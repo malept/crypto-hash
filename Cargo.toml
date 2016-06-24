@@ -1,0 +1,30 @@
+[package]
+name = "crypto-hash"
+version = "0.1.0"
+authors = ["Mark Lee"]
+description = "A wrapper for OS-level cryptographic hash functions"
+documentation = "https://malept.github.io/crypto-hash/"
+repository = "https://github.com/malept/crypto-hash"
+readme = "README.md"
+keywords = ["crypto", "hash", "digest"]
+license = "MIT"
+
+[features]
+
+lint = ["clippy"]
+
+[dependencies]
+
+hex = "0.2"
+
+clippy = { version = "*", optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+libc = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+advapi32-sys = "0.2"
+winapi = "0.2"
+
+[target.'cfg(not(any(target_os = "windows", target_os = "macos")))'.dependencies]
+openssl = "0.7"
