@@ -1,5 +1,7 @@
 # `crypto-hash`
 
+[![Build Status](https://travis-ci.org/malept/crypto-hash.svg?branch=master)](https://travis-ci.org/malept/crypto-hash)
+
 `crypto-hash` is a Rust wrapper around OS-level implementations of cryptographic hash functions.
 
 ## Supported Implementations

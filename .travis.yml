@@ -1,0 +1,113 @@
+sudo: false
+language: rust
+
+# necessary for `travis-cargo coveralls --no-sudo`
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
+    - libelf-dev
+    - libdw-dev
+    - binutils-dev # needed for --verify
+
+os:
+- linux
+- osx
+
+cache:
+  apt: true
+  cargo: true
+
+rust:
+- nightly
+- beta
+- stable
+
+# From https://github.com/japaric/rust-everywhere
+matrix:
+  # Clear the whole matrix
+  exclude:
+  - os: linux
+  - os: osx
+  - rust: nightly
+  - rust: beta
+  - rust: stable
+  include:
+  - os: linux # 32-bit Linux (glibc)
+    rust: stable
+    env: TARGET=i686-unknown-linux-gnu
+    addons:
+      apt:
+        packages:
+          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
+          - libelf-dev
+          - libdw-dev
+          - binutils-dev # needed for --verify
+          - gcc-multilib # Cross compiler and cross compiled C libraries
+          - libssl-dev:i386
+  - os: linux # 32-bit Linux (glibc)
+    env: TARGET=i686-unknown-linux-gnu
+    rust: beta
+    addons:
+      apt:
+        packages:
+          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
+          - libelf-dev
+          - libdw-dev
+          - binutils-dev # needed for --verify
+          - gcc-multilib # Cross compiler and cross compiled C libraries
+          - libssl-dev:i386
+  - os: linux # 32-bit Linux (glibc)
+    rust: nightly
+    env: TARGET=i686-unknown-linux-gnu
+    addons:
+      apt:
+        packages:
+          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
+          - libelf-dev
+          - libdw-dev
+          - binutils-dev # needed for --verify
+          - gcc-multilib # Cross compiler and cross compiled C libraries
+          - libssl-dev:i386
+  - os: linux # 64-bit Linux (glibc)
+    rust: stable
+    env: TARGET=x86_64-unknown-linux-gnu
+  - os: linux # 64-bit Linux (glibc)
+    rust: beta
+    env: TARGET=x86_64-unknown-linux-gnu
+  - os: linux # 64-bit Linux (glibc)
+    rust: nightly
+    env: TARGET=x86_64-unknown-linux-gnu
+  # 64-bit Linux (musl) doesn't work with openssl
+  - os: osx # 32-bit OSX
+    rust: stable
+    env: TARGET=i686-apple-darwin
+  - os: osx # 32-bit OSX
+    rust: beta
+    env: TARGET=i686-apple-darwin
+  - os: osx # 32-bit OSX
+    rust: nightly
+    env: TARGET=i686-apple-darwin
+  - os: osx # 64-bit OSX
+    rust: stable
+    env: TARGET=x86_64-apple-darwin
+  - os: osx # 64-bit OSX
+    rust: beta
+    env: TARGET=x86_64-apple-darwin
+  - os: osx # 64-bit OSX
+    rust: nightly
+    env: TARGET=x86_64-apple-darwin
+  allow_failures:
+  - rust: nightly
+
+before_install: ci/before_install.sh
+before_script: ci/before_script.sh
+script: ci/script.sh
+after_success: ci/after_success.sh
+
+env:
+  global:
+  - TRAVIS_CARGO_NIGHTLY_FEATURE='lint'
+  - PATH=$HOME/Library/Python/2.7/bin:$HOME/.local/bin:$PATH
+  # encrypted github token for doc upload
+  - secure: "ttZL5OpzNMQOHuaTj7cKyl5N24r3HPB0V/ogWt4Ws10t08aGoonlRSLVlUZaTKI9D5CZMthaWbHRczeJ0DO3MFvAyKcMsnBaM+hc04oRAK7GweoOW3AeKGhBGOVljQK47ySa/Bjniky9zejw/8gzHyOeji+Ydb6YwAdgxTqaHGL+5YAoB1CurxdoVZnVaCLLvvsbPsL27YFkOZrYsI51OlTzkoXj783GowgwjTWc6DBzIgtMTokBKkoPIvVRFBHpwrLhX/pvet3bauXrn2WGkl8+Ab5mBOEhwpmz9TkQW47qyWbibpOwkTwf55C7Ecpi1Aix5o21wLKEDdcZgzY72ri7DillNkLgbcIpHGBQpT+P1lK6pmG1G9HzW2bNPn8k0LukEIY8E0Q1kDef7mc4qw5zkMTgyruRi+yd6r9pTXXh1mDTvNc956Rx/fsfHgxhJIk73/IlYNIaDcmMHbyYQ/AeohWaxup45fqNRaK8AbYFm5rV3o6Ce9c+lW2cHm3ssbhQ5T6L8kGyrDO9glEeyvdKsO6lXRc6x0hiwu9msuRyCgDW1iPD0mkXiMYM5MVC3mg/h9E+e0KcjZg1+PaVqnUWHINsGynNJCctzCmfUMb9aufPTAtoYweT7FMTHekaTLhvxjaYxfPsVmi7kL6HaXAVKQf2qZgp/IjI7AtFsaE="
