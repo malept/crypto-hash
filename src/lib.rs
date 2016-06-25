@@ -22,6 +22,10 @@
 //! functions](https://en.wikipedia.org/wiki/Cryptographic_hash_function) provided by the operating
 //! system, when available.
 //!
+//! The purpose of this crate is to provide access to hash algorithms with as few dependencies as
+//! possible. This means that when possible, the library uses the hashing functions that are
+//! provided by the given operating system's bundled cryptographic libraries.
+//!
 //! # Supported Implementations
 //!
 //! By operating system:

@@ -146,6 +146,22 @@ enum State {
     Finalized,
 }
 
+/// Generator of digests using a cryptographic hash function.
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, Hasher};
+/// use std::io::Write;
+///
+/// let mut hasher = Hasher::new(Algorithm::SHA256);
+/// hasher.write_all(b"crypto");
+/// hasher.write_all(b"-");
+/// hasher.write_all(b"hash");
+/// let result = hasher.finish();
+/// let expected = b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'".to_vec();
+/// assert_eq!(expected, result)
+/// ```
 #[derive(Debug)]
 pub struct Hasher {
     context: DigestContext,
@@ -216,6 +232,7 @@ fn sha512_finish(ctx: &mut CC_SHA512_CTX) -> Vec<u8> {
 }
 
 impl Hasher {
+    /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
         let context = match algorithm {
             Algorithm::MD5 => DigestContext::MD5(md5_new()),
@@ -245,6 +262,7 @@ impl Hasher {
         self.state = State::Reset;
     }
 
+    /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         if self.state == State::Finalized {
             self.init();
