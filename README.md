@@ -28,6 +28,10 @@ By operating system:
 Add `crypto-hash` to your project's `Cargo.toml`. For more details, consult the
 [Cargo guide](http://doc.crates.io/guide.html#adding-dependencies).
 
+## [Release Notes](https://github.com/malept/crypto-hash/blob/master/NEWS.md)
+
+## [Contributing](https://github.com/malept/crypto-hash/blob/master/CONTRIBUTING.md)
+
 ## Acknowledgements
 
 This crate was inspired by [rust-native-tls](https://github.com/sfackler/rust-native-tls) and
