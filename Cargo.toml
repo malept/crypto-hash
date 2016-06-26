@@ -8,6 +8,10 @@ repository = "https://github.com/malept/crypto-hash"
 readme = "README.md"
 keywords = ["crypto", "hash", "digest", "md5", "sha256", "sha512"]
 license = "MIT"
+exclude = [
+    ".*.yml",
+    "ci/*"
+]
 
 [features]
 
