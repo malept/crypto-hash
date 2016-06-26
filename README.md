@@ -28,6 +28,16 @@ By operating system:
 Add `crypto-hash` to your project's `Cargo.toml`. For more details, consult the
 [Cargo guide](http://doc.crates.io/guide.html#adding-dependencies).
 
+Example:
+
+```rust
+use crypto_hash::{Algorithm, hex_digest};
+
+let digest = hex_digest(Algorithm::SHA256, b"crypto-hash".to_vec());
+```
+
+For more examples, consult the [documentation](https://malept.github.io/crypto-hash/).
+
 ## [Release Notes](https://github.com/malept/crypto-hash/blob/master/NEWS.md)
 
 ## [Contributing](https://github.com/malept/crypto-hash/blob/master/CONTRIBUTING.md)
