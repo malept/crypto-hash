@@ -6,7 +6,7 @@ description = "A wrapper for OS-level cryptographic hash functions"
 documentation = "https://malept.github.io/crypto-hash/"
 repository = "https://github.com/malept/crypto-hash"
 readme = "README.md"
-keywords = ["crypto", "hash", "digest", "md5", "sha256", "sha512"]
+keywords = ["crypto", "hash", "digest"]
 license = "MIT"
 exclude = [
     ".*.yml",
