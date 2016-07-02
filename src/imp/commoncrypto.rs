@@ -33,6 +33,41 @@ macro_rules! unsafe_guard {
     }
 }
 
+macro_rules! algorithm_helpers {
+    (
+        $ctx_ty: ident,
+        $init_binding: ident,
+        $write_binding: ident,
+        $finish_binding: ident,
+        $new_name: ident,
+        $init_name: ident,
+        $write_name: ident,
+        $finish_name: ident,
+        $digest_len: ident
+    ) => {
+        fn $new_name() -> $ctx_ty {
+            let mut ctx: $ctx_ty = $ctx_ty::new();
+            $init_name(&mut ctx);
+            ctx
+        }
+
+        fn $init_name(ctx: &mut $ctx_ty) {
+            unsafe_guard!($init_binding(ctx));
+            assert!(!(ctx as *mut $ctx_ty).is_null());
+        }
+
+        fn $write_name(ctx: &mut $ctx_ty, buf: &[u8]) {
+            unsafe_guard!($write_binding(ctx, buf.as_ptr(), buf.len()));
+        }
+
+        fn $finish_name(ctx: &mut $ctx_ty) -> Vec<u8> {
+            let mut md = [0u8; $digest_len];
+            unsafe_guard!($finish_binding(md.as_mut_ptr(), ctx));
+            md.to_vec()
+        }
+    }
+}
+
 const MD5_CBLOCK: usize = 64;
 const MD5_LBLOCK: usize = MD5_CBLOCK / 4;
 const MD5_DIGEST_LENGTH: usize = 16;
@@ -168,68 +203,33 @@ pub struct Hasher {
     state: State,
 }
 
-fn md5_new() -> CC_MD5_CTX {
-    let mut ctx: CC_MD5_CTX = CC_MD5_CTX::new();
-    md5_init(&mut ctx);
-    ctx
-}
-
-fn md5_init(ctx: &mut CC_MD5_CTX) {
-    unsafe_guard!(CC_MD5_Init(ctx));
-    assert!(!(ctx as *mut CC_MD5_CTX).is_null());
-}
-
-fn md5_write(ctx: &mut CC_MD5_CTX, buf: &[u8]) {
-    unsafe_guard!(CC_MD5_Update(ctx, buf.as_ptr(), buf.len()));
-}
-
-fn md5_finish(ctx: &mut CC_MD5_CTX) -> Vec<u8> {
-    let mut md = [0u8; MD5_DIGEST_LENGTH];
-    unsafe_guard!(CC_MD5_Final(md.as_mut_ptr(), ctx));
-    md.to_vec()
-}
-
-fn sha256_new() -> CC_SHA256_CTX {
-    let mut ctx: CC_SHA256_CTX = CC_SHA256_CTX::new();
-    sha256_init(&mut ctx);
-    ctx
-}
-
-fn sha512_new() -> CC_SHA512_CTX {
-    let mut ctx: CC_SHA512_CTX = CC_SHA512_CTX::new();
-    sha512_init(&mut ctx);
-    ctx
-}
-
-fn sha256_init(ctx: &mut CC_SHA256_CTX) {
-    unsafe_guard!(CC_SHA256_Init(ctx));
-    assert!(!(ctx as *mut CC_SHA256_CTX).is_null());
-}
-
-fn sha512_init(ctx: &mut CC_SHA512_CTX) {
-    unsafe_guard!(CC_SHA512_Init(ctx));
-    assert!(!(ctx as *mut CC_SHA512_CTX).is_null());
-}
-
-fn sha256_write(ctx: &mut CC_SHA256_CTX, buf: &[u8]) {
-    unsafe_guard!(CC_SHA256_Update(ctx, buf.as_ptr(), buf.len()));
-}
-
-fn sha512_write(ctx: &mut CC_SHA512_CTX, buf: &[u8]) {
-    unsafe_guard!(CC_SHA512_Update(ctx, buf.as_ptr(), buf.len()));
-}
-
-fn sha256_finish(ctx: &mut CC_SHA256_CTX) -> Vec<u8> {
-    let mut md = [0u8; SHA256_DIGEST_LENGTH];
-    unsafe_guard!(CC_SHA256_Final(md.as_mut_ptr(), ctx));
-    md.to_vec()
-}
-
-fn sha512_finish(ctx: &mut CC_SHA512_CTX) -> Vec<u8> {
-    let mut md = [0u8; SHA512_DIGEST_LENGTH];
-    unsafe_guard!(CC_SHA512_Final(md.as_mut_ptr(), ctx));
-    md.to_vec()
-}
+algorithm_helpers!(CC_MD5_CTX,
+                   CC_MD5_Init,
+                   CC_MD5_Update,
+                   CC_MD5_Final,
+                   md5_new,
+                   md5_init,
+                   md5_write,
+                   md5_finish,
+                   MD5_DIGEST_LENGTH);
+algorithm_helpers!(CC_SHA256_CTX,
+                   CC_SHA256_Init,
+                   CC_SHA256_Update,
+                   CC_SHA256_Final,
+                   sha256_new,
+                   sha256_init,
+                   sha256_write,
+                   sha256_finish,
+                   SHA256_DIGEST_LENGTH);
+algorithm_helpers!(CC_SHA512_CTX,
+                   CC_SHA512_Init,
+                   CC_SHA512_Update,
+                   CC_SHA512_Final,
+                   sha512_new,
+                   sha512_init,
+                   sha512_write,
+                   sha512_finish,
+                   SHA512_DIGEST_LENGTH);
 
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
