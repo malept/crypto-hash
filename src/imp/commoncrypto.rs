@@ -230,7 +230,9 @@ enum State {
 /// hasher.write_all(b"-");
 /// hasher.write_all(b"hash");
 /// let result = hasher.finish();
-/// let expected = b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'".to_vec();
+/// let expected =
+///     b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'"
+///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
 #[derive(Debug)]

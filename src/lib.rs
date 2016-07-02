@@ -93,7 +93,9 @@ pub enum Algorithm {
 ///
 /// let data = b"crypto-hash".to_vec();
 /// let result = digest(Algorithm::SHA256, data);
-/// let expected = b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'".to_vec();
+/// let expected =
+///     b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'"
+///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
 pub fn digest(algorithm: Algorithm, data: Vec<u8>) -> Vec<u8> {
