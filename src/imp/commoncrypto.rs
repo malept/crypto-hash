@@ -73,6 +73,7 @@ const MD5_LBLOCK: usize = MD5_CBLOCK / 4;
 const MD5_DIGEST_LENGTH: usize = 16;
 
 const SHA_LBLOCK: usize = 16;
+const SHA1_DIGEST_LENGTH: usize = 20;
 const SHA256_DIGEST_LENGTH: usize = 32;
 const SHA512_DIGEST_LENGTH: usize = 64;
 
@@ -100,6 +101,37 @@ impl CC_MD5_CTX {
             Nl: 0,
             Nh: 0,
             data: [0 as c_uint; MD5_LBLOCK],
+            num: 0,
+        }
+    }
+}
+
+#[allow(non_camel_case_types, non_snake_case)]
+#[derive(Clone, Debug, PartialEq)]
+#[repr(C)]
+struct CC_SHA_CTX {
+    h0: c_uint,
+    h1: c_uint,
+    h2: c_uint,
+    h3: c_uint,
+    h4: c_uint,
+    Nl: c_uint,
+    Nh: c_uint,
+    data: [c_uint; SHA_LBLOCK],
+    num: c_uint,
+}
+
+impl CC_SHA_CTX {
+    fn new() -> CC_SHA_CTX {
+        CC_SHA_CTX {
+            h0: 0,
+            h1: 0,
+            h2: 0,
+            h3: 0,
+            h4: 0,
+            Nl: 0,
+            Nh: 0,
+            data: [0 as c_uint; SHA_LBLOCK],
             num: 0,
         }
     }
@@ -158,6 +190,7 @@ impl CC_SHA512_CTX {
 #[derive(Debug)]
 enum DigestContext {
     MD5(CC_MD5_CTX),
+    SHA1(CC_SHA_CTX),
     SHA256(CC_SHA256_CTX),
     SHA512(CC_SHA512_CTX),
 }
@@ -166,6 +199,9 @@ extern "C" {
     fn CC_MD5_Init(ctx: *mut CC_MD5_CTX) -> c_int;
     fn CC_MD5_Update(ctx: *mut CC_MD5_CTX, data: *const u8, n: usize) -> c_int;
     fn CC_MD5_Final(md: *mut u8, ctx: *mut CC_MD5_CTX) -> c_int;
+    fn CC_SHA1_Init(ctx: *mut CC_SHA_CTX) -> c_int;
+    fn CC_SHA1_Update(ctx: *mut CC_SHA_CTX, data: *const u8, n: usize) -> c_int;
+    fn CC_SHA1_Final(md: *mut u8, ctx: *mut CC_SHA_CTX) -> c_int;
     fn CC_SHA256_Init(ctx: *mut CC_SHA256_CTX) -> c_int;
     fn CC_SHA256_Update(ctx: *mut CC_SHA256_CTX, data: *const u8, n: usize) -> c_int;
     fn CC_SHA256_Final(md: *mut u8, ctx: *mut CC_SHA256_CTX) -> c_int;
@@ -212,6 +248,15 @@ algorithm_helpers!(CC_MD5_CTX,
                    md5_write,
                    md5_finish,
                    MD5_DIGEST_LENGTH);
+algorithm_helpers!(CC_SHA_CTX,
+                   CC_SHA1_Init,
+                   CC_SHA1_Update,
+                   CC_SHA1_Final,
+                   sha1_new,
+                   sha1_init,
+                   sha1_write,
+                   sha1_finish,
+                   SHA1_DIGEST_LENGTH);
 algorithm_helpers!(CC_SHA256_CTX,
                    CC_SHA256_Init,
                    CC_SHA256_Update,
@@ -236,6 +281,7 @@ impl Hasher {
     pub fn new(algorithm: Algorithm) -> Hasher {
         let context = match algorithm {
             Algorithm::MD5 => DigestContext::MD5(md5_new()),
+            Algorithm::SHA1 => DigestContext::SHA1(sha1_new()),
             Algorithm::SHA256 => DigestContext::SHA256(sha256_new()),
             Algorithm::SHA512 => DigestContext::SHA512(sha512_new()),
         };
@@ -256,6 +302,7 @@ impl Hasher {
         }
         match self.context {
             DigestContext::MD5(ref mut ctx) => md5_init(ctx),
+            DigestContext::SHA1(ref mut ctx) => sha1_init(ctx),
             DigestContext::SHA256(ref mut ctx) => sha256_init(ctx),
             DigestContext::SHA512(ref mut ctx) => sha512_init(ctx),
         }
@@ -269,6 +316,7 @@ impl Hasher {
         }
         let result = match self.context {
             DigestContext::MD5(ref mut ctx) => md5_finish(ctx),
+            DigestContext::SHA1(ref mut ctx) => sha1_finish(ctx),
             DigestContext::SHA256(ref mut ctx) => sha256_finish(ctx),
             DigestContext::SHA512(ref mut ctx) => sha512_finish(ctx),
         };
@@ -285,6 +333,7 @@ impl io::Write for Hasher {
         }
         match self.context {
             DigestContext::MD5(ref mut ctx) => md5_write(ctx, buf),
+            DigestContext::SHA1(ref mut ctx) => sha1_write(ctx, buf),
             DigestContext::SHA256(ref mut ctx) => sha256_write(ctx, buf),
             DigestContext::SHA512(ref mut ctx) => sha512_write(ctx, buf),
         }

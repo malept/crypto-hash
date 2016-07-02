@@ -29,8 +29,8 @@ use advapi32::{CryptAcquireContextW, CryptCreateHash, CryptDestroyHash, CryptGet
 use std::io;
 use std::ptr;
 use super::Algorithm;
-use winapi::{CALG_MD5, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT, CRYPT_VERIFYCONTEXT, DWORD,
-             HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES};
+use winapi::{CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT, CRYPT_VERIFYCONTEXT,
+             DWORD, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES};
 
 macro_rules! call {
     ($e: expr) => ({
@@ -55,6 +55,7 @@ macro_rules! finish_algorithm {
 }
 
 const MD5_LENGTH: usize = 16;
+const SHA1_LENGTH: usize = 20;
 const SHA256_LENGTH: usize = 32;
 const SHA512_LENGTH: usize = 64;
 
@@ -94,6 +95,7 @@ impl Hasher {
 
         let hash_type = match algorithm {
             Algorithm::MD5 => CALG_MD5,
+            Algorithm::SHA1 => CALG_SHA1,
             Algorithm::SHA256 => CALG_SHA_256,
             Algorithm::SHA512 => CALG_SHA_512,
         };
@@ -112,12 +114,14 @@ impl Hasher {
     pub fn finish(&mut self) -> Vec<u8> {
         match self.algorithm {
             Algorithm::MD5 => self.finish_md5(),
+            Algorithm::SHA1 => self.finish_sha1(),
             Algorithm::SHA256 => self.finish_sha256(),
             Algorithm::SHA512 => self.finish_sha512(),
         }
     }
 
     finish_algorithm!(finish_md5, MD5_LENGTH);
+    finish_algorithm!(finish_sha1, SHA1_LENGTH);
     finish_algorithm!(finish_sha256, SHA256_LENGTH);
     finish_algorithm!(finish_sha512, SHA512_LENGTH);
 }

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+* SHA-1 algorithm
+
 ## [0.1.0] - 2016-06-26
 
 This release signifies the minimum amount of algorithms and implementations necessary for

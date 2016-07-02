@@ -37,6 +37,7 @@
 //! # Supported Algorithms
 //!
 //! * MD5
+//! * SHA1
 //! * SHA256
 //! * SHA512
 
@@ -74,6 +75,8 @@ pub use imp::Hasher;
 pub enum Algorithm {
     /// Popular message digest algorithm, only available for backwards compatibility purposes.
     MD5,
+    /// SHA-1 algorithm from NIST FIPS, only available for backwards compatibility purposes.
+    SHA1,
     /// SHA-2 family algorithm (256 bits).
     SHA256,
     /// SHA-2 family algorithm (512 bits).

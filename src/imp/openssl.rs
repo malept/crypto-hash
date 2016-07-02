@@ -49,6 +49,7 @@ impl Hasher {
     pub fn new(algorithm: Algorithm) -> Hasher {
         let hash_type = match algorithm {
             Algorithm::MD5 => hash::Type::MD5,
+            Algorithm::SHA1 => hash::Type::SHA1,
             Algorithm::SHA256 => hash::Type::SHA256,
             Algorithm::SHA512 => hash::Type::SHA512,
         };
