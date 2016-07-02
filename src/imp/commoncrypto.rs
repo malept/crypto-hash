@@ -195,6 +195,35 @@ enum DigestContext {
     SHA512(CC_SHA512_CTX),
 }
 
+#[allow(non_camel_case_types, non_snake_case)]
+#[derive(Clone, Debug, PartialEq)]
+#[repr(C)]
+enum CCHmacAlgorithm {
+    kCCHmacAlgSHA1,
+    kCCHmacAlgMD5,
+    kCCHmacAlgSHA256,
+    kCCHmacAlgSHA384,
+    kCCHmacAlgSHA512,
+    kCCHmacAlgSHA224,
+}
+
+const CC_HMAC_CONTEXT_SIZE: usize = 96;
+
+#[allow(non_camel_case_types, non_snake_case)]
+#[derive(Clone, Debug, PartialEq)]
+#[repr(C)]
+struct CCHmacContext {
+    ctx: [u32; CC_HMAC_CONTEXT_SIZE],
+}
+
+impl CCHmacContext {
+    fn new() -> CCHmacContext {
+        CCHmacContext {
+            ctx: [0u32; CC_HMAC_CONTEXT_SIZE],
+        }
+    }
+}
+
 extern "C" {
     fn CC_MD5_Init(ctx: *mut CC_MD5_CTX) -> c_int;
     fn CC_MD5_Update(ctx: *mut CC_MD5_CTX, data: *const u8, n: usize) -> c_int;
@@ -208,6 +237,12 @@ extern "C" {
     fn CC_SHA512_Init(ctx: *mut CC_SHA512_CTX) -> c_int;
     fn CC_SHA512_Update(ctx: *mut CC_SHA512_CTX, data: *const u8, n: usize) -> c_int;
     fn CC_SHA512_Final(md: *mut u8, ctx: *mut CC_SHA512_CTX) -> c_int;
+    fn CCHmacInit(ctx: *mut CCHmacContext,
+                  algorithm: CCHmacAlgorithm,
+                  key: *const u8,
+                  keyLength: usize);
+    fn CCHmacUpdate(ctx: *mut CCHmacContext, data: *const u8, dataLength: usize);
+    fn CCHmacFinal(ctx: *mut CCHmacContext, macOut: *mut u8);
 }
 
 #[derive(PartialEq, Copy, Clone, Debug)]
@@ -239,6 +274,12 @@ enum State {
 pub struct Hasher {
     context: DigestContext,
     state: State,
+}
+
+#[derive(Debug)]
+pub struct HMAC {
+    algorithm: Algorithm,
+    context: CCHmacContext,
 }
 
 algorithm_helpers!(CC_MD5_CTX,
@@ -353,5 +394,52 @@ impl Drop for Hasher {
         if self.state != State::Finalized {
             self.finish();
         }
+    }
+}
+
+fn algorithm_to_hmac_type(algorithm: Algorithm) -> CCHmacAlgorithm {
+    match algorithm {
+        Algorithm::MD5 => CCHmacAlgorithm::kCCHmacAlgMD5,
+        Algorithm::SHA1 => CCHmacAlgorithm::kCCHmacAlgSHA1,
+        Algorithm::SHA256 => CCHmacAlgorithm::kCCHmacAlgSHA256,
+        Algorithm::SHA512 => CCHmacAlgorithm::kCCHmacAlgSHA512,
+    }
+}
+
+impl HMAC {
+    /// Create a new `HMAC` for the given `Algorithm` and `key`.
+    pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
+        let mut ctx = CCHmacContext::new(algorithm, key);
+        let hmac_algorithm = algorithm_to_hmac_type(algorithm);
+        CCHmacInit(&mut ctx, hmac_algorithm, key);
+        HMAC {
+            algorithm: algorithm,
+            context: ctx,
+        }
+    }
+
+    /// Generate an HMAC from the key + data written to the `HMAC` instance.
+    pub fn finish(&mut self) -> Vec<u8> {
+        let digest_length = match self.algorithm {
+            Algorithm::MD5 => MD5_DIGEST_LENGTH,
+            Algorithm::SHA1 => SHA1_DIGEST_LENGTH,
+            Algorithm::SHA256 => SHA256_DIGEST_LENGTH,
+            Algorithm::SHA512 => SHA512_DIGEST_LENGTH,
+        };
+        let mut out: Vec<u8> = Vec::with_capacity(digest_length);
+        CCHmacFinal(self.context, &mut out[..]);
+
+        out
+    }
+}
+
+impl io::Write for HMAC {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        CCHmacUpdate(self.context, buf, buf.len());
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
     }
 }

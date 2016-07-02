@@ -23,6 +23,7 @@
 #![warn(missing_docs)]
 
 use openssl::crypto::hash;
+use openssl::crypto::hmac;
 use std::io;
 use super::Algorithm;
 
@@ -46,17 +47,39 @@ use super::Algorithm;
 /// ```
 pub struct Hasher(hash::Hasher);
 
+/// Generator of Hash-based Message Authentication Codes (HMACs).
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, HMAC};
+/// use std::io::Write;
+///
+/// let mut hmac = HMAC::new(Algorithm::SHA256, b"");
+/// hmac.write_all(b"crypto");
+/// hmac.write_all(b"-");
+/// hmac.write_all(b"hash");
+/// let result = hmac.finish();
+/// let expected =
+///     b"\x8e\xd6\xcd0\xba\xc2\x9e\xdc\x0f\xcc3\x07\xd4D\xdb6\xa6\xe8/\xf3\x94\xe6\xac\xa2\x01l\x03/*1\x1f$"
+///     .to_vec();
+/// assert_eq!(expected, result)
+/// ```
+pub struct HMAC(hmac::HMAC);
+
+fn algorithm_to_hash_type(algorithm: Algorithm) -> hash::Type {
+    match algorithm {
+        Algorithm::MD5 => hash::Type::MD5,
+        Algorithm::SHA1 => hash::Type::SHA1,
+        Algorithm::SHA256 => hash::Type::SHA256,
+        Algorithm::SHA512 => hash::Type::SHA512,
+    }
+}
+
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
-        let hash_type = match algorithm {
-            Algorithm::MD5 => hash::Type::MD5,
-            Algorithm::SHA1 => hash::Type::SHA1,
-            Algorithm::SHA256 => hash::Type::SHA256,
-            Algorithm::SHA512 => hash::Type::SHA512,
-        };
-
-        Hasher(hash::Hasher::new(hash_type))
+        Hasher(hash::Hasher::new(algorithm_to_hash_type(algorithm)))
     }
 
     /// Generate a digest from the data written to the `Hasher`.
@@ -75,5 +98,30 @@ impl io::Write for Hasher {
     fn flush(&mut self) -> io::Result<()> {
         let Hasher(ref mut hasher) = *self;
         hasher.flush()
+    }
+}
+
+impl HMAC {
+    /// Create a new `HMAC` for the given `Algorithm` and `key`.
+    pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
+        HMAC(hmac::HMAC::new(algorithm_to_hash_type(algorithm), key))
+    }
+
+    /// Generate an HMAC from the key + data written to the `HMAC` instance.
+    pub fn finish(&mut self) -> Vec<u8> {
+        let HMAC(ref mut hmac) = *self;
+        hmac.finish()
+    }
+}
+
+impl io::Write for HMAC {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        let HMAC(ref mut hmac) = *self;
+        hmac.write(buf)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        let HMAC(ref mut hmac) = *self;
+        hmac.flush()
     }
 }

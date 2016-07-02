@@ -69,6 +69,7 @@ mod imp;
 mod test;
 
 pub use imp::Hasher;
+pub use imp::HMAC;
 
 /// Available cryptographic hash functions.
 #[derive(Clone, Debug)]
@@ -119,4 +120,41 @@ pub fn digest(algorithm: Algorithm, data: Vec<u8>) -> Vec<u8> {
 /// ```
 pub fn hex_digest(algorithm: Algorithm, data: Vec<u8>) -> String {
     digest(algorithm, data).to_hex()
+}
+
+/// Helper function for `HMAC` which generates an HMAC from the given key, data, and algorithm.
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, hmac};
+///
+/// let data = b"crypto-hash".to_vec();
+/// let result = hmac(Algorithm::SHA256, vec![], data);
+/// let expected =
+///     b"\x8e\xd6\xcd0\xba\xc2\x9e\xdc\x0f\xcc3\x07\xd4D\xdb6\xa6\xe8/\xf3\x94\xe6\xac\xa2\x01l\x03/*1\x1f$"
+///     .to_vec();
+/// assert_eq!(expected, result)
+/// ```
+pub fn hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
+    let mut hasher = imp::HMAC::new(algorithm.clone(), &key[..]);
+    hasher.write_all(&data[..]).expect("Could not write hash data");
+    hasher.finish()
+}
+
+/// Helper function for `HMAC` which generates an HMAC serialized in hexadecimal from the given
+/// key, data, and algorithm.
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, hex_hmac};
+///
+/// let data = b"crypto-hash".to_vec();
+/// let result = hex_hmac(Algorithm::SHA256, vec![], data);
+/// let expected = "8ed6cd30bac29edc0fcc3307d444db36a6e82ff394e6aca2016c032f2a311f24";
+/// assert_eq!(expected, result)
+/// ```
+pub fn hex_hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> String {
+    hmac(algorithm, key, data).to_hex()
 }
