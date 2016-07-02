@@ -210,7 +210,7 @@ enum CCHmacAlgorithm {
 const CC_HMAC_CONTEXT_SIZE: usize = 96;
 
 #[allow(non_camel_case_types, non_snake_case)]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug)]
 #[repr(C)]
 struct CCHmacContext {
     ctx: [u32; CC_HMAC_CONTEXT_SIZE],
@@ -409,9 +409,9 @@ fn algorithm_to_hmac_type(algorithm: Algorithm) -> CCHmacAlgorithm {
 impl HMAC {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
-        let mut ctx = CCHmacContext::new(algorithm, key);
+        let mut ctx = CCHmacContext::new();
         let hmac_algorithm = algorithm_to_hmac_type(algorithm);
-        CCHmacInit(&mut ctx, hmac_algorithm, key);
+        CCHmacInit(&mut ctx, hmac_algorithm, key, key.len());
         HMAC {
             algorithm: algorithm,
             context: ctx,
@@ -427,7 +427,7 @@ impl HMAC {
             Algorithm::SHA512 => SHA512_DIGEST_LENGTH,
         };
         let mut out: Vec<u8> = Vec::with_capacity(digest_length);
-        CCHmacFinal(self.context, &mut out[..]);
+        CCHmacFinal(&mut self.context, &mut out[..]);
 
         out
     }
@@ -435,7 +435,7 @@ impl HMAC {
 
 impl io::Write for HMAC {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        CCHmacUpdate(self.context, buf, buf.len());
+        CCHmacUpdate(&mut self.context, buf, buf.len());
         Ok(buf.len())
     }
 
