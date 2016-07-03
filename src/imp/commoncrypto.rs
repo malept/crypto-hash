@@ -434,7 +434,7 @@ impl HMAC {
             Algorithm::SHA512 => SHA512_DIGEST_LENGTH,
         };
         let mut out: Vec<u8> = Vec::with_capacity(digest_length);
-        CCHmacFinal(&mut self.context, &mut out[..]);
+        CCHmacFinal(&mut self.context, &out[..].as_mut_ptr());
 
         out
     }
@@ -442,7 +442,7 @@ impl HMAC {
 
 impl io::Write for HMAC {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        CCHmacUpdate(&mut self.context, buf, buf.len());
+        CCHmacUpdate(&mut self.context, buf.as_ptr(), buf.len());
         Ok(buf.len())
     }
 
