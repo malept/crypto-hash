@@ -220,7 +220,8 @@ impl fmt::Debug for CCHmacContext {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "CCHmacContext {{ ctx: [");
         let mut first = true;
-        for item in self.ctx {
+        for i in 0..CC_HMAC_CONTEXT_SIZE {
+            let item = self.ctx[i];
             write!(f, "{}", item);
             if first {
                 write!(f, ", ");
