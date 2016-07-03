@@ -221,7 +221,7 @@ impl fmt::Debug for CCHmacContext {
         write!(f, "CCHmacContext {{ ctx: [");
         let mut first = true;
         for item in self.ctx {
-            write!("{}", item);
+            write!(f, "{}", item);
             if first {
                 write!(f, ", ");
                 first = false;
