@@ -228,12 +228,13 @@ impl fmt::Debug for CCHmacContext {
         let mut output = String::from("CCHmacContext {{ ctx: [");
         let mut first = true;
         for i in 0..CC_HMAC_CONTEXT_SIZE {
-            let item = self.ctx[i];
-            write!(output, "{}", item);
             if first {
-                write!(output, ", ");
                 first = false;
+            } else {
+                output.push_str(", ");
             }
+            let item = self.ctx[i];
+            output.push_str(format!("{}", item).as_str());
         }
         output.push_str("] }}");
         write!(f, "{}", output)
