@@ -21,6 +21,7 @@
 //! A cryptographic hash generator dependent upon OSX's `CommonCrypto`.
 
 use libc::{c_int, c_uint, c_ulong, c_ulonglong};
+use std::fmt;
 use std::io;
 use super::Algorithm;
 
@@ -208,6 +209,12 @@ enum CCHmacAlgorithm {
 }
 
 const CC_HMAC_CONTEXT_SIZE: usize = 96;
+
+impl fmt::Debug for [u32; CC_HMAC_CONTEXT_SIZE] {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Debug::fmt(&&self[..], f)
+    }
+}
 
 #[allow(non_camel_case_types, non_snake_case)]
 #[derive(Debug)]
