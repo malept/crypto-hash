@@ -417,7 +417,7 @@ impl HMAC {
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         let mut ctx = CCHmacContext::new();
         let hmac_algorithm = algorithm_to_hmac_type(algorithm);
-        CCHmacInit(&mut ctx, hmac_algorithm, key, key.len());
+        CCHmacInit(&mut ctx, hmac_algorithm, key.as_ptr(), key.len());
         HMAC {
             algorithm: algorithm,
             context: ctx,
@@ -433,7 +433,7 @@ impl HMAC {
             Algorithm::SHA512 => SHA512_DIGEST_LENGTH,
         };
         let mut out: Vec<u8> = Vec::with_capacity(digest_length);
-        CCHmacFinal(&mut self.context, &out[..].as_mut_ptr());
+        CCHmacFinal(&mut self.context, out[..].as_mut_ptr());
 
         out
     }
