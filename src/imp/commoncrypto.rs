@@ -203,7 +203,7 @@ enum DigestContext {
     SHA512(CC_SHA512_CTX),
 }
 
-#[allow(non_camel_case_types, non_snake_case)]
+#[allow(dead_code, non_camel_case_types, non_snake_case)]
 #[derive(Clone, Debug, PartialEq)]
 #[repr(C)]
 enum CCHmacAlgorithm {
