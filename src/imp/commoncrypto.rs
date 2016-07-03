@@ -413,8 +413,8 @@ impl Drop for Hasher {
     }
 }
 
-fn algorithm_to_hmac_type(algorithm: Algorithm) -> CCHmacAlgorithm {
-    match algorithm {
+fn algorithm_to_hmac_type(algorithm: &Algorithm) -> CCHmacAlgorithm {
+    match *algorithm {
         Algorithm::MD5 => CCHmacAlgorithm::kCCHmacAlgMD5,
         Algorithm::SHA1 => CCHmacAlgorithm::kCCHmacAlgSHA1,
         Algorithm::SHA256 => CCHmacAlgorithm::kCCHmacAlgSHA256,
@@ -426,7 +426,7 @@ impl HMAC {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         let mut ctx = CCHmacContext::new();
-        let hmac_algorithm = algorithm_to_hmac_type(algorithm);
+        let hmac_algorithm = algorithm_to_hmac_type(&algorithm);
         unsafe { CCHmacInit(&mut ctx, hmac_algorithm, key.as_ptr(), key.len()); }
         HMAC {
             algorithm: algorithm,
