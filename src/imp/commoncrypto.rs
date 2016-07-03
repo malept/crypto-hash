@@ -210,17 +210,16 @@ enum CCHmacAlgorithm {
 
 const CC_HMAC_CONTEXT_SIZE: usize = 96;
 
-impl fmt::Debug for [u32; CC_HMAC_CONTEXT_SIZE] {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Debug::fmt(&&self[..], f)
-    }
-}
-
 #[allow(non_camel_case_types, non_snake_case)]
-#[derive(Debug)]
 #[repr(C)]
 struct CCHmacContext {
     ctx: [u32; CC_HMAC_CONTEXT_SIZE],
+}
+
+impl fmt::Debug for CCHmacContext {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CCHmacContext {{ ctx: {} }}", &&self.ctx[..])
+    }
 }
 
 impl CCHmacContext {
