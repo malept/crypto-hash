@@ -70,7 +70,7 @@ macro_rules! algorithm_helpers {
 
         fn $hmac_finish_name(ctx: &mut CCHmacContext) -> Vec<u8> {
             let mut hmac = [0u8; $digest_len];
-            unsafe { CCHmacFinal(&mut self.context, hmac[..].as_mut_ptr()); }
+            unsafe { CCHmacFinal(ctx, hmac[..].as_mut_ptr()); }
             hmac.to_vec()
         }
     }
