@@ -44,6 +44,7 @@ macro_rules! algorithm_helpers {
         $init_name: ident,
         $write_name: ident,
         $finish_name: ident,
+        $hmac_finish_name: ident,
         $digest_len: ident
     ) => {
         fn $new_name() -> $ctx_ty {
@@ -65,6 +66,12 @@ macro_rules! algorithm_helpers {
             let mut md = [0u8; $digest_len];
             unsafe_guard!($finish_binding(md.as_mut_ptr(), ctx));
             md.to_vec()
+        }
+
+        fn $hmac_finish_name(ctx: &mut CCHmacContext) -> Vec<u8> {
+            let mut hmac = [0u8; $digest_len];
+            unsafe { CCHmacFinal(&mut self.context, hmac[..].as_mut_ptr()); }
+            hmac.to_vec()
         }
     }
 }
@@ -307,6 +314,7 @@ algorithm_helpers!(CC_MD5_CTX,
                    md5_init,
                    md5_write,
                    md5_finish,
+                   hmac_md5_finish,
                    MD5_DIGEST_LENGTH);
 algorithm_helpers!(CC_SHA_CTX,
                    CC_SHA1_Init,
@@ -316,6 +324,7 @@ algorithm_helpers!(CC_SHA_CTX,
                    sha1_init,
                    sha1_write,
                    sha1_finish,
+                   hmac_sha1_finish,
                    SHA1_DIGEST_LENGTH);
 algorithm_helpers!(CC_SHA256_CTX,
                    CC_SHA256_Init,
@@ -325,6 +334,7 @@ algorithm_helpers!(CC_SHA256_CTX,
                    sha256_init,
                    sha256_write,
                    sha256_finish,
+                   hmac_sha256_finish,
                    SHA256_DIGEST_LENGTH);
 algorithm_helpers!(CC_SHA512_CTX,
                    CC_SHA512_Init,
@@ -334,6 +344,7 @@ algorithm_helpers!(CC_SHA512_CTX,
                    sha512_init,
                    sha512_write,
                    sha512_finish,
+                   hmac_sha512_finish,
                    SHA512_DIGEST_LENGTH);
 
 impl Hasher {
@@ -437,16 +448,12 @@ impl HMAC {
 
     /// Generate an HMAC from the key + data written to the `HMAC` instance.
     pub fn finish(&mut self) -> Vec<u8> {
-        let digest_length = match self.algorithm {
-            Algorithm::MD5 => MD5_DIGEST_LENGTH,
-            Algorithm::SHA1 => SHA1_DIGEST_LENGTH,
-            Algorithm::SHA256 => SHA256_DIGEST_LENGTH,
-            Algorithm::SHA512 => SHA512_DIGEST_LENGTH,
-        };
-        let mut out: Vec<u8> = Vec::with_capacity(digest_length);
-        unsafe { CCHmacFinal(&mut self.context, out[..].as_mut_ptr()); }
-
-        out
+        match self.algorithm {
+            Algorithm::MD5 => hmac_md5_finish(&mut self.context),
+            Algorithm::SHA1 => hmac_sha1_finish(&mut self.context),
+            Algorithm::SHA256 => hmac_sha256_finish(&mut self.context),
+            Algorithm::SHA512 => hmac_sha512_finish(&mut self.context),
+        }
     }
 }
 
