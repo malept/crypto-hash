@@ -301,6 +301,24 @@ pub struct Hasher {
     state: State,
 }
 
+/// Generator of Hash-based Message Authentication Codes (HMACs).
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, HMAC};
+/// use std::io::Write;
+///
+/// let mut hmac = HMAC::new(Algorithm::SHA256, b"");
+/// hmac.write_all(b"crypto");
+/// hmac.write_all(b"-");
+/// hmac.write_all(b"hash");
+/// let result = hmac.finish();
+/// let expected =
+///     b"\x8e\xd6\xcd0\xba\xc2\x9e\xdc\x0f\xcc3\x07\xd4D\xdb6\xa6\xe8/\xf3\x94\xe6\xac\xa2\x01l\x03/*1\x1f$"
+///     .to_vec();
+/// assert_eq!(expected, result)
+/// ```
 #[derive(Debug)]
 pub struct HMAC {
     algorithm: Algorithm,
