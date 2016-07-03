@@ -218,17 +218,18 @@ struct CCHmacContext {
 
 impl fmt::Debug for CCHmacContext {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CCHmacContext {{ ctx: [");
+        let mut output = String::from("CCHmacContext {{ ctx: [");
         let mut first = true;
         for i in 0..CC_HMAC_CONTEXT_SIZE {
             let item = self.ctx[i];
-            write!(f, "{}", item);
+            write!(output, "{}", item);
             if first {
-                write!(f, ", ");
+                write!(output, ", ");
                 first = false;
             }
         }
-        write!(f, "] }}")
+        output.push_str("] }}");
+        write!(f, "{}", output)
     }
 }
 
