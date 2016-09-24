@@ -54,13 +54,19 @@ impl Hasher {
             Algorithm::SHA512 => hash::Type::SHA512,
         };
 
-        Hasher(hash::Hasher::new(hash_type))
+        match hash::Hasher::new(hash_type) {
+            Ok(hasher) => Hasher(hasher),
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         let Hasher(ref mut hasher) = *self;
-        hasher.finish()
+        match hasher.finish() {
+            Ok(digest) => digest,
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 }
 
