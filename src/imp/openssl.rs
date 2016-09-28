@@ -79,13 +79,19 @@ fn algorithm_to_hash_type(algorithm: Algorithm) -> hash::Type {
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
-        Hasher(hash::Hasher::new(algorithm_to_hash_type(algorithm)))
+        match hash::Hasher::new(algorithm_to_hash_type(algorithm)) {
+            Ok(hasher) => Hasher(hasher),
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         let Hasher(ref mut hasher) = *self;
-        hasher.finish()
+        match hasher.finish() {
+            Ok(digest) => digest,
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 }
 
