@@ -31,9 +31,9 @@ use std::io;
 use std::mem;
 use std::ptr;
 use super::Algorithm;
-use winapi::{ALG_ID, CALG_HMAC, CALG_MD5, CALG_RC4, CALG_SHA1, CALG_SHA_256, CALG_SHA_512,
+use winapi::{ALG_ID, BYTE, CALG_HMAC, CALG_MD5, CALG_RC2, CALG_SHA1, CALG_SHA_256, CALG_SHA_512,
              CRYPT_SILENT, CRYPT_VERIFYCONTEXT, DWORD, HCRYPTHASH, HCRYPTKEY, HCRYPTPROV, HMAC_INFO,
-             HP_HASHVAL, HP_HMAC_INFO, PROV_RSA_AES};
+             HP_HASHVAL, HP_HMAC_INFO, PROV_RSA_AES, PUBLICKEYSTRUC};
 
 macro_rules! call {
     ($e: expr) => ({
@@ -62,6 +62,13 @@ const SHA1_LENGTH: usize = 20;
 const SHA256_LENGTH: usize = 32;
 const SHA512_LENGTH: usize = 64;
 
+#[repr(C)]
+struct KeyBlob {
+    header: PUBLICKEYSTRUC,
+    key_size: DWORD,
+    key_data: *const BYTE,
+}
+
 struct CryptHash {
     algorithm: Algorithm,
     hcryptprov: HCRYPTPROV,
@@ -87,7 +94,7 @@ impl CryptHash {
 
         let hkey = match hmac_key {
             Some(key) => {
-                CryptHash::generate_hmac_key(hcp, hash_type, key)
+                CryptHash::generate_hmac_key(hcp, CALG_RC2, key)
             }
             None => 0
         };
@@ -99,7 +106,7 @@ impl CryptHash {
             hcryptkey: hkey,
         };
 
-        CryptHash::create(ret.hcryptprov, algid, hkey, &mut ret.hcrypthash);
+        CryptHash::create(ret.hcryptprov, CALG_HMAC, hkey, &mut ret.hcrypthash);
 
         if hmac_key.is_some() {
             let hmac_info = HMAC_INFO {
@@ -145,13 +152,27 @@ impl CryptHash {
     }
 
     fn generate_hmac_key(hcp: HCRYPTPROV, algid: ALG_ID, data: &[u8]) -> HCRYPTKEY {
-        let mut hcrypthash: HCRYPTHASH = 0;
-        CryptHash::create(hcp, algid, 0, &mut hcrypthash);
-        CryptHash::update(&mut hcrypthash, data);
+        use advapi32::CryptImportKey;
+        use winapi::{CUR_BLOB_VERSION, CRYPT_IPSEC_HMAC_KEY, PLAINTEXTKEYBLOB};
+        let key_blob = KeyBlob {
+            header: PUBLICKEYSTRUC {
+                bType: PLAINTEXTKEYBLOB as BYTE,
+                bVersion: CUR_BLOB_VERSION as BYTE,
+                reserved: 0,
+                aiKeyAlg: algid,
+            },
+            key_size: data.len() as DWORD,
+            key_data: data.as_ptr(),
+        };
+        let pb_data: [BYTE; 24] = unsafe { mem::transmute(key_blob) };
+        let pb_data_len = mem::size_of::<KeyBlob>() + data.len();
+        println!("PUBLICKEYSTRUC LEN: {}", mem::size_of::<PUBLICKEYSTRUC>());
+        println!("KEYBLOB LEN: {}", mem::size_of::<KeyBlob>());
+        println!("PB DATA LEN: {}", pb_data_len);
         let mut hkey = 0;
         let mut hkey_ptr = &mut hkey;
         assert_eq!(0, *hkey_ptr);
-        call!(unsafe { CryptDeriveKey(hcp, CALG_RC4, hcrypthash, 0, hkey_ptr as *mut _) });
+        call!(unsafe { CryptImportKey(hcp, pb_data.as_ptr(), pb_data_len as DWORD, 0, CRYPT_IPSEC_HMAC_KEY, hkey_ptr as *mut _) });
         assert!(*hkey_ptr != 0);
 
         *hkey_ptr
@@ -240,14 +261,33 @@ impl io::Write for Hasher {
     }
 }
 
+/// Generator of Hash-based Message Authentication Codes (HMACs).
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, HMAC};
+/// use std::io::Write;
+///
+/// let mut hmac = HMAC::new(Algorithm::SHA256, b"");
+/// hmac.write_all(b"crypto");
+/// hmac.write_all(b"-");
+/// hmac.write_all(b"hash");
+/// let result = hmac.finish();
+/// let expected =
+///     b"\x8e\xd6\xcd0\xba\xc2\x9e\xdc\x0f\xcc3\x07\xd4D\xdb6\xa6\xe8/\xf3\x94\xe6\xac\xa2\x01l\x03/*1\x1f$"
+///     .to_vec();
+/// assert_eq!(expected, result)
+/// ```
 pub struct HMAC(CryptHash);
+
 impl HMAC {
-    /// Create a new `HMAC` for the given `Algorithm`.
+    /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         HMAC(CryptHash::new(algorithm, Some(key)))
     }
 
-    /// Generate a digest from the data written to the `HMAC`.
+    /// Generate an HMAC from the key + data written to the `HMAC` instance.
     pub fn finish(&mut self) -> Vec<u8> {
         let HMAC(ref mut ch) = *self;
         ch.finish()
