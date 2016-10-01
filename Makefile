@@ -3,13 +3,15 @@ CARGO_BUILD_TEST = $(CARGO) test --no-run
 KCOV ?= kcov
 TEST_APP = debug/crypto_hash-*
 WIN_TARGET = x86_64-pc-windows-gnu
+WINE ?= wine64
+WINEPREFIX ?= $(HOME)/.local/share/wineprefixes/wine64
 
 build-test:
 	$(CARGO_BUILD_TEST)
 
 check-wine64:
 	$(CARGO_BUILD_TEST) --target $(WIN_TARGET)
-	WINEPREFIX=$(HOME)/.local/share/wineprefixes/wine64 wine64 target/$(WIN_TARGET)/$(TEST_APP)
+	WINEPREFIX="$(WINEPREFIX)" $(WINE) target/$(WIN_TARGET)/$(TEST_APP)
 
 cov: build-test
 	$(KCOV) --exclude-pattern=/.multirust,test.rs target/cov target/$(TEST_APP)
