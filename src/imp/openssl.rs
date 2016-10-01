@@ -110,13 +110,19 @@ impl io::Write for Hasher {
 impl HMAC {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
-        HMAC(hmac::HMAC::new(algorithm_to_hash_type(algorithm), key))
+        match hmac::HMAC::new(algorithm_to_hash_type(algorithm), key) {
+            Ok(hmac) => HMAC(hmac),
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 
     /// Generate an HMAC from the key + data written to the `HMAC` instance.
     pub fn finish(&mut self) -> Vec<u8> {
         let HMAC(ref mut hmac) = *self;
-        hmac.finish()
+        match hmac.finish() {
+            Ok(data) => data,
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
     }
 }
 
