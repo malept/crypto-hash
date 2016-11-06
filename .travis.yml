@@ -79,15 +79,6 @@ matrix:
     rust: nightly
     env: TARGET=x86_64-unknown-linux-gnu
   # 64-bit Linux (musl) doesn't work with openssl
-  - os: osx # 32-bit OSX
-    rust: stable
-    env: TARGET=i686-apple-darwin
-  - os: osx # 32-bit OSX
-    rust: beta
-    env: TARGET=i686-apple-darwin
-  - os: osx # 32-bit OSX
-    rust: nightly
-    env: TARGET=i686-apple-darwin
   - os: osx # 64-bit OSX
     rust: stable
     env: TARGET=x86_64-apple-darwin
