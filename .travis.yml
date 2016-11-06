@@ -35,7 +35,9 @@ matrix:
   include:
   - os: linux # 32-bit Linux (glibc)
     rust: stable
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     addons:
       apt:
         packages:
@@ -46,7 +48,9 @@ matrix:
           - gcc-multilib # Cross compiler and cross compiled C libraries
           - libssl-dev:i386
   - os: linux # 32-bit Linux (glibc)
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     rust: beta
     addons:
       apt:
@@ -59,7 +63,9 @@ matrix:
           - libssl-dev:i386
   - os: linux # 32-bit Linux (glibc)
     rust: nightly
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     addons:
       apt:
         packages:
