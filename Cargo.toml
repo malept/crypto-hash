@@ -31,4 +31,4 @@ advapi32-sys = "0.2"
 winapi = "0.2"
 
 [target.'cfg(not(any(target_os = "windows", target_os = "macos")))'.dependencies]
-openssl = "0.8"
+openssl = "0.9"

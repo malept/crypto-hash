@@ -22,7 +22,7 @@
 
 #![warn(missing_docs)]
 
-use openssl::crypto::hash;
+use openssl::hash;
 use std::io;
 use super::Algorithm;
 
@@ -50,10 +50,10 @@ impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
         let hash_type = match algorithm {
-            Algorithm::MD5 => hash::Type::MD5,
-            Algorithm::SHA1 => hash::Type::SHA1,
-            Algorithm::SHA256 => hash::Type::SHA256,
-            Algorithm::SHA512 => hash::Type::SHA512,
+            Algorithm::MD5 => hash::MessageDigest::md5(),
+            Algorithm::SHA1 => hash::MessageDigest::sha1(),
+            Algorithm::SHA256 => hash::MessageDigest::sha256(),
+            Algorithm::SHA512 => hash::MessageDigest::sha512(),
         };
 
         match hash::Hasher::new(hash_type) {
