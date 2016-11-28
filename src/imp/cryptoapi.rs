@@ -32,8 +32,8 @@ use std::mem;
 use std::ptr;
 use super::Algorithm;
 use winapi::{ALG_ID, BYTE, CALG_HMAC, CALG_MD5, CALG_RC2, CALG_SHA1, CALG_SHA_256, CALG_SHA_512,
-             CRYPT_SILENT, CRYPT_VERIFYCONTEXT, DWORD, HCRYPTHASH, HCRYPTKEY, HCRYPTPROV, HMAC_INFO,
-             HP_HASHVAL, HP_HMAC_INFO, PROV_RSA_AES, PUBLICKEYSTRUC};
+             CRYPT_SILENT, CRYPT_VERIFYCONTEXT, DWORD, HCRYPTHASH, HCRYPTKEY, HCRYPTPROV,
+             HMAC_INFO, HP_HASHVAL, HP_HMAC_INFO, PROV_RSA_AES, PUBLICKEYSTRUC};
 
 macro_rules! call {
     ($e: expr) => ({
@@ -111,10 +111,8 @@ impl CryptHash {
         };
 
         let hkey = match hmac_key {
-            Some(key) => {
-                CryptHash::generate_hmac_key(hcp, CALG_RC2, key)
-            }
-            None => 0
+            Some(key) => CryptHash::generate_hmac_key(hcp, CALG_RC2, key),
+            None => 0,
         };
 
         let mut ret = CryptHash {
@@ -161,12 +159,7 @@ impl CryptHash {
     }
 
     fn update(hcrypthash: &mut HCRYPTHASH, buf: &[u8]) {
-        call!(unsafe {
-            CryptHashData(*hcrypthash,
-                          buf.as_ptr() as *mut _,
-                          buf.len() as DWORD,
-                          0)
-        });
+        call!(unsafe { CryptHashData(*hcrypthash, buf.as_ptr() as *mut _, buf.len() as DWORD, 0) });
     }
 
     fn generate_hmac_key(hcp: HCRYPTPROV, algid: ALG_ID, data: &[u8]) -> HCRYPTKEY {
@@ -190,7 +183,14 @@ impl CryptHash {
         let mut hkey = 0;
         let mut hkey_ptr = &mut hkey;
         assert_eq!(0, *hkey_ptr);
-        call!(unsafe { CryptImportKey(hcp, pb_data.as_ptr(), pb_data_len as DWORD, 0, CRYPT_IPSEC_HMAC_KEY, hkey_ptr as *mut _) });
+        call!(unsafe {
+            CryptImportKey(hcp,
+                           pb_data.as_ptr(),
+                           pb_data_len as DWORD,
+                           0,
+                           CRYPT_IPSEC_HMAC_KEY,
+                           hkey_ptr as *mut _)
+        });
         assert!(*hkey_ptr != 0);
 
         *hkey_ptr

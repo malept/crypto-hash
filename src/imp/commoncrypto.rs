@@ -243,9 +243,7 @@ impl fmt::Debug for CCHmacContext {
 
 impl CCHmacContext {
     fn new() -> CCHmacContext {
-        CCHmacContext {
-            ctx: [0u32; CC_HMAC_CONTEXT_SIZE],
-        }
+        CCHmacContext { ctx: [0u32; CC_HMAC_CONTEXT_SIZE] }
     }
 }
 
@@ -458,7 +456,9 @@ impl HMAC {
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         let mut ctx = CCHmacContext::new();
         let hmac_algorithm = algorithm_to_hmac_type(&algorithm);
-        unsafe { CCHmacInit(&mut ctx, hmac_algorithm, key.as_ptr(), key.len()); }
+        unsafe {
+            CCHmacInit(&mut ctx, hmac_algorithm, key.as_ptr(), key.len());
+        }
         HMAC {
             algorithm: algorithm,
             context: ctx,
@@ -478,7 +478,9 @@ impl HMAC {
 
 impl io::Write for HMAC {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        unsafe { CCHmacUpdate(&mut self.context, buf.as_ptr(), buf.len()); }
+        unsafe {
+            CCHmacUpdate(&mut self.context, buf.as_ptr(), buf.len());
+        }
         Ok(buf.len())
     }
 
