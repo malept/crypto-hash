@@ -23,10 +23,19 @@
 #![warn(missing_docs)]
 
 use openssl::hash;
-use openssl::pkey::PKey;
+use openssl::pkey::{PKey, PKeyRef};
 use openssl::sign::Signer;
 use std::io;
 use super::Algorithm;
+
+macro_rules! openssl_call {
+    ($call: expr, $retval: ident, $retexpr: expr) => {
+        match $call {
+            Ok($retval) => $retexpr,
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+        }
+    }
+}
 
 /// Generator of digests using a cryptographic hash function.
 ///
@@ -66,33 +75,32 @@ pub struct Hasher(hash::Hasher);
 ///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
-pub struct HMAC(hmac::HMAC);
+pub struct HMAC<'a> {
+    pkey: PKey,
+    signer: Signer<'a>,
+}
 
-fn algorithm_to_hash_type(algorithm: Algorithm) -> hash::Type {
+fn algorithm_to_hash_type(algorithm: Algorithm) -> hash::MessageDigest {
     match algorithm {
-        Algorithm::MD5 => hash::Type::MD5,
-        Algorithm::SHA1 => hash::Type::SHA1,
-        Algorithm::SHA256 => hash::Type::SHA256,
-        Algorithm::SHA512 => hash::Type::SHA512,
+        Algorithm::MD5 => hash::MessageDigest::md5(),
+        Algorithm::SHA1 => hash::MessageDigest::sha1(),
+        Algorithm::SHA256 => hash::MessageDigest::sha256(),
+        Algorithm::SHA512 => hash::MessageDigest::sha512(),
     }
 }
 
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
-        match hash::Hasher::new(algorithm_to_hash_type(algorithm)) {
-            Ok(hasher) => Hasher(hasher),
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
-        }
+        openssl_call!(hash::Hasher::new(algorithm_to_hash_type(algorithm)),
+                      hasher,
+                      Hasher(hasher))
     }
 
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         let Hasher(ref mut hasher) = *self;
-        match hasher.finish() {
-            Ok(digest) => digest,
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
-        }
+        openssl_call!(hasher.finish(), digest, digest)
     }
 }
 
@@ -108,33 +116,35 @@ impl io::Write for Hasher {
     }
 }
 
-impl HMAC {
+impl<'a> HMAC<'a> {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
-        match hmac::HMAC::new(algorithm_to_hash_type(algorithm), key) {
-            Ok(hmac) => HMAC(hmac),
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
-        }
+        let hmac_key = HMAC::generate_pkey(key);
+        let keyref: PKeyRef<'a> = *hmac_key;
+        openssl_call!(Signer::new(algorithm_to_hash_type(algorithm), &keyref),
+                      value,
+                      HMAC {
+                          pkey: hmac_key,
+                          signer: value,
+                      })
+    }
+
+    fn generate_pkey(key: &[u8]) -> PKey {
+        openssl_call!(PKey::hmac(key), hkey, hkey)
     }
 
     /// Generate an HMAC from the key + data written to the `HMAC` instance.
     pub fn finish(&mut self) -> Vec<u8> {
-        let HMAC(ref mut hmac) = *self;
-        match hmac.finish() {
-            Ok(data) => data,
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
-        }
+        openssl_call!(self.signer.finish(), data, data)
     }
 }
 
-impl io::Write for HMAC {
+impl<'a> io::Write for HMAC<'a> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        let HMAC(ref mut hmac) = *self;
-        hmac.write(buf)
+        self.signer.write(buf)
     }
 
     fn flush(&mut self) -> io::Result<()> {
-        let HMAC(ref mut hmac) = *self;
-        hmac.flush()
+        self.signer.flush()
     }
 }
