@@ -22,8 +22,9 @@
 
 #![warn(missing_docs)]
 
-use openssl::crypto::hash;
-use openssl::crypto::hmac;
+use openssl::hash;
+use openssl::pkey::PKey;
+use openssl::sign::Signer;
 use std::io;
 use super::Algorithm;
 

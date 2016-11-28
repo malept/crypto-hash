@@ -35,7 +35,10 @@ matrix:
   include:
   - os: linux # 32-bit Linux (glibc)
     rust: stable
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_ALLOW_CROSS=1
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     addons:
       apt:
         packages:
@@ -46,7 +49,10 @@ matrix:
           - gcc-multilib # Cross compiler and cross compiled C libraries
           - libssl-dev:i386
   - os: linux # 32-bit Linux (glibc)
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_ALLOW_CROSS=1
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     rust: beta
     addons:
       apt:
@@ -59,7 +65,10 @@ matrix:
           - libssl-dev:i386
   - os: linux # 32-bit Linux (glibc)
     rust: nightly
-    env: TARGET=i686-unknown-linux-gnu
+    env:
+    - PKG_CONFIG_ALLOW_CROSS=1
+    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - TARGET=i686-unknown-linux-gnu
     addons:
       apt:
         packages:
@@ -79,15 +88,6 @@ matrix:
     rust: nightly
     env: TARGET=x86_64-unknown-linux-gnu
   # 64-bit Linux (musl) doesn't work with openssl
-  - os: osx # 32-bit OSX
-    rust: stable
-    env: TARGET=i686-apple-darwin
-  - os: osx # 32-bit OSX
-    rust: beta
-    env: TARGET=i686-apple-darwin
-  - os: osx # 32-bit OSX
-    rust: nightly
-    env: TARGET=i686-apple-darwin
   - os: osx # 64-bit OSX
     rust: stable
     env: TARGET=x86_64-apple-darwin

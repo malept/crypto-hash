@@ -1,6 +1,6 @@
 [package]
 name = "crypto-hash"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Mark Lee"]
 description = "A wrapper for OS-level cryptographic hash functions"
 documentation = "https://malept.github.io/crypto-hash/"
@@ -31,4 +31,4 @@ advapi32-sys = "0.2"
 winapi = "0.2"
 
 [target.'cfg(not(any(target_os = "windows", target_os = "macos")))'.dependencies]
-openssl = { version = "0.8", features = ["hmac"] }
+openssl = "0.9"

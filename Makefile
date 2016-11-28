@@ -9,6 +9,11 @@ WINEPREFIX ?= $(HOME)/.local/share/wineprefixes/wine64
 build-test:
 	$(CARGO_BUILD_TEST)
 
+check-i686:
+	PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig \
+		PKG_CONFIG_ALLOW_CROSS=1 \
+		$(CARGO) test --target i686-unknown-linux-gnu --verbose
+
 check-wine64:
 	$(CARGO_BUILD_TEST) --target $(WIN_TARGET)
 	WINEPREFIX="$(WINEPREFIX)" $(WINE) target/$(WIN_TARGET)/$(TEST_APP)
