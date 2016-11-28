@@ -45,9 +45,9 @@
 
 #[cfg(target_os = "windows")]
 extern crate advapi32;
-extern crate hex;
 #[cfg(target_os = "macos")]
-extern crate libc;
+extern crate commoncrypto;
+extern crate hex;
 #[cfg(not(any(target_os = "macos", target_os = "windows")))]
 extern crate openssl;
 #[cfg(target_os = "windows")]

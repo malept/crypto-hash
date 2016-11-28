@@ -58,7 +58,7 @@ impl Hasher {
 
         match hash::Hasher::new(hash_type) {
             Ok(hasher) => Hasher(hasher),
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack),
         }
     }
 
@@ -67,7 +67,7 @@ impl Hasher {
         let Hasher(ref mut hasher) = *self;
         match hasher.finish() {
             Ok(digest) => digest,
-            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack)
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack),
         }
     }
 }
