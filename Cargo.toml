@@ -1,6 +1,6 @@
 [package]
 name = "crypto-hash"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Mark Lee"]
 description = "A wrapper for OS-level cryptographic hash functions"
 documentation = "https://malept.github.io/crypto-hash/"
