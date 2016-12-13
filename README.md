@@ -15,8 +15,8 @@ the given operating system's bundled cryptographic libraries.
 By operating system:
 
 * Windows: CryptoAPI
-* OS X: CommonCrypto
-* Linux/BSD/etc.: OpenSSL
+* OS X: [CommonCrypto](https://crates.io/crates/commoncrypto)
+* Linux/BSD/etc.: [OpenSSL](https://crates.io/crates/openssl)
 
 ## Supported Algorithms
 
