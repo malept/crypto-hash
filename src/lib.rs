@@ -30,9 +30,9 @@
 //!
 //! By operating system:
 //!
-//! * Windows: CryptoAPI
-//! * Mac OS X: CommonCrypto
-//! * Linux/BSD/etc.: OpenSSL
+//! * Windows: `CryptoAPI`
+//! * Mac OS X: `CommonCrypto`
+//! * Linux/BSD/etc.: `OpenSSL`
 //!
 //! # Supported Algorithms
 //!
