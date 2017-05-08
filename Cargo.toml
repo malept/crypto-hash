@@ -13,6 +13,10 @@ exclude = [
     "ci/*"
 ]
 
+[badges]
+travis-ci = { repository = "malept/crypto-hash" }
+appveyor = { repository = "malept/crypto-hash" }
+
 [features]
 
 lint = ["clippy"]
