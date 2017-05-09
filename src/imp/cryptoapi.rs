@@ -88,12 +88,12 @@ impl Hasher {
     pub fn new(algorithm: Algorithm) -> Hasher {
         let mut hcp = 0;
         call!(unsafe {
-            CryptAcquireContextW(&mut hcp,
-                                 ptr::null(),
-                                 ptr::null(),
-                                 PROV_RSA_AES,
-                                 CRYPT_VERIFYCONTEXT | CRYPT_SILENT)
-        });
+                  CryptAcquireContextW(&mut hcp,
+                                       ptr::null(),
+                                       ptr::null(),
+                                       PROV_RSA_AES,
+                                       CRYPT_VERIFYCONTEXT | CRYPT_SILENT)
+              });
 
         let hash_type = match algorithm {
             Algorithm::MD5 => CALG_MD5,
@@ -131,11 +131,11 @@ impl Hasher {
 impl io::Write for Hasher {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         call!(unsafe {
-            CryptHashData(self.hcrypthash,
-                          buf.as_ptr() as *mut _,
-                          buf.len() as DWORD,
-                          0)
-        });
+                  CryptHashData(self.hcrypthash,
+                                buf.as_ptr() as *mut _,
+                                buf.len() as DWORD,
+                                0)
+              });
         Ok(buf.len())
     }
 
