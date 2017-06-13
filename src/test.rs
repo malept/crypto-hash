@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Mark Lee
+// Copyright (c) 2016, 2017 Mark Lee
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -74,5 +74,6 @@ fn hasher_with_write() {
 }
 
 fn assert_hex_hashed_empty_string(algorithm: Algorithm, expected: &str) {
-    assert_eq!(expected, hex_digest(algorithm, vec![]).as_str())
+    let vec = vec![];
+    assert_eq!(expected, hex_digest(algorithm, vec.as_slice()).as_str())
 }
