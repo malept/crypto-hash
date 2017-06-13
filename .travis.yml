@@ -4,7 +4,10 @@ language: rust
 # necessary for `travis-cargo coveralls --no-sudo`
 addons:
   apt:
+    sources:
+    - kalakris-cmake
     packages:
+    - cmake
     - libcurl4-openssl-dev
     - libelf-dev
     - libdw-dev
