@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [0.3.0] - 2017-06-18
+
+### Changed
+
+* Upgrade to `commoncrypto` 0.2.x
+* Function signatures for `digest` and `hex_digest` changed to use `&[u8]`, per Clippy
+
 ## [0.2.1] - 2016-12-12
 
 ### Changed
