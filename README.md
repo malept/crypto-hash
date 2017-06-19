@@ -35,7 +35,7 @@ Example:
 ```rust
 use crypto_hash::{Algorithm, hex_digest};
 
-let digest = hex_digest(Algorithm::SHA256, b"crypto-hash".to_vec());
+let digest = hex_digest(Algorithm::SHA256, b"crypto-hash");
 ```
 
 For more examples, consult the [documentation](https://malept.github.io/crypto-hash/).
