@@ -70,9 +70,9 @@ fn hasher_sans_write() {
 #[test]
 fn hasher_with_write() {
     let mut hasher = Hasher::new(Algorithm::MD5);
-    hasher
-        .write_all(TO_HASH.as_bytes())
-        .expect("Could not write to hasher");
+    hasher.write_all(TO_HASH.as_bytes()).expect(
+        "Could not write to hasher",
+    );
     let actual = hasher.finish().to_hex();
     assert_eq!(TO_HASH_MD5, actual)
 }
