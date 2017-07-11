@@ -1,7 +1,7 @@
 CARGO ?= cargo
 CARGO_BUILD_TEST = $(CARGO) test --no-run
 KCOV ?= kcov
-TEST_APP = debug/crypto_hash-*
+TEST_APP = debug/crypto_hash-*.exe
 WIN_TARGET = x86_64-pc-windows-gnu
 
 build-test:
