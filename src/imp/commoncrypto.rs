@@ -43,10 +43,7 @@ use super::Algorithm;
 /// assert_eq!(expected, result)
 /// ```
 #[derive(Debug)]
-pub struct Hasher {
-    context: DigestContext,
-    state: State,
-}
+pub struct Hasher(hash::Hasher);
 
 /// Generator of Hash-based Message Authentication Codes (HMACs).
 ///
