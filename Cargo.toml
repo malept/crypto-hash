@@ -21,7 +21,7 @@ appveyor = { repository = "malept/crypto-hash" }
 hex = "0.2"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-commoncrypto = "0.2"
+commoncrypto = { git = "https://github.com/malept/rust-commoncrypto", branch = "hmac" }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 advapi32-sys = "0.2"
