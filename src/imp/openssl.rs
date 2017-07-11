@@ -100,9 +100,7 @@ impl Hasher {
             Algorithm::SHA512 => hash::MessageDigest::sha512(),
         };
 
-        openssl_call!(hash::Hasher::new(hash_type),
-                      hasher,
-                      Hasher(hasher))
+        openssl_call!(hash::Hasher::new(hash_type), hasher, Hasher(hasher))
     }
 
     /// Generate a digest from the data written to the `Hasher`.
@@ -128,12 +126,14 @@ impl<'a> HMAC<'a> {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         let hmac_key = HMAC::generate_pkey(key);
-        openssl_call!(Signer::new(algorithm_to_hash_type(algorithm), hmac_key.deref()),
-                      value,
-                      HMAC {
-                          pkey: hmac_key,
-                          signer: value,
-                      })
+        openssl_call!(
+            Signer::new(algorithm_to_hash_type(algorithm), hmac_key.deref()),
+            value,
+            HMAC {
+                pkey: hmac_key,
+                signer: value,
+            }
+        )
     }
 
     fn generate_pkey(key: &[u8]) -> PKey {

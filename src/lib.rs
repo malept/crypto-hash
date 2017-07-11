@@ -138,7 +138,9 @@ pub fn hex_digest(algorithm: Algorithm, data: &[u8]) -> String {
 /// ```
 pub fn hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
     let mut hasher = imp::HMAC::new(algorithm.clone(), &key[..]);
-    hasher.write_all(&data[..]).expect("Could not write hash data");
+    hasher.write_all(&data[..]).expect(
+        "Could not write hash data",
+    );
     hasher.finish()
 }
 

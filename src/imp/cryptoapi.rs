@@ -144,11 +144,13 @@ impl CryptHash {
     fn acquire_context() -> HCRYPTPROV {
         let mut hcp = 0;
         call!(unsafe {
-            CryptAcquireContextW(&mut hcp,
-                                 ptr::null(),
-                                 ptr::null(),
-                                 PROV_RSA_AES,
-                                 CRYPT_VERIFYCONTEXT | CRYPT_SILENT)
+            CryptAcquireContextW(
+                &mut hcp,
+                ptr::null(),
+                ptr::null(),
+                PROV_RSA_AES,
+                CRYPT_VERIFYCONTEXT | CRYPT_SILENT,
+            )
         });
 
         hcp
@@ -159,7 +161,9 @@ impl CryptHash {
     }
 
     fn update(hcrypthash: &mut HCRYPTHASH, buf: &[u8]) {
-        call!(unsafe { CryptHashData(*hcrypthash, buf.as_ptr() as *mut _, buf.len() as DWORD, 0) });
+        call!(unsafe {
+            CryptHashData(*hcrypthash, buf.as_ptr() as *mut _, buf.len() as DWORD, 0)
+        });
     }
 
     fn generate_hmac_key(hcp: HCRYPTPROV, algid: ALG_ID, data: &[u8]) -> HCRYPTKEY {
@@ -184,12 +188,14 @@ impl CryptHash {
         let mut hkey_ptr = &mut hkey;
         assert_eq!(0, *hkey_ptr);
         call!(unsafe {
-            CryptImportKey(hcp,
-                           pb_data.as_ptr(),
-                           pb_data_len as DWORD,
-                           0,
-                           CRYPT_IPSEC_HMAC_KEY,
-                           hkey_ptr as *mut _)
+            CryptImportKey(
+                hcp,
+                pb_data.as_ptr(),
+                pb_data_len as DWORD,
+                0,
+                CRYPT_IPSEC_HMAC_KEY,
+                hkey_ptr as *mut _,
+            )
         });
         assert!(*hkey_ptr != 0);
 
