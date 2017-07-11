@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [0.3.0] - 2017-06-18
+
+### Changed
+
+* Upgrade to `commoncrypto` 0.2.x
+* Function signatures for `digest` and `hex_digest` changed to use `&[u8]`, per Clippy
+
+## [0.2.1] - 2016-12-12
+
+### Changed
+
+* Move CommonCrypto implementation to its own crate
+
 ## [0.2.0] - 2016-11-06
 
 ### Added
@@ -31,5 +44,7 @@ Implementations:
 * CryptoAPI (Windows)
 * OpenSSL (Linux/BSD/etc.)
 
+[0.3.0]: https://github.com/malept/crypto-hash/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/malept/crypto-hash/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/malept/crypto-hash/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/malept/crypto-hash/releases/tag/v0.1.0

@@ -1,4 +1,4 @@
-// Copyright (c) 2015, 2016 Mark Lee
+// Copyright (c) 2015, 2016, 2017 Mark Lee
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +30,9 @@
 //!
 //! By operating system:
 //!
-//! * Windows: CryptoAPI
-//! * Mac OS X: CommonCrypto
-//! * Linux/BSD/etc.: OpenSSL
+//! * Windows: `CryptoAPI`
+//! * Mac OS X: `CommonCrypto`
+//! * Linux/BSD/etc.: `OpenSSL`
 //!
 //! # Supported Algorithms
 //!
@@ -45,9 +45,9 @@
 
 #[cfg(target_os = "windows")]
 extern crate advapi32;
-extern crate hex;
 #[cfg(target_os = "macos")]
-extern crate libc;
+extern crate commoncrypto;
+extern crate hex;
 #[cfg(not(any(target_os = "macos", target_os = "windows")))]
 extern crate openssl;
 #[cfg(target_os = "windows")]
@@ -92,16 +92,16 @@ pub enum Algorithm {
 /// ```rust
 /// use crypto_hash::{Algorithm, digest};
 ///
-/// let data = b"crypto-hash".to_vec();
+/// let data = b"crypto-hash";
 /// let result = digest(Algorithm::SHA256, data);
 /// let expected =
 ///     b"\xfd\x1a\xfb`\"\xcdMG\xc8\x90\x96\x1cS9(\xea\xcf\xe8!\x9f\x1b%$\xf7\xfb*a\x84}\xdf\x8c'"
 ///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
-pub fn digest(algorithm: Algorithm, data: Vec<u8>) -> Vec<u8> {
-    let mut hasher = imp::Hasher::new(algorithm.clone());
-    hasher.write_all(&data[..]).expect("Could not write hash data");
+pub fn digest(algorithm: Algorithm, data: &[u8]) -> Vec<u8> {
+    let mut hasher = imp::Hasher::new(algorithm);
+    hasher.write_all(data).expect("Could not write hash data");
     hasher.finish()
 }
 
@@ -113,12 +113,12 @@ pub fn digest(algorithm: Algorithm, data: Vec<u8>) -> Vec<u8> {
 /// ```rust
 /// use crypto_hash::{Algorithm, hex_digest};
 ///
-/// let data = b"crypto-hash".to_vec();
+/// let data = b"crypto-hash";
 /// let result = hex_digest(Algorithm::SHA256, data);
 /// let expected = "fd1afb6022cd4d47c890961c533928eacfe8219f1b2524f7fb2a61847ddf8c27";
 /// assert_eq!(expected, result)
 /// ```
-pub fn hex_digest(algorithm: Algorithm, data: Vec<u8>) -> String {
+pub fn hex_digest(algorithm: Algorithm, data: &[u8]) -> String {
     digest(algorithm, data).to_hex()
 }
 

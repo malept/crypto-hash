@@ -15,8 +15,8 @@ the given operating system's bundled cryptographic libraries.
 By operating system:
 
 * Windows: CryptoAPI
-* OS X: CommonCrypto
-* Linux/BSD/etc.: OpenSSL
+* OS X: [CommonCrypto](https://crates.io/crates/commoncrypto)
+* Linux/BSD/etc.: [OpenSSL](https://crates.io/crates/openssl)
 
 ## Supported Algorithms
 
@@ -35,7 +35,7 @@ Example:
 ```rust
 use crypto_hash::{Algorithm, hex_digest};
 
-let digest = hex_digest(Algorithm::SHA256, b"crypto-hash".to_vec());
+let digest = hex_digest(Algorithm::SHA256, b"crypto-hash");
 ```
 
 For more examples, consult the [documentation](https://malept.github.io/crypto-hash/).

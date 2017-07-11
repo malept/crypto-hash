@@ -13,10 +13,12 @@ addons:
 os:
 - linux
 - osx
+dist: trusty
 
 cache:
-  apt: true
   cargo: true
+  directories:
+  - $HOME/.cache/pip
 
 rust:
 - nightly
@@ -107,7 +109,7 @@ after_success: ci/after_success.sh
 
 env:
   global:
-  - TRAVIS_CARGO_NIGHTLY_FEATURE='lint'
+  - TRAVIS_CARGO_NIGHTLY_FEATURE=""
   - PATH=$HOME/Library/Python/2.7/bin:$HOME/.local/bin:$PATH
   # encrypted github token for doc upload
   - secure: "ttZL5OpzNMQOHuaTj7cKyl5N24r3HPB0V/ogWt4Ws10t08aGoonlRSLVlUZaTKI9D5CZMthaWbHRczeJ0DO3MFvAyKcMsnBaM+hc04oRAK7GweoOW3AeKGhBGOVljQK47ySa/Bjniky9zejw/8gzHyOeji+Ydb6YwAdgxTqaHGL+5YAoB1CurxdoVZnVaCLLvvsbPsL27YFkOZrYsI51OlTzkoXj783GowgwjTWc6DBzIgtMTokBKkoPIvVRFBHpwrLhX/pvet3bauXrn2WGkl8+Ab5mBOEhwpmz9TkQW47qyWbibpOwkTwf55C7Ecpi1Aix5o21wLKEDdcZgzY72ri7DillNkLgbcIpHGBQpT+P1lK6pmG1G9HzW2bNPn8k0LukEIY8E0Q1kDef7mc4qw5zkMTgyruRi+yd6r9pTXXh1mDTvNc956Rx/fsfHgxhJIk73/IlYNIaDcmMHbyYQ/AeohWaxup45fqNRaK8AbYFm5rV3o6Ce9c+lW2cHm3ssbhQ5T6L8kGyrDO9glEeyvdKsO6lXRc6x0hiwu9msuRyCgDW1iPD0mkXiMYM5MVC3mg/h9E+e0KcjZg1+PaVqnUWHINsGynNJCctzCmfUMb9aufPTAtoYweT7FMTHekaTLhvxjaYxfPsVmi7kL6HaXAVKQf2qZgp/IjI7AtFsaE="

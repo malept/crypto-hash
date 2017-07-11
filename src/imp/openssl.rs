@@ -92,7 +92,14 @@ fn algorithm_to_hash_type(algorithm: Algorithm) -> hash::MessageDigest {
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
     pub fn new(algorithm: Algorithm) -> Hasher {
-        openssl_call!(hash::Hasher::new(algorithm_to_hash_type(algorithm)),
+        let hash_type = match algorithm {
+            Algorithm::MD5 => hash::MessageDigest::md5(),
+            Algorithm::SHA1 => hash::MessageDigest::sha1(),
+            Algorithm::SHA256 => hash::MessageDigest::sha256(),
+            Algorithm::SHA512 => hash::MessageDigest::sha512(),
+        };
+
+        openssl_call!(hash::Hasher::new(hash_type),
                       hasher,
                       Hasher(hasher))
     }
@@ -100,7 +107,7 @@ impl Hasher {
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         let Hasher(ref mut hasher) = *self;
-        openssl_call!(hasher.finish(), digest, digest)
+        openssl_call!(hasher.finish2(), digest, digest.to_vec())
     }
 }
 

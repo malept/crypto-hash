@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Mark Lee
+// Copyright (c) 2016, 2017 Mark Lee
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,15 @@ const HMAC_SHA1_EMPTY_STRING: &'static str = "fbdb1d1b18aa6c08324b7d64b71fb76370
 const HMAC_SHA256_EMPTY_STRING: &'static str = "b613679a0814d9ec772f95d778c35fc5ff1697c493715653c6c712144292c5ad";
 const MD5_EMPTY_STRING: &'static str = "d41d8cd98f00b204e9800998ecf8427e";
 const SHA1_EMPTY_STRING: &'static str = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
-const SHA256_EMPTY_STRING: &'static str = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-const SHA512_EMPTY_STRING: &'static str = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e";
+const SHA256_EMPTY_STRING: &'static str = concat!(
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649",
+    "b934ca495991b7852b855"
+);
+const SHA512_EMPTY_STRING: &'static str = concat!(
+    "cf83e1357eefb8bdf1542850d66d8007d620e4050b5",
+    "715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318",
+    "d2877eec2f63b931bd47417a81a538327af927da3e"
+);
 const TO_HASH: &'static str = "The quick brown fox jumps over the lazy dog";
 const TO_HASH_HMAC_MD5: &'static str = "80070713463e7749b90c2dc24911e275";
 const TO_HASH_MD5: &'static str = "9e107d9d372bb6826bd81d3542a419d6";
@@ -81,7 +88,9 @@ fn hasher_sans_write() {
 #[test]
 fn hasher_with_write() {
     let mut hasher = Hasher::new(Algorithm::MD5);
-    hasher.write_all(TO_HASH.as_bytes()).expect("Could not write to hasher");
+    hasher.write_all(TO_HASH.as_bytes()).expect(
+        "Could not write to hasher",
+    );
     let actual = hasher.finish().to_hex();
     assert_eq!(TO_HASH_MD5, actual)
 }
@@ -102,7 +111,8 @@ fn hmac_with_write() {
 }
 
 fn assert_hex_hashed_empty_string(algorithm: Algorithm, expected: &str) {
-    assert_eq!(expected, hex_digest(algorithm, vec![]).as_str())
+    let vec = vec![];
+    assert_eq!(expected, hex_digest(algorithm, vec.as_slice()).as_str())
 }
 
 fn assert_hex_hmac_empty_string(algorithm: Algorithm, expected: &str) {
