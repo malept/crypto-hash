@@ -26,6 +26,7 @@ use openssl::hash;
 use openssl::pkey::{PKey, PKeyRef};
 use openssl::sign::Signer;
 use std::io;
+use std::ops::Deref;
 use super::Algorithm;
 
 macro_rules! openssl_call {
@@ -127,8 +128,7 @@ impl<'a> HMAC<'a> {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
         let hmac_key = HMAC::generate_pkey(key);
-        let keyref: PKeyRef<'a> = *hmac_key;
-        openssl_call!(Signer::new(algorithm_to_hash_type(algorithm), &keyref),
+        openssl_call!(Signer::new(algorithm_to_hash_type(algorithm), hmac_key.deref()),
                       value,
                       HMAC {
                           pkey: hmac_key,
