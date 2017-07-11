@@ -21,6 +21,7 @@
 //! A cryptographic hash generator dependent upon OSX's `CommonCrypto`.
 
 use commoncrypto::{hash, hmac};
+use commoncrypto::hmac::CCHmacAlgorithm;
 use std::io;
 use super::Algorithm;
 
@@ -115,7 +116,7 @@ fn algorithm_to_hmac_type(algorithm: &Algorithm) -> CCHmacAlgorithm {
 impl HMAC {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
-        HMAC(hmac::HMAC::new(algorithm_to_hmac_type(&algorithm), key))
+        HMAC { context: hmac::HMAC::new(algorithm_to_hmac_type(&algorithm), key) }
     }
 
     /// Generate an HMAC from the key + data written to the `HMAC` instance.
