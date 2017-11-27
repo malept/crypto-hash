@@ -98,7 +98,7 @@ fn hasher_with_write() {
 #[test]
 fn hmac_sans_write() {
     let mut hmac = HMAC::new(Algorithm::MD5, b"");
-    let actual = hmac.finish().to_hex();
+    let actual = hex::encode(hmac.finish());
     assert_eq!(HMAC_MD5_EMPTY_STRING, actual)
 }
 
@@ -108,7 +108,7 @@ fn hmac_with_write() {
     hmac.write_all(TO_HASH.as_bytes()).expect(
         "Could not write to hmac",
     );
-    let actual = hmac.finish().to_hex();
+    let actual = hex::encode(hmac.finish());
     assert_eq!(TO_HASH_HMAC_MD5, actual)
 }
 

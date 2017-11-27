@@ -157,5 +157,5 @@ pub fn hmac(algorithm: &Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
 /// assert_eq!(expected, result)
 /// ```
 pub fn hex_hmac(algorithm: &Algorithm, key: Vec<u8>, data: Vec<u8>) -> String {
-    hmac(algorithm, key, data).to_hex()
+    hex::encode(hmac(algorithm, key, data))
 }
