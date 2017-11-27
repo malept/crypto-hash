@@ -53,7 +53,6 @@ extern crate openssl;
 #[cfg(target_os = "windows")]
 extern crate winapi;
 
-use hex::ToHex;
 use std::io::Write;
 
 #[cfg(target_os = "macos")]
@@ -118,5 +117,5 @@ pub fn digest(algorithm: Algorithm, data: &[u8]) -> Vec<u8> {
 /// assert_eq!(expected, result)
 /// ```
 pub fn hex_digest(algorithm: Algorithm, data: &[u8]) -> String {
-    digest(algorithm, data).to_hex()
+    hex::encode(digest(algorithm, data))
 }

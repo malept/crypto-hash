@@ -20,7 +20,7 @@
 
 #![cfg(test)]
 
-use hex::ToHex;
+use hex;
 use std::io::Write;
 use super::{Algorithm, Hasher, hex_digest};
 
@@ -63,7 +63,7 @@ fn sha512_empty_string() {
 #[test]
 fn hasher_sans_write() {
     let mut hasher = Hasher::new(Algorithm::MD5);
-    let actual = hasher.finish().to_hex();
+    let actual = hex::encode(hasher.finish());
     assert_eq!(MD5_EMPTY_STRING, actual)
 }
 
@@ -73,7 +73,7 @@ fn hasher_with_write() {
     hasher.write_all(TO_HASH.as_bytes()).expect(
         "Could not write to hasher",
     );
-    let actual = hasher.finish().to_hex();
+    let actual = hex::encode(hasher.finish());
     assert_eq!(TO_HASH_MD5, actual)
 }
 
