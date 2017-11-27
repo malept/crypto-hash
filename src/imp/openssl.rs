@@ -76,8 +76,26 @@ pub struct Hasher(hash::Hasher);
 ///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
-pub struct HMAC<'a> {
+
+pub struct HMACKey<'a> {
+    key: &'a [u8],
     pkey: PKey,
+}
+
+impl<'a> HMACKey<'a> {
+    /// Create a new `HMAC` for the given `Algorithm` and `key`.
+    pub fn new(key: &[u8]) -> HMACKey {
+        let pkey = openssl_call!(PKey::hmac(key), hkey, hkey);
+
+        HMACKey {
+            key: key,
+            pkey: pkey,
+        }
+    }
+}
+
+pub struct HMAC<'a> {
+    key: HMACKey<'a>,
     signer: Signer<'a>,
 }
 
@@ -100,7 +118,9 @@ impl Hasher {
             Algorithm::SHA512 => hash::MessageDigest::sha512(),
         };
 
-        openssl_call!(hash::Hasher::new(hash_type), hasher, Hasher(hasher))
+        openssl_call!(hash::Hasher::new(hash_type),
+                      hasher,
+                      Hasher(hasher))
     }
 
     /// Generate a digest from the data written to the `Hasher`.
@@ -125,19 +145,13 @@ impl io::Write for Hasher {
 impl<'a> HMAC<'a> {
     /// Create a new `HMAC` for the given `Algorithm` and `key`.
     pub fn new(algorithm: Algorithm, key: &[u8]) -> HMAC {
-        let hmac_key = HMAC::generate_pkey(key);
-        openssl_call!(
-            Signer::new(algorithm_to_hash_type(algorithm), hmac_key.deref()),
-            value,
-            HMAC {
-                pkey: hmac_key,
-                signer: value,
-            }
-        )
-    }
-
-    fn generate_pkey(key: &[u8]) -> PKey {
-        openssl_call!(PKey::hmac(key), hkey, hkey)
+        let hmac_key = HMACKey::new(key);
+        openssl_call!(Signer::new(algorithm_to_hash_type(algorithm), &hmac_key.pkey),
+                      value,
+                      HMAC {
+                          key: hmac_key,
+                          signer: value,
+                      })
     }
 
     /// Generate an HMAC from the key + data written to the `HMAC` instance.

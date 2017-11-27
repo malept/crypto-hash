@@ -136,7 +136,7 @@ pub fn hex_digest(algorithm: Algorithm, data: &[u8]) -> String {
 ///     .to_vec();
 /// assert_eq!(expected, result)
 /// ```
-pub fn hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
+pub fn hmac(algorithm: &Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
     let mut hasher = imp::HMAC::new(algorithm.clone(), &key[..]);
     hasher.write_all(&data[..]).expect(
         "Could not write hash data",
@@ -157,6 +157,6 @@ pub fn hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> Vec<u8> {
 /// let expected = "8ed6cd30bac29edc0fcc3307d444db36a6e82ff394e6aca2016c032f2a311f24";
 /// assert_eq!(expected, result)
 /// ```
-pub fn hex_hmac(algorithm: Algorithm, key: Vec<u8>, data: Vec<u8>) -> String {
+pub fn hex_hmac(algorithm: &Algorithm, key: Vec<u8>, data: Vec<u8>) -> String {
     hmac(algorithm, key, data).to_hex()
 }

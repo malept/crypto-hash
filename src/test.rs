@@ -118,5 +118,5 @@ fn assert_hex_hashed_empty_string(algorithm: Algorithm, expected: &str) {
 }
 
 fn assert_hex_hmac_empty_string(algorithm: Algorithm, expected: &str) {
-    assert_eq!(expected, hex_hmac(algorithm, vec![], vec![]).as_str())
+    assert_eq!(expected, hex_hmac(&algorithm, vec![], vec![]).as_str())
 }
