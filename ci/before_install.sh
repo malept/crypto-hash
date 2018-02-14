@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -xe
+#!/bin/bash -xe
 
 # Mostly from https://github.com/japaric/rust-everywhere
 # Load the correct rust if it's not already there
@@ -11,23 +9,7 @@ case $TARGET in
   i686-apple-darwin | \
   i686-unknown-linux-gnu | \
   x86_64-unknown-linux-musl)
-    if test "$TRAVIS_RUST_VERSION" = "stable"; then
-        # e.g. 1.6.0
-        version=$(rustc -V | cut -d' ' -f2)
-    else
-        version=$TRAVIS_RUST_VERSION
-    fi
-    tarball=rust-std-${version}-${TARGET}
-
-    # Cannot use wget due to https://github.com/travis-ci/travis-ci/issues/5156
-    curl -O https://static.rust-lang.org/dist/${tarball}.tar.gz
-
-    tar xzf ${tarball}.tar.gz
-
-    ${tarball}/install.sh --prefix=$(rustc --print sysroot)
-
-    rm -r ${tarball}
-    rm ${tarball}.tar.gz
+    rustup target add --toolchain $TRAVIS_RUST_VERSION $TARGET
     ;;
   # Nothing to do for native builds
   *) ;;
