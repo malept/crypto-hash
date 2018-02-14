@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/ec.rs.html#92' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/ec.rs.html#55' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct PointConversionForm(_);</pre><div class='docblock'><p>Compressed or Uncompressed conversion</p>
 
 <p>Conversion from the binary value of the point on the curve is performed in one of
@@ -57,12 +57,29 @@ for binary curves.</p>
 
 <p>Further documentation is available in the <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.202.2977&amp;rep=rep1&amp;type=pdf">X9.62</a> standard.</p>
 </div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#57-69' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedconstant.COMPRESSED' class="associatedconstant"><span id='COMPRESSED.v' class='invisible'><code>const <a href='#associatedconstant.COMPRESSED' class="constant"><b>COMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">COMPRESSED</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_COMPRESSED</span>)</pre>
+<p>Compressed conversion from point value.</p>
+</div><h4 id='associatedconstant.UNCOMPRESSED' class="associatedconstant"><span id='UNCOMPRESSED.v' class='invisible'><code>const <a href='#associatedconstant.UNCOMPRESSED' class="constant"><b>UNCOMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">UNCOMPRESSED</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_UNCOMPRESSED</span>)</pre>
+<p>Uncompressed conversion from point value.</p>
+</div><h4 id='associatedconstant.HYBRID' class="associatedconstant"><span id='HYBRID.v' class='invisible'><code>const <a href='#associatedconstant.HYBRID' class="constant"><b>HYBRID</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">HYBRID</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_HYBRID</span>)</pre>
+<p>Performs both compressed and uncompressed conversions.</p>
+</div></div>
             <h2 id='implementations' class='small-section-header'>
               Trait Implementations<a href='#implementations' class='anchor'></a>
             </h2>
-        <h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#91' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#91' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#91' title='goto source code'>[src]</a></span></h4>
+        <h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#54' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#54' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#54' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
 </div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#112-114' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>

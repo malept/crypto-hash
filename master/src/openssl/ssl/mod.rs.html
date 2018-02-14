@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.9.24/src/ssl/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/ssl/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -2559,57 +2559,6 @@
 <span id="2514">2514</span>
 <span id="2515">2515</span>
 <span id="2516">2516</span>
-<span id="2517">2517</span>
-<span id="2518">2518</span>
-<span id="2519">2519</span>
-<span id="2520">2520</span>
-<span id="2521">2521</span>
-<span id="2522">2522</span>
-<span id="2523">2523</span>
-<span id="2524">2524</span>
-<span id="2525">2525</span>
-<span id="2526">2526</span>
-<span id="2527">2527</span>
-<span id="2528">2528</span>
-<span id="2529">2529</span>
-<span id="2530">2530</span>
-<span id="2531">2531</span>
-<span id="2532">2532</span>
-<span id="2533">2533</span>
-<span id="2534">2534</span>
-<span id="2535">2535</span>
-<span id="2536">2536</span>
-<span id="2537">2537</span>
-<span id="2538">2538</span>
-<span id="2539">2539</span>
-<span id="2540">2540</span>
-<span id="2541">2541</span>
-<span id="2542">2542</span>
-<span id="2543">2543</span>
-<span id="2544">2544</span>
-<span id="2545">2545</span>
-<span id="2546">2546</span>
-<span id="2547">2547</span>
-<span id="2548">2548</span>
-<span id="2549">2549</span>
-<span id="2550">2550</span>
-<span id="2551">2551</span>
-<span id="2552">2552</span>
-<span id="2553">2553</span>
-<span id="2554">2554</span>
-<span id="2555">2555</span>
-<span id="2556">2556</span>
-<span id="2557">2557</span>
-<span id="2558">2558</span>
-<span id="2559">2559</span>
-<span id="2560">2560</span>
-<span id="2561">2561</span>
-<span id="2562">2562</span>
-<span id="2563">2563</span>
-<span id="2564">2564</span>
-<span id="2565">2565</span>
-<span id="2566">2566</span>
-<span id="2567">2567</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! SSL/TLS support.</span>
 <span class="doccomment">//!</span>
@@ -2621,11 +2570,11 @@
 <span class="doccomment">//! To connect as a client to a remote server:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! use openssl::ssl::{SslMethod, SslConnectorBuilder};</span>
+<span class="doccomment">//! use openssl::ssl::{SslMethod, SslConnector};</span>
 <span class="doccomment">//! use std::io::{Read, Write};</span>
 <span class="doccomment">//! use std::net::TcpStream;</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! let connector = SslConnectorBuilder::new(SslMethod::tls()).unwrap().build();</span>
+<span class="doccomment">//! let connector = SslConnector::builder(SslMethod::tls()).unwrap().build();</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let stream = TcpStream::connect(&quot;google.com:443&quot;).unwrap();</span>
 <span class="doccomment">//! let mut stream = connector.connect(&quot;google.com&quot;, stream).unwrap();</span>
@@ -2639,30 +2588,17 @@
 <span class="doccomment">//! To accept connections as a server from remote clients:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use openssl::pkcs12::Pkcs12;</span>
-<span class="doccomment">//! use openssl::ssl::{SslMethod, SslAcceptorBuilder, SslStream};</span>
-<span class="doccomment">//! use std::fs::File;</span>
-<span class="doccomment">//! use std::io::{Read, Write};</span>
+<span class="doccomment">//! use openssl::ssl::{SslMethod, SslAcceptor, SslStream, SslFiletype};</span>
 <span class="doccomment">//! use std::net::{TcpListener, TcpStream};</span>
 <span class="doccomment">//! use std::sync::Arc;</span>
 <span class="doccomment">//! use std::thread;</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // In this example we retrieve our keypair and certificate chain from a PKCS #12 archive,</span>
-<span class="doccomment">//! // but but they can also be retrieved from, for example, individual PEM- or DER-formatted</span>
-<span class="doccomment">//! // files. See the documentation for the `PKey` and `X509` types for more details.</span>
-<span class="doccomment">//! let mut file = File::open(&quot;identity.pfx&quot;).unwrap();</span>
-<span class="doccomment">//! let mut pkcs12 = vec![];</span>
-<span class="doccomment">//! file.read_to_end(&amp;mut pkcs12).unwrap();</span>
-<span class="doccomment">//! let pkcs12 = Pkcs12::from_der(&amp;pkcs12).unwrap();</span>
-<span class="doccomment">//! let identity = pkcs12.parse(&quot;password123&quot;).unwrap();</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! let acceptor = SslAcceptorBuilder::mozilla_intermediate(SslMethod::tls(),</span>
-<span class="doccomment">//!                                                         &amp;identity.pkey,</span>
-<span class="doccomment">//!                                                         &amp;identity.cert,</span>
-<span class="doccomment">//!                                                         &amp;identity.chain)</span>
-<span class="doccomment">//!     .unwrap()</span>
-<span class="doccomment">//!     .build();</span>
-<span class="doccomment">//! let acceptor = Arc::new(acceptor);</span>
+<span class="doccomment">//! let mut acceptor = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();</span>
+<span class="doccomment">//! acceptor.set_private_key_file(&quot;key.pem&quot;, SslFiletype::PEM).unwrap();</span>
+<span class="doccomment">//! acceptor.set_certificate_chain_file(&quot;certs.pem&quot;).unwrap();</span>
+<span class="doccomment">//! acceptor.check_private_key().unwrap();</span>
+<span class="doccomment">//! let acceptor = Arc::new(acceptor.build());</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let listener = TcpListener::bind(&quot;0.0.0.0:8443&quot;).unwrap();</span>
 <span class="doccomment">//!</span>
@@ -2687,7 +2623,6 @@
 <span class="kw">use</span> <span class="ident">foreign_types</span>::{<span class="ident">ForeignType</span>, <span class="ident">ForeignTypeRef</span>, <span class="ident">Opaque</span>};
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_int</span>, <span class="ident">c_long</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_uchar</span>, <span class="ident">c_uint</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">Any</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">TypeId</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
@@ -2696,7 +2631,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>::{<span class="self">self</span>, <span class="ident">ManuallyDrop</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">panic</span>::<span class="ident">resume_unwind</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
@@ -2710,130 +2645,110 @@
 <span class="kw">use</span> <span class="ident">ec</span>::<span class="ident">EcKeyRef</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v101&quot;</span>, <span class="ident">ossl101</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>)))]</span>
 <span class="kw">use</span> <span class="ident">ec</span>::<span class="ident">EcKey</span>;
-<span class="kw">use</span> <span class="ident">x509</span>::{<span class="ident">X509</span>, <span class="ident">X509FileType</span>, <span class="ident">X509Name</span>, <span class="ident">X509Ref</span>, <span class="ident">X509StoreContextRef</span>, <span class="ident">X509VerifyError</span>};
+<span class="kw">use</span> <span class="ident">x509</span>::{<span class="ident">X509</span>, <span class="ident">X509Name</span>, <span class="ident">X509Ref</span>, <span class="ident">X509StoreContextRef</span>, <span class="ident">X509VerifyResult</span>};
 <span class="kw">use</span> <span class="ident">x509</span>::<span class="ident">store</span>::{<span class="ident">X509StoreBuilderRef</span>, <span class="ident">X509StoreRef</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
 <span class="kw">use</span> <span class="ident">x509</span>::<span class="ident">store</span>::<span class="ident">X509Store</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">ossl102</span>, <span class="ident">ossl110</span>))]</span>
 <span class="kw">use</span> <span class="ident">verify</span>::<span class="ident">X509VerifyParamRef</span>;
-<span class="kw">use</span> <span class="ident">pkey</span>::<span class="ident">PKeyRef</span>;
+<span class="kw">use</span> <span class="ident">pkey</span>::{<span class="ident">HasPrivate</span>, <span class="ident">PKeyRef</span>, <span class="ident">Params</span>, <span class="ident">Private</span>};
 <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">ErrorStack</span>;
 <span class="kw">use</span> <span class="ident">ex_data</span>::<span class="ident">Index</span>;
 <span class="kw">use</span> <span class="ident">stack</span>::{<span class="ident">Stack</span>, <span class="ident">StackRef</span>};
 <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">bio</span>::<span class="ident">BioMethod</span>;
+<span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">error</span>::<span class="ident">InnerError</span>;
 <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">callbacks</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">connector</span>::{<span class="ident">ConnectConfiguration</span>, <span class="ident">SslAcceptor</span>, <span class="ident">SslAcceptorBuilder</span>, <span class="ident">SslConnector</span>,
                          <span class="ident">SslConnectorBuilder</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">HandshakeError</span>, <span class="ident">RetryError</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorCode</span>, <span class="ident">HandshakeError</span>};
 
 <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">mod</span> <span class="ident">callbacks</span>;
 <span class="kw">mod</span> <span class="ident">connector</span>;
 <span class="kw">mod</span> <span class="ident">bio</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span>;
+<span class="kw">mod</span> <span class="ident">test</span>;
 
-<span class="comment">// FIXME drop SSL_ prefix</span>
-<span class="comment">// FIXME remvove flags not used in OpenSSL 1.1</span>
 <span class="macro">bitflags</span><span class="macro">!</span> {
     <span class="doccomment">/// Options controlling the behavior of an `SslContext`.</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslOption</span>: <span class="ident">c_ulong</span> {
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_MICROSOFT_SESS_ID_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_MICROSOFT_SESS_ID_BUG</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NETSCAPE_CHALLENGE_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NETSCAPE_CHALLENGE_BUG</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG</span> <span class="op">=</span>
-            <span class="ident">ffi</span>::<span class="ident">SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_SSLEAY_080_CLIENT_DH_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_SSLEAY_080_CLIENT_DH_BUG</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_TLS_D5_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_TLS_D5_BUG</span>;
-        <span class="comment">// FIXME remove</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_TLS_BLOCK_PADDING_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_TLS_BLOCK_PADDING_BUG</span>;
-
-        <span class="comment">// FIXME remove? not documented anywhere</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_CISCO_ANYCONNECT</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_CISCO_ANYCONNECT</span>;
-
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslOptions</span>: <span class="ident">c_ulong</span> {
         <span class="doccomment">/// Disables a countermeasure against an SSLv3/TLSv1.0 vulnerability affecting CBC ciphers.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</span>;
+        <span class="kw">const</span> <span class="ident">DONT_INSERT_EMPTY_FRAGMENTS</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS</span>;
 
         <span class="doccomment">/// A &quot;reasonable default&quot; set of options which enables compatibility flags.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_ALL</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_ALL</span>;
+        <span class="kw">const</span> <span class="ident">ALL</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_ALL</span>;
 
         <span class="doccomment">/// Do not query the MTU.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// Only affects DTLS connections.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_QUERY_MTU</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_QUERY_MTU</span>;
+        <span class="kw">const</span> <span class="ident">NO_QUERY_MTU</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_QUERY_MTU</span>;
 
         <span class="doccomment">/// Enables Cookie Exchange as described in [RFC 4347 Section 4.2.1].</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// Only affects DTLS connections.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// [RFC 4347 Section 4.2.1]: https://tools.ietf.org/html/rfc4347#section-4.2.1</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_COOKIE_EXCHANGE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_COOKIE_EXCHANGE</span>;
+        <span class="kw">const</span> <span class="ident">COOKIE_EXCHANGE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_COOKIE_EXCHANGE</span>;
 
         <span class="doccomment">/// Disables the use of session tickets for session resumption.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_TICKET</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TICKET</span>;
+        <span class="kw">const</span> <span class="ident">NO_TICKET</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TICKET</span>;
 
         <span class="doccomment">/// Always start a new session when performing a renegotiation on the server side.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</span> <span class="op">=</span>
+        <span class="kw">const</span> <span class="ident">NO_SESSION_RESUMPTION_ON_RENEGOTIATION</span> <span class="op">=</span>
             <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION</span>;
 
         <span class="doccomment">/// Disables the use of TLS compression.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_COMPRESSION</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_COMPRESSION</span>;
+        <span class="kw">const</span> <span class="ident">NO_COMPRESSION</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_COMPRESSION</span>;
 
         <span class="doccomment">/// Allow legacy insecure renegotiation with servers or clients that do not support secure</span>
         <span class="doccomment">/// renegotiation.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</span> <span class="op">=</span>
+        <span class="kw">const</span> <span class="ident">ALLOW_UNSAFE_LEGACY_RENEGOTIATION</span> <span class="op">=</span>
             <span class="ident">ffi</span>::<span class="ident">SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION</span>;
 
         <span class="doccomment">/// Creates a new key for each session when using ECDHE.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// This is always enabled in OpenSSL 1.1.0.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_SINGLE_ECDH_USE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_SINGLE_ECDH_USE</span>;
+        <span class="kw">const</span> <span class="ident">SINGLE_ECDH_USE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_SINGLE_ECDH_USE</span>;
 
         <span class="doccomment">/// Creates a new key for each session when using DHE.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// This is always enabled in OpenSSL 1.1.0.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_SINGLE_DH_USE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_SINGLE_DH_USE</span>;
+        <span class="kw">const</span> <span class="ident">SINGLE_DH_USE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_SINGLE_DH_USE</span>;
 
         <span class="doccomment">/// Use the server&#39;s preferences rather than the client&#39;s when selecting a cipher.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// This has no effect on the client side.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_CIPHER_SERVER_PREFERENCE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_CIPHER_SERVER_PREFERENCE</span>;
+        <span class="kw">const</span> <span class="ident">CIPHER_SERVER_PREFERENCE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_CIPHER_SERVER_PREFERENCE</span>;
 
         <span class="doccomment">/// Disables version rollback attach detection.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_TLS_ROLLBACK_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_TLS_ROLLBACK_BUG</span>;
+        <span class="kw">const</span> <span class="ident">TLS_ROLLBACK_BUG</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_TLS_ROLLBACK_BUG</span>;
 
         <span class="doccomment">/// Disables the use of SSLv2.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_SSLV2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSLv2</span>;
+        <span class="kw">const</span> <span class="ident">NO_SSLV2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSLv2</span>;
 
         <span class="doccomment">/// Disables the use of SSLv3.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_SSLV3</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSLv3</span>;
+        <span class="kw">const</span> <span class="ident">NO_SSLV3</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSLv3</span>;
 
         <span class="doccomment">/// Disables the use of TLSv1.0.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_TLSV1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1</span>;
+        <span class="kw">const</span> <span class="ident">NO_TLSV1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1</span>;
 
         <span class="doccomment">/// Disables the use of TLSv1.1.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_TLSV1_1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1_1</span>;
+        <span class="kw">const</span> <span class="ident">NO_TLSV1_1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1_1</span>;
 
         <span class="doccomment">/// Disables the use of TLSv1.2.</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_TLSV1_2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1_2</span>;
+        <span class="kw">const</span> <span class="ident">NO_TLSV1_2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_TLSv1_2</span>;
 
         <span class="doccomment">/// Disables the use of DTLSv1.0</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_DTLSV1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_DTLSv1</span>;
+        <span class="kw">const</span> <span class="ident">NO_DTLSV1</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_DTLSv1</span>;
 
         <span class="doccomment">/// Disables the use of DTLSv1.2.</span>
         <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_DTLSV1_2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_DTLSv1_2</span>;
+        <span class="kw">const</span> <span class="ident">NO_DTLSV1_2</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_DTLSv1_2</span>;
 
         <span class="doccomment">/// Disables the use of all (D)TLS protocol versions.</span>
         <span class="doccomment">///</span>
@@ -2846,12 +2761,12 @@
         <span class="doccomment">/// Only support TLSv1.2:</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// ```rust</span>
-        <span class="doccomment">/// use openssl::ssl::{SSL_OP_NO_SSL_MASK, SSL_OP_NO_TLSV1_2};</span>
+        <span class="doccomment">/// use openssl::ssl::SslOptions;</span>
         <span class="doccomment">///</span>
-        <span class="doccomment">/// let options = SSL_OP_NO_SSL_MASK &amp; !SSL_OP_NO_TLSV1_2;</span>
+        <span class="doccomment">/// let options = SslOptions::NO_SSL_MASK &amp; !SslOptions::NO_TLSV1_2;</span>
         <span class="doccomment">/// ```</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_OP_NO_SSL_MASK</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSL_MASK</span>;
+        <span class="kw">const</span> <span class="ident">NO_SSL_MASK</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_OP_NO_SSL_MASK</span>;
     }
 }
 
@@ -2863,11 +2778,11 @@
         <span class="doccomment">/// Normally, a write in OpenSSL will always write out all of the requested data, even if it</span>
         <span class="doccomment">/// requires more than one TLS record or write to the underlying stream. This option will</span>
         <span class="doccomment">/// cause a write to return after writing a single TLS record instead.</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_ENABLE_PARTIAL_WRITE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ENABLE_PARTIAL_WRITE</span>;
+        <span class="kw">const</span> <span class="ident">ENABLE_PARTIAL_WRITE</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ENABLE_PARTIAL_WRITE</span>;
 
         <span class="doccomment">/// Disables a check that the data buffer has not moved between calls when operating in a</span>
         <span class="doccomment">/// nonblocking context.</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER</span>;
+        <span class="kw">const</span> <span class="ident">ACCEPT_MOVING_WRITE_BUFFER</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER</span>;
 
         <span class="doccomment">/// Enables automatic retries after TLS session events such as renegotiations or heartbeats.</span>
         <span class="doccomment">///</span>
@@ -2878,25 +2793,19 @@
         <span class="doccomment">/// Note that `SslStream::read` and `SslStream::write` will automatically retry regardless</span>
         <span class="doccomment">/// of the state of this option. It only affects `SslStream::ssl_read` and</span>
         <span class="doccomment">/// `SslStream::ssl_write`.</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_AUTO_RETRY</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_AUTO_RETRY</span>;
+        <span class="kw">const</span> <span class="ident">AUTO_RETRY</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_AUTO_RETRY</span>;
 
         <span class="doccomment">/// Disables automatic chain building when verifying a peer&#39;s certificate.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// TLS peers are responsible for sending the entire certificate chain from the leaf to a</span>
         <span class="doccomment">/// trusted root, but some will incorrectly not do so. OpenSSL will try to build the chain</span>
         <span class="doccomment">/// out of certificates it knows of, and this option will disable that behavior.</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_NO_AUTO_CHAIN</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_NO_AUTO_CHAIN</span>;
+        <span class="kw">const</span> <span class="ident">NO_AUTO_CHAIN</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_NO_AUTO_CHAIN</span>;
 
         <span class="doccomment">/// Release memory buffers when the session does not need them.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// This saves ~34 KiB of memory for idle streams.</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_RELEASE_BUFFERS</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_RELEASE_BUFFERS</span>;
-
-        <span class="comment">// FIXME remove</span>
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">libressl</span>))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_SEND_CLIENTHELLO_TIME</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_SEND_CLIENTHELLO_TIME</span>;
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">libressl</span>))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_SEND_SERVERHELLO_TIME</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_SEND_SERVERHELLO_TIME</span>;
+        <span class="kw">const</span> <span class="ident">RELEASE_BUFFERS</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_RELEASE_BUFFERS</span>;
 
         <span class="doccomment">/// Sends the fake `TLS_FALLBACK_SCSV` cipher suite in the ClientHello message of a</span>
         <span class="doccomment">/// handshake.</span>
@@ -2906,7 +2815,7 @@
         <span class="doccomment">///</span>
         <span class="doccomment">/// Do not use this unless you know what you&#39;re doing!</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">libressl</span>))]</span>
-        <span class="kw">const</span> <span class="ident">SSL_MODE_SEND_FALLBACK_SCSV</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_SEND_FALLBACK_SCSV</span>;
+        <span class="kw">const</span> <span class="ident">SEND_FALLBACK_SCSV</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_MODE_SEND_FALLBACK_SCSV</span>;
     }
 }
 
@@ -2948,20 +2857,46 @@
         <span class="doccomment">/// Verifies that the peer&#39;s certificate is trusted.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// On the server side, this will cause OpenSSL to request a certificate from the client.</span>
-        <span class="kw">const</span> <span class="ident">SSL_VERIFY_PEER</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_PEER</span>;
+        <span class="kw">const</span> <span class="ident">PEER</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_PEER</span>;
 
         <span class="doccomment">/// Disables verification of the peer&#39;s certificate.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// On the server side, this will cause OpenSSL to not request a certificate from the</span>
         <span class="doccomment">/// client. On the client side, the certificate will be checked for validity, but the</span>
         <span class="doccomment">/// negotiation will continue regardless of the result of that check.</span>
-        <span class="kw">const</span> <span class="ident">SSL_VERIFY_NONE</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_NONE</span>;
+        <span class="kw">const</span> <span class="ident">NONE</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_NONE</span>;
 
         <span class="doccomment">/// On the server side, abort the handshake if the client did not send a certificate.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// This should be paired with `SSL_VERIFY_PEER`. It has no effect on the client side.</span>
-        <span class="kw">const</span> <span class="ident">SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span>;
+        <span class="kw">const</span> <span class="ident">FAIL_IF_NO_PEER_CERT</span> <span class="op">=</span> ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span>;
     }
+}
+
+<span class="doccomment">/// An identifier of the format of a certificate or key file.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslFiletype</span>(<span class="ident">c_int</span>);
+
+<span class="kw">impl</span> <span class="ident">SslFiletype</span> {
+    <span class="doccomment">/// Constructs an `SslFiletype` from a raw OpenSSL value.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">raw</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">SslFiletype</span> {
+        <span class="ident">SslFiletype</span>(<span class="ident">raw</span>)
+    }
+
+    <span class="doccomment">/// Returns the raw OpenSSL value represented by this type.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
+        <span class="self">self</span>.<span class="number">0</span>
+    }
+
+    <span class="doccomment">/// The PEM format.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to `SSL_FILETYPE_PEM`.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PEM</span>: <span class="ident">SslFiletype</span> <span class="op">=</span> <span class="ident">SslFiletype</span>(<span class="ident">ffi</span>::<span class="ident">SSL_FILETYPE_PEM</span>);
+
+    <span class="doccomment">/// The ASN1 format.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to `SSL_FILETYPE_ASN1`.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ASN1</span>: <span class="ident">SslFiletype</span> <span class="op">=</span> <span class="ident">SslFiletype</span>(<span class="ident">ffi</span>::<span class="ident">SSL_FILETYPE_ASN1</span>);
 }
 
 <span class="doccomment">/// An identifier of a certificate status type.</span>
@@ -2978,10 +2913,29 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
         <span class="self">self</span>.<span class="number">0</span>
     }
+
+    <span class="doccomment">/// An OSCP status.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">OCSP</span>: <span class="ident">StatusType</span> <span class="op">=</span> <span class="ident">StatusType</span>(<span class="ident">ffi</span>::<span class="ident">TLSEXT_STATUSTYPE_ocsp</span>);
 }
 
-<span class="doccomment">/// An OSCP status.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">STATUS_TYPE_OCSP</span>: <span class="ident">StatusType</span> <span class="op">=</span> <span class="ident">StatusType</span>(<span class="ident">ffi</span>::<span class="ident">TLSEXT_STATUSTYPE_ocsp</span>);
+<span class="doccomment">/// An identifier of a session name type.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NameType</span>(<span class="ident">c_int</span>);
+
+<span class="kw">impl</span> <span class="ident">NameType</span> {
+    <span class="doccomment">/// Constructs a `StatusType` from a raw OpenSSL value.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">raw</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">StatusType</span> {
+        <span class="ident">StatusType</span>(<span class="ident">raw</span>)
+    }
+
+    <span class="doccomment">/// Returns the raw OpenSSL value represented by this type.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
+        <span class="self">self</span>.<span class="number">0</span>
+    }
+
+    <span class="doccomment">/// A host name.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">HOST_NAME</span>: <span class="ident">NameType</span> <span class="op">=</span> <span class="ident">NameType</span>(<span class="ident">ffi</span>::<span class="ident">TLSEXT_NAMETYPE_host_name</span>);
+}
 
 <span class="macro">lazy_static</span><span class="macro">!</span> {
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">INDEXES</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TypeId</span>, <span class="ident">c_int</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">HashMap</span>::<span class="ident">new</span>());
@@ -2991,7 +2945,7 @@
 <span class="comment">// Creates a static index for user data of type T</span>
 <span class="comment">// Registers a destructor for the data which will be called</span>
 <span class="comment">// when context is freed</span>
-<span class="kw">fn</span> <span class="ident">get_callback_idx</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="ident">c_int</span> {
+<span class="kw">fn</span> <span class="ident">get_callback_idx</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="ident">c_int</span> {
     <span class="kw-2">*</span><span class="ident">INDEXES</span>
         .<span class="ident">lock</span>()
         .<span class="ident">unwrap</span>()
@@ -2999,21 +2953,12 @@
         .<span class="ident">or_insert_with</span>(<span class="op">||</span> <span class="ident">get_new_idx</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>())
 }
 
-<span class="kw">fn</span> <span class="ident">get_ssl_callback_idx</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="ident">c_int</span> {
+<span class="kw">fn</span> <span class="ident">get_ssl_callback_idx</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="ident">c_int</span> {
     <span class="kw-2">*</span><span class="ident">SSL_INDEXES</span>
         .<span class="ident">lock</span>()
         .<span class="ident">unwrap</span>()
         .<span class="ident">entry</span>(<span class="ident">TypeId</span>::<span class="ident">of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>())
         .<span class="ident">or_insert_with</span>(<span class="op">||</span> <span class="ident">get_new_ssl_idx</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>())
-}
-
-<span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">NPN_PROTOS_IDX</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="ident">get_new_idx</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>();
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-<span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">ALPN_PROTOS_IDX</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="ident">get_new_idx</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>();
 }
 
 <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">free_data_box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
@@ -3045,41 +2990,83 @@
     }
 }
 
-<span class="doccomment">/// Convert a set of byte slices into a series of byte strings encoded for SSL. Encoding is a byte</span>
-<span class="doccomment">/// containing the length followed by the string.</span>
-<span class="kw">fn</span> <span class="ident">ssl_encode_byte_strings</span>(<span class="ident">strings</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]]) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">enc</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-    <span class="kw">for</span> <span class="ident">string</span> <span class="kw">in</span> <span class="ident">strings</span> {
-        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u8</span>;
-        <span class="kw">if</span> <span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">!=</span> <span class="ident">string</span>.<span class="ident">len</span>() {
-            <span class="comment">// If the item does not fit, discard it</span>
-            <span class="kw">continue</span>;
-        }
-        <span class="ident">enc</span>.<span class="ident">push</span>(<span class="ident">len</span>);
-        <span class="ident">enc</span>.<span class="ident">extend</span>(<span class="ident">string</span>[..<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">to_vec</span>());
-    }
-    <span class="ident">enc</span>
+<span class="doccomment">/// An error returned from the SNI callback.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SniError</span>(<span class="ident">c_int</span>);
+
+<span class="kw">impl</span> <span class="ident">SniError</span> {
+    <span class="doccomment">/// Abort the handshake with a fatal alert.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALERT_FATAL</span>: <span class="ident">SniError</span> <span class="op">=</span> <span class="ident">SniError</span>(<span class="ident">ffi</span>::<span class="ident">SSL_TLSEXT_ERR_ALERT_FATAL</span>);
+
+    <span class="doccomment">/// Send a warning alert to the client and continue the handshake.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALERT_WARNING</span>: <span class="ident">SniError</span> <span class="op">=</span> <span class="ident">SniError</span>(<span class="ident">ffi</span>::<span class="ident">SSL_TLSEXT_ERR_ALERT_WARNING</span>);
+
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">NOACK</span>: <span class="ident">SniError</span> <span class="op">=</span> <span class="ident">SniError</span>(<span class="ident">ffi</span>::<span class="ident">SSL_TLSEXT_ERR_NOACK</span>);
 }
 
-<span class="comment">// FIXME look into this</span>
-<span class="doccomment">/// An error returned from an SNI callback.</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SniError</span> {
-    <span class="ident">Fatal</span>(<span class="ident">c_int</span>),
-    <span class="ident">Warning</span>(<span class="ident">c_int</span>),
-    <span class="ident">NoAck</span>,
+<span class="doccomment">/// An SSL/TLS alert.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslAlert</span>(<span class="ident">c_int</span>);
+
+<span class="kw">impl</span> <span class="ident">SslAlert</span> {
+    <span class="doccomment">/// Alert 112 - `unrecognized_name`.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">UNRECOGNIZED_NAME</span>: <span class="ident">SslAlert</span> <span class="op">=</span> <span class="ident">SslAlert</span>(<span class="ident">ffi</span>::<span class="ident">SSL_AD_UNRECOGNIZED_NAME</span>);
+}
+
+<span class="doccomment">/// An error returned from an ALPN selection callback.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AlpnError</span>(<span class="ident">c_int</span>);
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+<span class="kw">impl</span> <span class="ident">AlpnError</span> {
+    <span class="doccomment">/// Terminate the handshake with a fatal alert.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Requires the `v110` feature and OpenSSL 1.1.0.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALERT_FATAL</span>: <span class="ident">AlpnError</span> <span class="op">=</span> <span class="ident">AlpnError</span>(<span class="ident">ffi</span>::<span class="ident">SSL_TLSEXT_ERR_ALERT_FATAL</span>);
+
+    <span class="doccomment">/// Do not select a protocol, but continue the handshake.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">NOACK</span>: <span class="ident">AlpnError</span> <span class="op">=</span> <span class="ident">AlpnError</span>(<span class="ident">ffi</span>::<span class="ident">SSL_TLSEXT_ERR_NOACK</span>);
+}
+
+<span class="doccomment">/// A standard implementation of protocol selection for Application Layer Protocol Negotiation</span>
+<span class="doccomment">/// (ALPN).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `server` should contain the server&#39;s list of supported protocols and `client` the client&#39;s. They</span>
+<span class="doccomment">/// must both be in the ALPN wire format. See the documentation for</span>
+<span class="doccomment">/// [`SslContextBuilder::set_alpn_protos`] for details.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// It will select the first protocol supported by the server which is also supported by the client.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This corresponds to [`SSL_select_next_proto`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`SslContextBuilder::set_alpn_protos`]: struct.SslContextBuilder.html#method.set_alpn_protos</span>
+<span class="doccomment">/// [`SSL_select_next_proto`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_CTX_set_alpn_protos.html</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">select_next_proto</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">server</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> {
+    <span class="kw">unsafe</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="ident">ptr</span>::<span class="ident">null_mut</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outlen</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_select_next_proto</span>(
+            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">out</span>,
+            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">outlen</span>,
+            <span class="ident">server</span>.<span class="ident">as_ptr</span>(),
+            <span class="ident">server</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_uint</span>,
+            <span class="ident">client</span>.<span class="ident">as_ptr</span>(),
+            <span class="ident">client</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_uint</span>,
+        );
+        <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="ident">ffi</span>::<span class="ident">OPENSSL_NPN_NEGOTIATED</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>(<span class="ident">out</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">outlen</span> <span class="kw">as</span> <span class="ident">usize</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">None</span>
+        }
+    }
 }
 
 <span class="doccomment">/// A builder for `SslContext`s.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslContextBuilder</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX</span>);
-
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">SslContextBuilder</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">SslContextBuilder</span> {}
-
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">SslContextBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_CTX_free</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) }
-    }
-}
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslContextBuilder</span>(<span class="ident">SslContext</span>);
 
 <span class="kw">impl</span> <span class="ident">SslContextBuilder</span> {
     <span class="doccomment">/// Creates a new `SslContextBuilder`.</span>
@@ -3098,12 +3085,12 @@
 
     <span class="doccomment">/// Creates an `SslContextBuilder` from a pointer to a raw OpenSSL value.</span>
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_ptr</span>(<span class="ident">ctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX</span>) <span class="op">-&gt;</span> <span class="ident">SslContextBuilder</span> {
-        <span class="ident">SslContextBuilder</span>(<span class="ident">ctx</span>)
+        <span class="ident">SslContextBuilder</span>(<span class="ident">SslContext</span>::<span class="ident">from_ptr</span>(<span class="ident">ctx</span>))
     }
 
     <span class="doccomment">/// Returns a pointer to the raw OpenSSL value.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX</span> {
-        <span class="self">self</span>.<span class="number">0</span>
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()
     }
 
     <span class="doccomment">/// Configures the certificate verification method for new connections.</span>
@@ -3129,8 +3116,7 @@
     <span class="doccomment">/// [`SSL_CTX_set_verify`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_CTX_set_verify.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_verify_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mode</span>: <span class="ident">SslVerifyMode</span>, <span class="ident">verify</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="comment">// FIXME should take a mutable reference to the store</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">bool</span>, <span class="kw-2">&amp;</span><span class="ident">X509StoreContextRef</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">bool</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">X509StoreContextRef</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">verify</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">verify</span>);
@@ -3156,7 +3142,7 @@
     <span class="doccomment">/// [`SSL_CTX_set_tlsext_servername_callback`]: https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_tlsext_servername_callback.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_servername_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SniError</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslAlert</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SniError</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -3236,7 +3222,7 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_set_tmp_dh`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_set_tmp_dh`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_tmp_dh.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dh</span>: <span class="kw-2">&amp;</span><span class="ident">DhRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dh</span>: <span class="kw-2">&amp;</span><span class="ident">DhRef</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> { <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_tmp_dh</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">dh</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">c_int</span>).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> ()) }
     }
 
@@ -3252,7 +3238,7 @@
     <span class="doccomment">/// [`SSL_CTX_set_tmp_dh_callback`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_tmp_dh.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -3269,7 +3255,7 @@
     <span class="doccomment">/// Sets the parameters to be used during ephemeral elliptic curve Diffie-Hellman key exchange.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This corresponds to `SSL_CTX_set_tmp_ecdh`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">EcKeyRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">EcKeyRef</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_tmp_ecdh</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">key</span>.<span class="ident">as_ptr</span>())
                 <span class="kw">as</span> <span class="ident">c_int</span>)
@@ -3290,7 +3276,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v101&quot;</span>, <span class="ident">ossl101</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EcKey</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EcKey</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -3384,7 +3370,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_certificate_file</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">file</span>: <span class="ident">P</span>,
-        <span class="ident">file_type</span>: <span class="ident">X509FileType</span>,
+        <span class="ident">file_type</span>: <span class="ident">SslFiletype</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">file</span>.<span class="ident">as_ref</span>().<span class="ident">as_os_str</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
         <span class="kw">unsafe</span> {
@@ -3453,7 +3439,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_private_key_file</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">file</span>: <span class="ident">P</span>,
-        <span class="ident">file_type</span>: <span class="ident">X509FileType</span>,
+        <span class="ident">file_type</span>: <span class="ident">SslFiletype</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">file</span>.<span class="ident">as_ref</span>().<span class="ident">as_os_str</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
         <span class="kw">unsafe</span> {
@@ -3470,16 +3456,20 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_use_PrivateKey`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_use_PrivateKey`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_use_PrivateKey_file.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_private_key</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">PKeyRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_private_key</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">PKeyRef</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">T</span>: <span class="ident">HasPrivate</span>,
+    {
         <span class="kw">unsafe</span> { <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_CTX_use_PrivateKey</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">key</span>.<span class="ident">as_ptr</span>())).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> ()) }
     }
 
     <span class="doccomment">/// Sets the list of supported ciphers.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See `man 1 ciphers` for details on the format.</span>
+    <span class="doccomment">/// See [`ciphers`] for details on the format.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This corresponds to [`SSL_CTX_set_cipher_list`].</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// [`ciphers`]: https://www.openssl.org/docs/man1.1.0/apps/ciphers.html</span>
     <span class="doccomment">/// [`SSL_CTX_set_cipher_list`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_get_client_ciphers.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_cipher_list</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cipher_list</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">cipher_list</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">cipher_list</span>).<span class="ident">unwrap</span>();
@@ -3513,9 +3503,9 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_set_options`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_set_options`]: https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_options</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">option</span>: <span class="ident">SslOption</span>) <span class="op">-&gt;</span> <span class="ident">SslOption</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_options</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">option</span>: <span class="ident">SslOptions</span>) <span class="op">-&gt;</span> <span class="ident">SslOptions</span> {
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">compat</span>::<span class="ident">SSL_CTX_set_options</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">option</span>.<span class="ident">bits</span>()) };
-        <span class="ident">SslOption</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
+        <span class="ident">SslOptions</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
     }
 
     <span class="doccomment">/// Returns the options used by the context.</span>
@@ -3523,9 +3513,9 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_get_options`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_get_options`]: https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SslOption</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SslOptions</span> {
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">compat</span>::<span class="ident">SSL_CTX_get_options</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) };
-        <span class="ident">SslOption</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
+        <span class="ident">SslOptions</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
     }
 
     <span class="doccomment">/// Clears the options used by the context, returning the old set.</span>
@@ -3533,87 +3523,73 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_clear_options`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_clear_options`]: https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_options</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">option</span>: <span class="ident">SslOption</span>) <span class="op">-&gt;</span> <span class="ident">SslOption</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_options</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">option</span>: <span class="ident">SslOptions</span>) <span class="op">-&gt;</span> <span class="ident">SslOptions</span> {
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">compat</span>::<span class="ident">SSL_CTX_clear_options</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">option</span>.<span class="ident">bits</span>()) };
-        <span class="ident">SslOption</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
+        <span class="ident">SslOptions</span>::<span class="ident">from_bits</span>(<span class="ident">ret</span>).<span class="ident">unwrap</span>()
     }
 
-    <span class="doccomment">/// Set the protocols to be used during Next Protocol Negotiation (the protocols</span>
-    <span class="doccomment">/// supported by the application).</span>
-    <span class="comment">// FIXME overhaul</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">libressl261</span>, <span class="ident">libressl262</span>, <span class="ident">libressl26x</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_npn_protocols</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
-        <span class="comment">// Firstly, convert the list of protocols to a byte-array that can be passed to OpenSSL</span>
-        <span class="comment">// APIs -- a list of length-prefixed strings.</span>
-        <span class="kw">let</span> <span class="ident">protocols</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ssl_encode_byte_strings</span>(<span class="ident">protocols</span>));
-
-        <span class="kw">unsafe</span> {
-            <span class="comment">// Attach the protocol list to the OpenSSL context structure,</span>
-            <span class="comment">// so that we can refer to it within the callback.</span>
-            <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_ex_data</span>(
-                <span class="self">self</span>.<span class="ident">as_ptr</span>(),
-                <span class="kw-2">*</span><span class="ident">NPN_PROTOS_IDX</span>,
-                <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">protocols</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-            ))<span class="question-mark">?</span>;
-            <span class="comment">// Now register the callback that performs the default protocol</span>
-            <span class="comment">// matching based on the client-supported list of protocols that</span>
-            <span class="comment">// has been saved.</span>
-            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_next_proto_select_cb</span>(
-                <span class="self">self</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">raw_next_proto_select_cb</span>,
-                <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-            );
-            <span class="comment">// Also register the callback to advertise these protocols, if a server socket is</span>
-            <span class="comment">// created with the context.</span>
-            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_next_protos_advertised_cb</span>(
-                <span class="self">self</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">raw_next_protos_advertise_cb</span>,
-                <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-            );
-            <span class="prelude-val">Ok</span>(())
-        }
-    }
-
-    <span class="doccomment">/// Set the protocols to be used during ALPN (application layer protocol negotiation).</span>
-    <span class="doccomment">/// If this is a server, these are the protocols we report to the client.</span>
-    <span class="doccomment">/// If this is a client, these are the protocols we try to match with those reported by the</span>
-    <span class="doccomment">/// server.</span>
+    <span class="doccomment">/// Sets the protocols to sent to the server for Application Layer Protocol Negotiation (ALPN).</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Note that ordering of the protocols controls the priority with which they are chosen.</span>
+    <span class="doccomment">/// The input must be in ALPN &quot;wire format&quot;. It consists of a sequence of supported protocol</span>
+    <span class="doccomment">/// names prefixed by their byte length. For example, the protocol list consisting of `spdy/1`</span>
+    <span class="doccomment">/// and `http/1.1` is encoded as `b&quot;\x06spdy/1\x08http/1.1&quot;`. The protocols are ordered by</span>
+    <span class="doccomment">/// preference.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_CTX_set_alpn_protos`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
-    <span class="comment">// FIXME overhaul</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_CTX_set_alpn_protos`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_CTX_set_alpn_protos.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_alpn_protocols</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">protocols</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ssl_encode_byte_strings</span>(<span class="ident">protocols</span>));
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_alpn_protos</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="comment">// Set the context&#39;s internal protocol list for use if we are a server</span>
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">protocols</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="ident">c_uint</span>::<span class="ident">max_value</span>() <span class="kw">as</span> <span class="ident">usize</span>);
             <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_alpn_protos</span>(
                 <span class="self">self</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">protocols</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">protocols</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_uint</span>,
             );
             <span class="comment">// fun fact, SSL_CTX_set_alpn_protos has a reversed return code D:</span>
-            <span class="kw">if</span> <span class="ident">r</span> <span class="op">!=</span> <span class="number">0</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>());
+            <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="prelude-val">Ok</span>(())
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>())
             }
+        }
+    }
 
-            <span class="comment">// Rather than use the argument to the callback to contain our data, store it in the</span>
-            <span class="comment">// ssl ctx&#39;s ex_data so that we can configure a function to free it later. In the</span>
-            <span class="comment">// future, it might make sense to pull this into our internal struct Ssl instead of</span>
-            <span class="comment">// leaning on openssl and using function pointers.</span>
-            <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_ex_data</span>(
+    <span class="doccomment">/// Sets the callback used by a server to select a protocol for Application Layer Protocol</span>
+    <span class="doccomment">/// Negotiation (ALPN).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The callback is provided with the client&#39;s protocol list in ALPN wire format. See the</span>
+    <span class="doccomment">/// documentation for [`SslContextBuilder::set_alpn_protos`] for details. It should return one</span>
+    <span class="doccomment">/// of those protocols on success. The [`select_next_proto`] function implements the standard</span>
+    <span class="doccomment">/// protocol selection algorithm.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_CTX_set_alpn_select_cb`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SslContextBuilder::set_alpn_protos`]: struct.SslContextBuilder.html#method.set_alpn_protos</span>
+    <span class="doccomment">/// [`select_next_proto`]: fn.select_next_proto.html</span>
+    <span class="doccomment">/// [`SSL_CTX_set_alpn_select_cb`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_CTX_set_alpn_protos.html</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_alpn_select_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>], <span class="ident">AlpnError</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+    {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
+            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_ex_data</span>(
                 <span class="self">self</span>.<span class="ident">as_ptr</span>(),
-                <span class="kw-2">*</span><span class="ident">ALPN_PROTOS_IDX</span>,
-                <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">protocols</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-            ))<span class="question-mark">?</span>;
-
-            <span class="comment">// Now register the callback that performs the default protocol</span>
-            <span class="comment">// matching based on the client-supported list of protocols that</span>
-            <span class="comment">// has been saved.</span>
-            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_alpn_select_cb</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">raw_alpn_select_cb</span>, <span class="ident">ptr</span>::<span class="ident">null_mut</span>());
-
-            <span class="prelude-val">Ok</span>(())
+                <span class="ident">get_callback_idx</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(),
+                <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">callback</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
+            );
+            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_alpn_select_cb</span>(
+                <span class="self">self</span>.<span class="ident">as_ptr</span>(),
+                <span class="ident">callbacks</span>::<span class="ident">raw_alpn_select</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>,
+                <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+            );
         }
     }
 
@@ -3662,7 +3638,7 @@
     <span class="doccomment">/// [`SSL_CTX_set_tlsext_status_cb`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_tlsext_status_cb.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_status_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -3691,7 +3667,6 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_psk_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span>
-            <span class="op">+</span> <span class="ident">Any</span>
             <span class="op">+</span> <span class="lifetime">&#39;static</span>
             <span class="op">+</span> <span class="ident">Sync</span>
             <span class="op">+</span> <span class="ident">Send</span>,
@@ -3728,13 +3703,11 @@
 
     <span class="doccomment">/// Consumes the builder, returning a new `SslContext`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SslContext</span> {
-        <span class="kw">let</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">SslContext</span>(<span class="self">self</span>.<span class="number">0</span>);
-        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="self">self</span>);
-        <span class="ident">ctx</span>
+        <span class="self">self</span>.<span class="number">0</span>
     }
 }
 
-<span class="macro">foreign_type</span><span class="macro">!</span> {
+<span class="macro">foreign_type_and_impl_send_sync</span><span class="macro">!</span> {
     <span class="kw">type</span> <span class="ident">CType</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX</span>;
     <span class="kw">fn</span> <span class="ident">drop</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX_free</span>;
 
@@ -3749,9 +3722,6 @@
     <span class="doccomment">/// [`SslContext`]: struct.SslContext.html</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslContextRef</span>;
 }
-
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">SslContext</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">SslContext</span> {}
 
 <span class="kw">impl</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">SslContext</span> {
     <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
@@ -3823,7 +3793,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_get0_privatekey`]: https://www.openssl.org/docs/man1.1.0/ssl/ssl.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PKeyRef</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PKeyRef</span><span class="op">&lt;</span><span class="ident">Private</span><span class="op">&gt;&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX_get0_privatekey</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>());
             <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
@@ -3991,7 +3961,7 @@
     <span class="doccomment">/// These can be cached to share sessions across connections.</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslSession</span>;
 
-    <span class="doccomment">/// Reference to [`SslSession]`.</span>
+    <span class="doccomment">/// Reference to [`SslSession`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SslSession`]: struct.SslSession.html</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslSessionRef</span>;
@@ -4093,12 +4063,10 @@
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">SslRef</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">fmt</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Ssl&quot;</span>);
-        <span class="ident">builder</span>.<span class="ident">field</span>(<span class="string">&quot;state&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state_string_long</span>());
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">verify_result</span>() {
-            <span class="ident">builder</span>.<span class="ident">field</span>(<span class="string">&quot;verify_result&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">err</span>);
-        }
-        <span class="ident">builder</span>.<span class="ident">finish</span>()
+        <span class="ident">fmt</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Ssl&quot;</span>)
+            .<span class="ident">field</span>(<span class="string">&quot;state&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state_string_long</span>())
+            .<span class="ident">field</span>(<span class="string">&quot;verify_result&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">verify_result</span>())
+            .<span class="ident">finish</span>()
     }
 }
 
@@ -4117,8 +4085,8 @@
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_write</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>, <span class="ident">len</span>) }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ret</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
-        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_get_error</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ret</span>) }
+    <span class="kw">fn</span> <span class="ident">get_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ret</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">ErrorCode</span> {
+        <span class="kw">unsafe</span> { <span class="ident">ErrorCode</span>::<span class="ident">from_raw</span>(<span class="ident">ffi</span>::<span class="ident">SSL_get_error</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ret</span>)) }
     }
 
     <span class="doccomment">/// Like [`SslContextBuilder::set_verify`].</span>
@@ -4139,8 +4107,7 @@
     <span class="doccomment">/// [`SSL_set_verify`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_set_verify.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_verify_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mode</span>: <span class="ident">SslVerifyMode</span>, <span class="ident">verify</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="comment">// FIXME should take a mutable reference to the x509 store</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">bool</span>, <span class="kw-2">&amp;</span><span class="ident">X509StoreContextRef</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">bool</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">X509StoreContextRef</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">verify</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">verify</span>);
@@ -4159,7 +4126,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SslContextBuilder::set_tmp_dh`]: struct.SslContextBuilder.html#method.set_tmp_dh</span>
     <span class="doccomment">/// [`SSL_set_tmp_dh`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_set_tmp_dh.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dh</span>: <span class="kw-2">&amp;</span><span class="ident">DhRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dh</span>: <span class="kw-2">&amp;</span><span class="ident">DhRef</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> { <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_set_tmp_dh</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">dh</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">c_int</span>).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> ()) }
     }
 
@@ -4171,7 +4138,7 @@
     <span class="doccomment">/// [`SSL_set_tmp_dh_callback`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_set_tmp_dh.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_dh_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -4190,7 +4157,7 @@
     <span class="doccomment">/// This corresponds to `SSL_set_tmp_ecdh`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SslContextBuilder::set_tmp_ecdh`]: struct.SslContextBuilder.html#method.set_tmp_ecdh</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">EcKeyRef</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">EcKeyRef</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> { <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">SSL_set_tmp_ecdh</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">key</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">c_int</span>).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> ()) }
     }
 
@@ -4204,7 +4171,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v101&quot;</span>, <span class="ident">ossl101</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tmp_ecdh_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EcKey</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Any</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="ident">bool</span>, <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EcKey</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">callback</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback</span>);
@@ -4347,7 +4314,7 @@
     <span class="doccomment">/// This corresponds to `SSL_get_privatekey`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SslContext::private_key`]: struct.SslContext.html#method.private_key</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PKeyRef</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PKeyRef</span><span class="op">&lt;</span><span class="ident">Private</span><span class="op">&gt;&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_privatekey</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>());
             <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
@@ -4372,32 +4339,7 @@
         <span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">version</span>.<span class="ident">to_bytes</span>()).<span class="ident">unwrap</span>()
     }
 
-    <span class="doccomment">/// Returns the protocol selected by performing Next Protocol Negotiation, if any.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The protocol&#39;s name is returned is an opaque sequence of bytes. It is up to the client</span>
-    <span class="doccomment">/// to interpret it.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This corresponds to [`SSL_get0_next_proto_negotiated`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`SSL_get0_next_proto_negotiated`]: https://www.openssl.org/docs/manmaster/man3/SSL_get0_next_proto_negotiated.html</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">libressl261</span>, <span class="ident">libressl262</span>, <span class="ident">libressl26x</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">selected_npn_protocol</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span> <span class="op">=</span> <span class="ident">ptr</span>::<span class="ident">null</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">len</span>: <span class="ident">c_uint</span> <span class="op">=</span> <span class="number">0</span>;
-            <span class="comment">// Get the negotiated protocol from the SSL instance.</span>
-            <span class="comment">// `data` will point at a `c_uchar` array; `len` will contain the length of this array.</span>
-            <span class="ident">ffi</span>::<span class="ident">SSL_get0_next_proto_negotiated</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">data</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">len</span>);
-
-            <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">is_null</span>() {
-                <span class="prelude-val">None</span>
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>(<span class="ident">data</span>, <span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>))
-            }
-        }
-    }
-
-    <span class="doccomment">/// Returns the protocol selected by performing ALPN, if any.</span>
+    <span class="doccomment">/// Returns the protocol selected via Application Layer Protocol Negotiation (ALPN).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The protocol&#39;s name is returned is an opaque sequence of bytes. It is up to the client</span>
     <span class="doccomment">/// to interpret it.</span>
@@ -4436,30 +4378,6 @@
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_pending</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">usize</span> }
     }
 
-    <span class="doccomment">/// Returns the compression method currently in use.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This corresponds to `SSL_get_current_compression`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">compression</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">_compression</span>()
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">osslconf</span> <span class="op">=</span> <span class="string">&quot;OPENSSL_NO_COMP&quot;</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">_compression</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_current_compression</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>());
-            <span class="kw">if</span> <span class="ident">ptr</span> <span class="op">==</span> <span class="ident">ptr</span>::<span class="ident">null</span>() {
-                <span class="kw">return</span> <span class="prelude-val">None</span>;
-            }
-            <span class="kw">let</span> <span class="ident">meth</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_COMP_get_name</span>(<span class="ident">ptr</span>);
-            <span class="prelude-val">Some</span>(<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">CStr</span>::<span class="ident">from_ptr</span>(<span class="ident">meth</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> _).<span class="ident">to_bytes</span>()).<span class="ident">unwrap</span>())
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">osslconf</span> <span class="op">=</span> <span class="string">&quot;OPENSSL_NO_COMP&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">_compression</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="prelude-val">None</span>
-    }
-
     <span class="doccomment">/// Returns the servername sent by the client via Server Name Indication (SNI).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It is only useful on the server side.</span>
@@ -4467,15 +4385,14 @@
     <span class="doccomment">/// This corresponds to [`SSL_get_servername`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_get_servername`]: https://www.openssl.org/docs/manmaster/man3/SSL_get_servername.html</span>
-    <span class="comment">// FIXME add name parameter</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">servername</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">servername</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">type_</span>: <span class="ident">NameType</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_servername</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ffi</span>::<span class="ident">TLSEXT_NAMETYPE_host_name</span>);
+            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_servername</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">type_</span>.<span class="number">0</span>);
             <span class="kw">if</span> <span class="ident">name</span> <span class="op">==</span> <span class="ident">ptr</span>::<span class="ident">null</span>() {
-                <span class="kw">return</span> <span class="prelude-val">None</span>;
+                <span class="prelude-val">None</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">CStr</span>::<span class="ident">from_ptr</span>(<span class="ident">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> _).<span class="ident">to_bytes</span>()).<span class="ident">unwrap</span>())
             }
-
-            <span class="prelude-val">Some</span>(<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">CStr</span>::<span class="ident">from_ptr</span>(<span class="ident">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> _).<span class="ident">to_bytes</span>()).<span class="ident">unwrap</span>())
         }
     }
 
@@ -4522,8 +4439,8 @@
     <span class="doccomment">/// This corresponds to [`SSL_get_verify_result`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_get_verify_result`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_get_verify_result.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verify_result</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">X509VerifyError</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> { <span class="ident">X509VerifyError</span>::<span class="ident">from_raw</span>(<span class="ident">ffi</span>::<span class="ident">SSL_get_verify_result</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>())) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verify_result</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">X509VerifyResult</span> {
+        <span class="kw">unsafe</span> { <span class="ident">X509VerifyResult</span>::<span class="ident">from_raw</span>(<span class="ident">ffi</span>::<span class="ident">SSL_get_verify_result</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">c_int</span>) }
     }
 
     <span class="doccomment">/// Returns a shared reference to the SSL session.</span>
@@ -4707,16 +4624,14 @@
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">stream</span>)
         } <span class="kw">else</span> {
-            <span class="kw">match</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>) {
-                <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantWrite</span>(_) <span class="op">|</span> <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantRead</span>(_) <span class="op">=&gt;</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Interrupted</span>(<span class="ident">MidHandshakeSslStream</span> {
-                        <span class="ident">stream</span>: <span class="ident">stream</span>,
-                        <span class="ident">error</span>: <span class="ident">e</span>,
-                    }))
-                }
-                <span class="ident">err</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
-                    <span class="ident">stream</span>: <span class="ident">stream</span>,
-                    <span class="ident">error</span>: <span class="ident">err</span>,
+            <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
+            <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">code</span>() {
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(
+                    <span class="ident">MidHandshakeSslStream</span> { <span class="ident">stream</span>, <span class="ident">error</span> },
+                )),
+                _ <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
+                    <span class="ident">stream</span>,
+                    <span class="ident">error</span>,
                 })),
             }
         }
@@ -4741,16 +4656,14 @@
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">stream</span>)
         } <span class="kw">else</span> {
-            <span class="kw">match</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>) {
-                <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantWrite</span>(_) <span class="op">|</span> <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantRead</span>(_) <span class="op">=&gt;</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Interrupted</span>(<span class="ident">MidHandshakeSslStream</span> {
-                        <span class="ident">stream</span>: <span class="ident">stream</span>,
-                        <span class="ident">error</span>: <span class="ident">e</span>,
-                    }))
-                }
-                <span class="ident">err</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
-                    <span class="ident">stream</span>: <span class="ident">stream</span>,
-                    <span class="ident">error</span>: <span class="ident">err</span>,
+            <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
+            <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">code</span>() {
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(
+                    <span class="ident">MidHandshakeSslStream</span> { <span class="ident">stream</span>, <span class="ident">error</span> },
+                )),
+                _ <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
+                    <span class="ident">stream</span>,
+                    <span class="ident">error</span>,
                 })),
             }
         }
@@ -4800,15 +4713,12 @@
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">stream</span>)
         } <span class="kw">else</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>) {
-                <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantWrite</span>(_) <span class="op">|</span> <span class="ident">e</span> @ <span class="ident">Error</span>::<span class="ident">WantRead</span>(_) <span class="op">=&gt;</span> {
-                    <span class="self">self</span>.<span class="ident">error</span> <span class="op">=</span> <span class="ident">e</span>;
-                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Interrupted</span>(<span class="self">self</span>))
+            <span class="self">self</span>.<span class="ident">error</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
+            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">code</span>() {
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(<span class="self">self</span>))
                 }
-                <span class="ident">err</span> <span class="op">=&gt;</span> {
-                    <span class="self">self</span>.<span class="ident">error</span> <span class="op">=</span> <span class="ident">err</span>;
-                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="self">self</span>))
-                }
+                _ <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="self">self</span>)),
             }
         }
     }
@@ -4816,10 +4726,19 @@
 
 <span class="doccomment">/// A TLS session over a stream.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
-    <span class="comment">// FIXME use ManuallyDrop</span>
-    <span class="ident">ssl</span>: <span class="ident">Ssl</span>,
-    <span class="ident">_method</span>: <span class="ident">BioMethod</span>, <span class="comment">// NOTE: this *must* be after the Ssl field so things drop right</span>
+    <span class="ident">ssl</span>: <span class="ident">ManuallyDrop</span><span class="op">&lt;</span><span class="ident">Ssl</span><span class="op">&gt;</span>,
+    <span class="ident">method</span>: <span class="ident">ManuallyDrop</span><span class="op">&lt;</span><span class="ident">BioMethod</span><span class="op">&gt;</span>,
     <span class="ident">_p</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="comment">// ssl holds a reference to method internally so it has to drop first</span>
+        <span class="kw">unsafe</span> {
+            <span class="ident">ManuallyDrop</span>::<span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">ssl</span>);
+            <span class="ident">ManuallyDrop</span>::<span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">method</span>);
+        }
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>
@@ -4841,8 +4760,8 @@
             <span class="ident">ffi</span>::<span class="ident">SSL_set_bio</span>(<span class="ident">ssl</span>.<span class="ident">as_ptr</span>(), <span class="ident">bio</span>, <span class="ident">bio</span>);
 
             <span class="ident">SslStream</span> {
-                <span class="ident">ssl</span>: <span class="ident">ssl</span>,
-                <span class="ident">_method</span>: <span class="ident">method</span>,
+                <span class="ident">ssl</span>: <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="ident">ssl</span>),
+                <span class="ident">method</span>: <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="ident">method</span>),
                 <span class="ident">_p</span>: <span class="ident">PhantomData</span>,
             }
         }
@@ -4870,12 +4789,7 @@
         <span class="kw">if</span> <span class="ident">ret</span> <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">ret</span> <span class="kw">as</span> <span class="ident">usize</span>)
         } <span class="kw">else</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>) {
-                <span class="comment">// FIXME only do this in read</span>
-                <span class="comment">// Don&#39;t treat unexpected EOFs as errors when reading</span>
-                <span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">ConnectionAborted</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
-                <span class="ident">e</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-            }
+            <span class="prelude-val">Err</span>(<span class="self">self</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>))
         }
     }
 
@@ -4911,7 +4825,9 @@
     <span class="doccomment">/// session down. In particular, it must be fully shut down if the connection is to be used for</span>
     <span class="doccomment">/// further communication in the future.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This corresponds to [`SSL_shutdown`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_shutdown.html</span>
+    <span class="doccomment">/// This corresponds to [`SSL_shutdown`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_shutdown`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_shutdown.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ShutdownResult</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_shutdown</span>(<span class="self">self</span>.<span class="ident">ssl</span>.<span class="ident">as_ptr</span>()) } {
             <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ShutdownResult</span>::<span class="ident">Sent</span>),
@@ -4925,45 +4841,26 @@
     <span class="kw">fn</span> <span class="ident">make_error</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ret</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
         <span class="self">self</span>.<span class="ident">check_panic</span>();
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ssl</span>.<span class="ident">get_error</span>(<span class="ident">ret</span>) {
-            <span class="ident">ffi</span>::<span class="ident">SSL_ERROR_SSL</span> <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">Ssl</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>()),
-            <span class="ident">ffi</span>::<span class="ident">SSL_ERROR_SYSCALL</span> <span class="op">=&gt;</span> {
+        <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ssl</span>.<span class="ident">get_error</span>(<span class="ident">ret</span>);
+
+        <span class="kw">let</span> <span class="ident">cause</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">code</span> {
+            <span class="ident">ErrorCode</span>::<span class="ident">SSL</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">InnerError</span>::<span class="ident">Ssl</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>())),
+            <span class="ident">ErrorCode</span>::<span class="ident">SYSCALL</span> <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">ErrorStack</span>::<span class="ident">get</span>();
                 <span class="kw">if</span> <span class="ident">errs</span>.<span class="ident">errors</span>().<span class="ident">is_empty</span>() {
-                    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_bio_error</span>() {
-                        <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="ident">err</span>),
-                        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
-                            <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">ConnectionAborted</span>,
-                            <span class="string">&quot;unexpected EOF observed&quot;</span>,
-                        )),
-                    }
+                    <span class="self">self</span>.<span class="ident">get_bio_error</span>().<span class="ident">map</span>(<span class="ident">InnerError</span>::<span class="ident">Io</span>)
                 } <span class="kw">else</span> {
-                    <span class="ident">Error</span>::<span class="ident">Ssl</span>(<span class="ident">errs</span>)
+                    <span class="prelude-val">Some</span>(<span class="ident">InnerError</span>::<span class="ident">Ssl</span>(<span class="ident">errs</span>))
                 }
             }
-            <span class="ident">ffi</span>::<span class="ident">SSL_ERROR_ZERO_RETURN</span> <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">ZeroReturn</span>,
-            <span class="ident">ffi</span>::<span class="ident">SSL_ERROR_WANT_WRITE</span> <span class="op">=&gt;</span> {
-                <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_bio_error</span>() {
-                    <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="ident">err</span>,
-                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
-                        <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>,
-                        <span class="string">&quot;BUG: got an SSL_ERROR_WANT_WRITE with no error in the BIO&quot;</span>,
-                    ),
-                };
-                <span class="ident">Error</span>::<span class="ident">WantWrite</span>(<span class="ident">err</span>)
+            <span class="ident">ErrorCode</span>::<span class="ident">ZERO_RETURN</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> {
+                <span class="self">self</span>.<span class="ident">get_bio_error</span>().<span class="ident">map</span>(<span class="ident">InnerError</span>::<span class="ident">Io</span>)
             }
-            <span class="ident">ffi</span>::<span class="ident">SSL_ERROR_WANT_READ</span> <span class="op">=&gt;</span> {
-                <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_bio_error</span>() {
-                    <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="ident">err</span>,
-                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="ident">RetryError</span>),
-                };
-                <span class="ident">Error</span>::<span class="ident">WantRead</span>(<span class="ident">err</span>)
-            }
-            <span class="ident">err</span> <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
-                <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">InvalidData</span>,
-                <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;unexpected error {}&quot;</span>, <span class="ident">err</span>),
-            )),
-        }
+            _ <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+        };
+
+        <span class="ident">Error</span> { <span class="ident">code</span>, <span class="ident">cause</span> }
     }
 
     <span class="kw">fn</span> <span class="ident">check_panic</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
@@ -5008,13 +4905,15 @@
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ssl_read</span>(<span class="ident">buf</span>) {
                 <span class="prelude-val">Ok</span>(<span class="ident">n</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">n</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">ZeroReturn</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantRead</span>(<span class="kw-2">ref</span> <span class="ident">e</span>))
-                    <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">get_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">is</span>::<span class="op">&lt;</span><span class="ident">RetryError</span><span class="op">&gt;</span>()) <span class="op">=&gt;</span> {}
-                <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="ident">e</span>)) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantRead</span>(<span class="ident">e</span>)) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantWrite</span>(<span class="ident">e</span>)) <span class="op">=&gt;</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
+                <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">code</span>() <span class="op">==</span> <span class="ident">ErrorCode</span>::<span class="ident">ZERO_RETURN</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">code</span>() <span class="op">==</span> <span class="ident">ErrorCode</span>::<span class="ident">SYSCALL</span> <span class="op">&amp;&amp;</span> <span class="ident">e</span>.<span class="ident">io_error</span>().<span class="ident">is_none</span>() <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>)
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="ident">e</span>)),
+                <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">code</span>() <span class="op">==</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">&amp;&amp;</span> <span class="ident">e</span>.<span class="ident">io_error</span>().<span class="ident">is_none</span>() <span class="op">=&gt;</span> {}
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into_io_error</span>()
+                        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="ident">e</span>)))
+                }
             }
         }
     }
@@ -5025,12 +4924,11 @@
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ssl_write</span>(<span class="ident">buf</span>) {
                 <span class="prelude-val">Ok</span>(<span class="ident">n</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">n</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantRead</span>(<span class="kw-2">ref</span> <span class="ident">e</span>))
-                    <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">get_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">is</span>::<span class="op">&lt;</span><span class="ident">RetryError</span><span class="op">&gt;</span>()) <span class="op">=&gt;</span> {}
-                <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">Stream</span>(<span class="ident">e</span>)) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantRead</span>(<span class="ident">e</span>)) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">WantWrite</span>(<span class="ident">e</span>)) <span class="op">=&gt;</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
+                <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">code</span>() <span class="op">==</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">&amp;&amp;</span> <span class="ident">e</span>.<span class="ident">io_error</span>().<span class="ident">is_none</span>() <span class="op">=&gt;</span> {}
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into_io_error</span>()
+                        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="ident">e</span>)))
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="ident">e</span>)),
             }
         }
     }

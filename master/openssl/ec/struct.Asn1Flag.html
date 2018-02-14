@@ -48,18 +48,45 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/ec.rs.html#99' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/ec.rs.html#75' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Asn1Flag(_);</pre><div class='docblock'><p>Named Curve or Explicit</p>
 
-<p>This type acts as a boolean as to whether the EC_Group is named or
-explicit.</p>
+<p>This type acts as a boolean as to whether the <code>EcGroup</code> is named or explicit.</p>
 </div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#77-102' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedconstant.EXPLICIT_CURVE' class="associatedconstant"><span id='EXPLICIT_CURVE.v' class='invisible'><code>const <a href='#associatedconstant.EXPLICIT_CURVE' class="constant"><b>EXPLICIT_CURVE</b></a>: <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">EXPLICIT_CURVE</span>: <span class="ident">Asn1Flag</span> <span class="op">=</span> <span class="ident">Asn1Flag</span>(<span class="number">0</span>)</pre>
+<p>Curve defined using polynomial parameters</p>
+
+<p>Most applications use a named EC_GROUP curve, however, support
+is included to explicitly define the curve used to calculate keys
+This information would need to be known by both endpoint to make communication
+effective.</p>
+
+<p>OPENSSL_EC_EXPLICIT_CURVE, but that was only added in 1.1.
+Man page documents that 0 can be used in older versions.</p>
+
+<p>OpenSSL documentation at <a href="https://www.openssl.org/docs/man1.1.0/crypto/EC_GROUP_get_seed_len.html"><code>EC_GROUP</code></a></p>
+</div><h4 id='associatedconstant.NAMED_CURVE' class="associatedconstant"><span id='NAMED_CURVE.v' class='invisible'><code>const <a href='#associatedconstant.NAMED_CURVE' class="constant"><b>NAMED_CURVE</b></a>: <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">NAMED_CURVE</span>: <span class="ident">Asn1Flag</span> <span class="op">=</span> <span class="ident">Asn1Flag</span>(<span class="ident">ffi</span>::<span class="ident">OPENSSL_EC_NAMED_CURVE</span>)</pre>
+<p>Standard Curves</p>
+
+<p>Curves that make up the typical encryption use cases.  The collection of curves
+are well known but extensible.</p>
+
+<p>OpenSSL documentation at <a href="https://www.openssl.org/docs/manmaster/man3/EC_GROUP_order_bits.html"><code>EC_GROUP</code></a></p>
+</div></div>
             <h2 id='implementations' class='small-section-header'>
               Trait Implementations<a href='#implementations' class='anchor'></a>
             </h2>
-        <h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#98' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#98' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#98' title='goto source code'>[src]</a></span></h4>
+        <h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#74' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#74' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../openssl/ec/struct.Asn1Flag.html" title="struct openssl::ec::Asn1Flag">Asn1Flag</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#74' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
 </div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#112-114' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>

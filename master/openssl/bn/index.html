@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'>Module bn</p><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#constants">Constants</a></li></ul></div><p class='location'><a href='../index.html'>openssl</a></p><script>window.sidebarCurrent = {name: 'bn', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'>Module bn</p><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>openssl</a></p><script>window.sidebarCurrent = {name: 'bn', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/bn.rs.html#1-1401' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/bn.rs.html#1-1404' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>BigNum implementation</p>
 
 <p>Large numbers are important for a cryptographic library.  OpenSSL implementation
@@ -62,14 +62,13 @@ allows numbers of any size to be compared and mathematical functions performed.<
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">bn</span>::<span class="ident">BigNum</span>;
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">error</span>::<span class="ident">ErrorStack</span>;
 
-<span class="kw">fn</span> <span class="ident">bignums</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span> (), <span class="ident">ErrorStack</span> <span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">bignums</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
   <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">new</span>()<span class="question-mark">?</span>; <span class="comment">// a = 0</span>
   <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_dec_str</span>(<span class="string">&quot;1234567890123456789012345&quot;</span>)<span class="question-mark">?</span>;
   <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">a</span> <span class="op">*</span> <span class="kw-2">&amp;</span><span class="ident">b</span>;
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">a</span>,<span class="ident">c</span>);
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">a</span>, <span class="ident">c</span>);
   <span class="prelude-val">Ok</span>(())
-}
-</pre>
+}</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
@@ -105,28 +104,6 @@ allows numbers of any size to be compared and mathematical functions performed.<
                                   title='struct openssl::bn::MsbOption'>MsbOption</a></td>
                            <td class='docblock-short'>
                                 <p>Options for the most significant bits of a randomly generated <code>BigNum</code>.</p>
-                           </td>
-                       </tr></table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="constant" href="constant.MSB_MAYBE_ZERO.html"
-                                  title='constant openssl::bn::MSB_MAYBE_ZERO'>MSB_MAYBE_ZERO</a></td>
-                           <td class='docblock-short'>
-                                <p>The most significant bit of the number may be 0.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="constant" href="constant.MSB_ONE.html"
-                                  title='constant openssl::bn::MSB_ONE'>MSB_ONE</a></td>
-                           <td class='docblock-short'>
-                                <p>The most significant bit of the number must be 1.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="constant" href="constant.TWO_MSB_ONE.html"
-                                  title='constant openssl::bn::TWO_MSB_ONE'>TWO_MSB_ONE</a></td>
-                           <td class='docblock-short'>
-                                <p>The most significant two bits of the number must be 1.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

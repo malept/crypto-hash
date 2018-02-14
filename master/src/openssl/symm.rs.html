@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.9.24/src/symm.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/symm.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>symm.rs.html -- source</title>
@@ -1170,6 +1170,21 @@
 <span id="1125">1125</span>
 <span id="1126">1126</span>
 <span id="1127">1127</span>
+<span id="1128">1128</span>
+<span id="1129">1129</span>
+<span id="1130">1130</span>
+<span id="1131">1131</span>
+<span id="1132">1132</span>
+<span id="1133">1133</span>
+<span id="1134">1134</span>
+<span id="1135">1135</span>
+<span id="1136">1136</span>
+<span id="1137">1137</span>
+<span id="1138">1138</span>
+<span id="1139">1139</span>
+<span id="1140">1140</span>
+<span id="1141">1141</span>
+<span id="1142">1142</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! High level interface to certain symmetric ciphers.</span>
 <span class="doccomment">//!</span>
@@ -1304,6 +1319,10 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">des_ecb</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ecb</span>()) }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">des_ede3</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
+        <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ede3</span>()) }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rc4</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
@@ -1788,7 +1807,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">hex</span>::{<span class="ident">FromHex</span>, <span class="ident">ToHex</span>};
+    <span class="kw">use</span> <span class="ident">hex</span>::{<span class="self">self</span>, <span class="ident">FromHex</span>};
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="comment">// Test vectors from FIPS-197:</span>
@@ -1876,7 +1895,7 @@
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">r0</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">rest</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">finalize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">r0</span>[<span class="ident">count</span>..]).<span class="ident">unwrap</span>();
         <span class="ident">r0</span>.<span class="ident">truncate</span>(<span class="ident">count</span> <span class="op">+</span> <span class="ident">rest</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">r0</span>.<span class="ident">to_hex</span>(), <span class="ident">c0</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hex</span>::<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">r0</span>), <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">c0</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">c</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">Crypter</span>::<span class="ident">new</span>(
             <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_ecb</span>(),
@@ -1889,7 +1908,7 @@
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">r0</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">p1</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">rest</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">finalize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">p1</span>[<span class="ident">count</span>..]).<span class="ident">unwrap</span>();
         <span class="ident">p1</span>.<span class="ident">truncate</span>(<span class="ident">count</span> <span class="op">+</span> <span class="ident">rest</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p1</span>.<span class="ident">to_hex</span>(), <span class="ident">p0</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">p1</span>), <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">p0</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1991,8 +2010,8 @@
         <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">pt</span>;
 
         <span class="kw">if</span> <span class="ident">computed</span> <span class="op">!=</span> <span class="ident">expected</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Computed: {}&quot;</span>, <span class="ident">computed</span>.<span class="ident">to_hex</span>());
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Expected: {}&quot;</span>, <span class="ident">expected</span>.<span class="ident">to_hex</span>());
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Computed: {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">computed</span>));
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Expected: {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">expected</span>));
             <span class="kw">if</span> <span class="ident">computed</span>.<span class="ident">len</span>() <span class="op">!=</span> <span class="ident">expected</span>.<span class="ident">len</span>() {
                 <span class="macro">println</span><span class="macro">!</span>(
                     <span class="string">&quot;Lengths differ: {} in computed vs {} expected&quot;</span>,
@@ -2022,8 +2041,8 @@
         <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">pt</span>;
 
         <span class="kw">if</span> <span class="ident">computed</span> <span class="op">!=</span> <span class="ident">expected</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Computed: {}&quot;</span>, <span class="ident">computed</span>.<span class="ident">to_hex</span>());
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Expected: {}&quot;</span>, <span class="ident">expected</span>.<span class="ident">to_hex</span>());
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Computed: {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">computed</span>));
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Expected: {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="ident">expected</span>));
             <span class="kw">if</span> <span class="ident">computed</span>.<span class="ident">len</span>() <span class="op">!=</span> <span class="ident">expected</span>.<span class="ident">len</span>() {
                 <span class="macro">println</span><span class="macro">!</span>(
                     <span class="string">&quot;Lengths differ: {} in computed vs {} expected&quot;</span>,
@@ -2209,6 +2228,17 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_des_ede3</span>() {
+
+        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;9994f4c69d40ae4f34ff403b5cf39d4c8207ea5d3e19a5fd&quot;</span>;
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;9e5c4297d60582f81071ac8ab7d0698d4c79de8b94c519858207ea5d3e19a5fd&quot;</span>;
+        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;010203040506070801020304050607080102030405060708&quot;</span>;
+        <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;5cc118306dc702e4&quot;</span>;
+
+        <span class="ident">cipher_test</span>(<span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">des_ede3</span>(), <span class="ident">pt</span>, <span class="ident">ct</span>, <span class="ident">key</span>, <span class="ident">iv</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes128_gcm</span>() {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0e00c76561d2bd9b40c3c15427e2b08f&quot;</span>;
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;492cadaccd3ca3fbc9cf9f06eb3325c4e159850b0dbe98199b89b7af528806610b6f63998e1eae80c348e7\
@@ -2234,8 +2264,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
         ).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">out</span>.<span class="ident">to_hex</span>());
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">actual_tag</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
 
         <span class="kw">let</span> <span class="ident">out</span> <span class="op">=</span> <span class="ident">decrypt_aead</span>(
             <span class="ident">Cipher</span>::<span class="ident">aes_128_gcm</span>(),
@@ -2245,7 +2275,7 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
         ).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">out</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2284,8 +2314,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
         ).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">out</span>.<span class="ident">to_hex</span>());
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">actual_tag</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
 
         <span class="kw">let</span> <span class="ident">out</span> <span class="op">=</span> <span class="ident">decrypt_aead</span>(
             <span class="ident">Cipher</span>::<span class="ident">chacha20_poly1305</span>(),
@@ -2295,7 +2325,7 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
         ).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">out</span>.<span class="ident">to_hex</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 }
 </pre>

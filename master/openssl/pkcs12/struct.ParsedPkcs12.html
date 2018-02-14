@@ -48,16 +48,16 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/pkcs12.rs.html#87-92' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/pkcs12.rs.html#103-107' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ParsedPkcs12 {
-    pub pkey: <a class="struct" href="../../openssl/pkey/struct.PKey.html" title="struct openssl::pkey::PKey">PKey</a>,
+    pub pkey: <a class="struct" href="../../openssl/pkey/struct.PKey.html" title="struct openssl::pkey::PKey">PKey</a>&lt;<a class="enum" href="../../openssl/pkey/enum.Private.html" title="enum openssl::pkey::Private">Private</a>&gt;,
     pub cert: <a class="struct" href="../../openssl/x509/struct.X509.html" title="struct openssl::x509::X509">X509</a>,
-    pub chain: <a class="struct" href="../../openssl/stack/struct.Stack.html" title="struct openssl::stack::Stack">Stack</a>&lt;<a class="struct" href="../../openssl/x509/struct.X509.html" title="struct openssl::x509::X509">X509</a>&gt;,
+    pub chain: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../../openssl/stack/struct.Stack.html" title="struct openssl::stack::Stack">Stack</a>&lt;<a class="struct" href="../../openssl/x509/struct.X509.html" title="struct openssl::x509::X509">X509</a>&gt;&gt;,
 }</pre><h2 id='fields' class='fields small-section-header'>
                        Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.pkey" class="structfield small-section-header">
                            <a href="#structfield.pkey" class="anchor field"></a>
                            <span id="pkey.v" class='invisible'>
-                           <code>pkey: <a class="struct" href="../../openssl/pkey/struct.PKey.html" title="struct openssl::pkey::PKey">PKey</a></code>
+                           <code>pkey: <a class="struct" href="../../openssl/pkey/struct.PKey.html" title="struct openssl::pkey::PKey">PKey</a>&lt;<a class="enum" href="../../openssl/pkey/enum.Private.html" title="enum openssl::pkey::Private">Private</a>&gt;</code>
                            </span></span><span id="structfield.cert" class="structfield small-section-header">
                            <a href="#structfield.cert" class="anchor field"></a>
                            <span id="cert.v" class='invisible'>
@@ -65,7 +65,7 @@
                            </span></span><span id="structfield.chain" class="structfield small-section-header">
                            <a href="#structfield.chain" class="anchor field"></a>
                            <span id="chain.v" class='invisible'>
-                           <code>chain: <a class="struct" href="../../openssl/stack/struct.Stack.html" title="struct openssl::stack::Stack">Stack</a>&lt;<a class="struct" href="../../openssl/x509/struct.X509.html" title="struct openssl::x509::X509">X509</a>&gt;</code>
+                           <code>chain: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../../openssl/stack/struct.Stack.html" title="struct openssl::stack::Stack">Stack</a>&lt;<a class="struct" href="../../openssl/x509/struct.X509.html" title="struct openssl::x509::X509">X509</a>&gt;&gt;</code>
                            </span></span></section>
     <section id='search' class="content hidden"></section>
 

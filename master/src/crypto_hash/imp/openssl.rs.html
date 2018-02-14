@@ -196,7 +196,7 @@
     <span class="doccomment">/// Generate a digest from the data written to the `Hasher`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">Hasher</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">hasher</span>) <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span>;
-        <span class="kw">match</span> <span class="ident">hasher</span>.<span class="ident">finish2</span>() {
+        <span class="kw">match</span> <span class="ident">hasher</span>.<span class="ident">finish</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">digest</span>) <span class="op">=&gt;</span> <span class="ident">digest</span>.<span class="ident">to_vec</span>(),
             <span class="prelude-val">Err</span>(<span class="ident">error_stack</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;OpenSSL error(s): {}&quot;</span>, <span class="ident">error_stack</span>),
         }

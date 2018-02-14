@@ -69,7 +69,7 @@ encryption methods are found in the <a href="../symm/struct.Crypter.html"><code>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">hex</span>;
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">aes</span>::{<span class="ident">AesKey</span>, <span class="ident">KeyError</span>, <span class="ident">aes_ige</span>};
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">symm</span>::<span class="ident">Mode</span>;
-<span class="kw">use</span> <span class="ident">hex</span>::{<span class="ident">FromHex</span>, <span class="ident">ToHex</span>};
+<span class="kw">use</span> <span class="ident">hex</span>::<span class="ident">FromHex</span>;
 
 <span class="kw">fn</span> <span class="ident">decrypt</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">KeyError</span><span class="op">&gt;</span> {
   <span class="kw">let</span> <span class="ident">raw_key</span> <span class="op">=</span> <span class="string">&quot;000102030405060708090A0B0C0D0E0F&quot;</span>;
@@ -80,7 +80,7 @@ encryption methods are found in the <a href="../symm/struct.Crypter.html"><code>
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">AesKey</span>::<span class="ident">new_encrypt</span>(<span class="kw-2">&amp;</span><span class="ident">key_as_u8</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0u8</span>; <span class="ident">cipher_as_u8</span>.<span class="ident">len</span>()];
     <span class="ident">aes_ige</span>(<span class="kw-2">&amp;</span><span class="ident">cipher_as_u8</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">iv_as_u8</span>, <span class="ident">Mode</span>::<span class="ident">Encrypt</span>);
-    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>.<span class="ident">to_hex</span>(), <span class="string">&quot;a6ad974d5cea1d36d2f367980907ed32&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">output</span>), <span class="string">&quot;a6ad974d5cea1d36d2f367980907ed32&quot;</span>);
   }
   <span class="prelude-val">Ok</span>(())
 }

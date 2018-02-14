@@ -55,7 +55,56 @@
                       Methods<a href='#methods' class='anchor'></a>
                     </h2>
                 <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'></span></h3>
-<div class='impl-items'><h4 id='method.empty' class="method"><span id='empty.v' class='invisible'><code>pub fn <a href='#method.empty' class='fnname'>empty</a>() -&gt; <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='impl-items'><h4 id='associatedconstant.ENABLE_PARTIAL_WRITE' class="associatedconstant"><span id='ENABLE_PARTIAL_WRITE.v' class='invisible'><code>const <a href='#associatedconstant.ENABLE_PARTIAL_WRITE' class="constant"><b>ENABLE_PARTIAL_WRITE</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">ENABLE_PARTIAL_WRITE</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ENABLE_PARTIAL_WRITE</span>,}</pre>
+<p>Enables &quot;short writes&quot;.</p>
+
+<p>Normally, a write in OpenSSL will always write out all of the requested data, even if it
+requires more than one TLS record or write to the underlying stream. This option will
+cause a write to return after writing a single TLS record instead.</p>
+</div><h4 id='associatedconstant.ACCEPT_MOVING_WRITE_BUFFER' class="associatedconstant"><span id='ACCEPT_MOVING_WRITE_BUFFER.v' class='invisible'><code>const <a href='#associatedconstant.ACCEPT_MOVING_WRITE_BUFFER' class="constant"><b>ACCEPT_MOVING_WRITE_BUFFER</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">ACCEPT_MOVING_WRITE_BUFFER</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER</span>,}</pre>
+<p>Disables a check that the data buffer has not moved between calls when operating in a
+nonblocking context.</p>
+</div><h4 id='associatedconstant.AUTO_RETRY' class="associatedconstant"><span id='AUTO_RETRY.v' class='invisible'><code>const <a href='#associatedconstant.AUTO_RETRY' class="constant"><b>AUTO_RETRY</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">AUTO_RETRY</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_AUTO_RETRY</span>,}</pre>
+<p>Enables automatic retries after TLS session events such as renegotiations or heartbeats.</p>
+
+<p>By default, OpenSSL will return a <code>WantRead</code> error after a renegotiation or heartbeat.
+This option will cause OpenSSL to automatically continue processing the requested
+operation instead.</p>
+
+<p>Note that <code>SslStream::read</code> and <code>SslStream::write</code> will automatically retry regardless
+of the state of this option. It only affects <code>SslStream::ssl_read</code> and
+<code>SslStream::ssl_write</code>.</p>
+</div><h4 id='associatedconstant.NO_AUTO_CHAIN' class="associatedconstant"><span id='NO_AUTO_CHAIN.v' class='invisible'><code>const <a href='#associatedconstant.NO_AUTO_CHAIN' class="constant"><b>NO_AUTO_CHAIN</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">NO_AUTO_CHAIN</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_NO_AUTO_CHAIN</span>,}</pre>
+<p>Disables automatic chain building when verifying a peer&#39;s certificate.</p>
+
+<p>TLS peers are responsible for sending the entire certificate chain from the leaf to a
+trusted root, but some will incorrectly not do so. OpenSSL will try to build the chain
+out of certificates it knows of, and this option will disable that behavior.</p>
+</div><h4 id='associatedconstant.RELEASE_BUFFERS' class="associatedconstant"><span id='RELEASE_BUFFERS.v' class='invisible'><code>const <a href='#associatedconstant.RELEASE_BUFFERS' class="constant"><b>RELEASE_BUFFERS</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">RELEASE_BUFFERS</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_RELEASE_BUFFERS</span>,}</pre>
+<p>Release memory buffers when the session does not need them.</p>
+
+<p>This saves ~34 KiB of memory for idle streams.</p>
+</div><h4 id='associatedconstant.SEND_FALLBACK_SCSV' class="associatedconstant"><span id='SEND_FALLBACK_SCSV.v' class='invisible'><code>const <a href='#associatedconstant.SEND_FALLBACK_SCSV' class="constant"><b>SEND_FALLBACK_SCSV</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">SEND_FALLBACK_SCSV</span>: <span class="ident">SslMode</span> <span class="op">=</span> <span class="ident">SslMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_MODE_SEND_FALLBACK_SCSV</span>,}</pre>
+<p>Sends the fake <code>TLS_FALLBACK_SCSV</code> cipher suite in the ClientHello message of a
+handshake.</p>
+
+<p>This should only be enabled if a client has failed to connect to a server which
+attempted to downgrade the protocol version of the session.</p>
+
+<p>Do not use this unless you know what you&#39;re doing!</p>
+</div><h4 id='method.empty' class="method"><span id='empty.v' class='invisible'><code>pub fn <a href='#method.empty' class='fnname'>empty</a>() -&gt; <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
 <div class='docblock'><p>Returns an empty set of flags.</p>
 </div><h4 id='method.all' class="method"><span id='all.v' class='invisible'><code>pub fn <a href='#method.all' class='fnname'>all</a>() -&gt; <a class="struct" href="../../openssl/ssl/struct.SslMode.html" title="struct openssl::ssl::SslMode">SslMode</a></code></span></h4>
 <div class='docblock'><p>Returns the set containing all flags.</p>

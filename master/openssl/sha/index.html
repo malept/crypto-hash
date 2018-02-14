@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/sha.rs.html#1-388' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/sha.rs.html#1-386' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>The SHA family of hashes.</p>
 
 <p>SHA, or Secure Hash Algorithms, are a family of cryptographic hashing algorithms published by
@@ -68,7 +68,6 @@ you can create a hasher that you can repeatedly update to add bytes to.</p>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">hex</span>;
  
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">sha</span>;
-<span class="kw">use</span> <span class="ident">hex</span>::<span class="ident">ToHex</span>;
  
 <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">sha</span>::<span class="ident">Sha256</span>::<span class="ident">new</span>();
@@ -77,7 +76,7 @@ you can create a hasher that you can repeatedly update to add bytes to.</p>
     <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="string">b&quot;world&quot;</span>);
  
     <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">hasher</span>.<span class="ident">finish</span>();
-    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hashed \&quot;Hello, world\&quot; to {}&quot;</span>, <span class="ident">hash</span>.<span class="ident">to_hex</span>());
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hashed \&quot;Hello, world\&quot; to {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">hash</span>));
 }</pre>
 
 <p>On the other hand, if you already have access to all of the data you woud like to hash, you
@@ -89,11 +88,10 @@ to the algorithm you want to use.</p>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">hex</span>;
 
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">sha</span>::<span class="ident">sha256</span>;
-<span class="kw">use</span> <span class="ident">hex</span>::<span class="ident">ToHex</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">sha256</span>(<span class="string">b&quot;your data or message&quot;</span>);
-    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hash = {}&quot;</span>, <span class="ident">hash</span>.<span class="ident">to_hex</span>());
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hash = {}&quot;</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">hash</span>));
 }</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>

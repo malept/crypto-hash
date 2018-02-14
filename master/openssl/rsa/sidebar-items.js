@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["NO_PADDING",""],["PKCS1_OAEP_PADDING",""],["PKCS1_PADDING",""]],"struct":[["Padding","Type of encryption padding to use."],["Rsa",""],["RsaRef",""]]});
+initSidebarItems({"struct":[["Padding","Type of encryption padding to use."],["Rsa","An RSA key."],["RsaRef","Reference to `RSA`"]]});

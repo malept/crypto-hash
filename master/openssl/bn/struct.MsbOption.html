@@ -48,9 +48,29 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/bn.rs.html#56' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/bn.rs.html#57' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct MsbOption(_);</pre><div class='docblock'><p>Options for the most significant bits of a randomly generated <code>BigNum</code>.</p>
-</div></section>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/bn/struct.MsbOption.html" title="struct openssl::bn::MsbOption">MsbOption</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/bn.rs.html#59-71' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedconstant.MAYBE_ZERO' class="associatedconstant"><span id='MAYBE_ZERO.v' class='invisible'><code>const <a href='#associatedconstant.MAYBE_ZERO' class="constant"><b>MAYBE_ZERO</b></a>: <a class="struct" href="../../openssl/bn/struct.MsbOption.html" title="struct openssl::bn::MsbOption">MsbOption</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">MAYBE_ZERO</span>: <span class="ident">MsbOption</span> <span class="op">=</span> <span class="ident">MsbOption</span>(<span class="op">-</span><span class="number">1</span>)</pre>
+<p>The most significant bit of the number may be 0.</p>
+</div><h4 id='associatedconstant.ONE' class="associatedconstant"><span id='ONE.v' class='invisible'><code>const <a href='#associatedconstant.ONE' class="constant"><b>ONE</b></a>: <a class="struct" href="../../openssl/bn/struct.MsbOption.html" title="struct openssl::bn::MsbOption">MsbOption</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">ONE</span>: <span class="ident">MsbOption</span> <span class="op">=</span> <span class="ident">MsbOption</span>(<span class="number">0</span>)</pre>
+<p>The most significant bit of the number must be 1.</p>
+</div><h4 id='associatedconstant.TWO_ONES' class="associatedconstant"><span id='TWO_ONES.v' class='invisible'><code>const <a href='#associatedconstant.TWO_ONES' class="constant"><b>TWO_ONES</b></a>: <a class="struct" href="../../openssl/bn/struct.MsbOption.html" title="struct openssl::bn::MsbOption">MsbOption</a></code></span></h4>
+<div class='docblock'><pre class="rust ">
+<span class="ident">TWO_ONES</span>: <span class="ident">MsbOption</span> <span class="op">=</span> <span class="ident">MsbOption</span>(<span class="number">1</span>)</pre>
+<p>The most significant two bits of the number must be 1.</p>
+
+<p>The number of bits in the product of two such numbers will always be exactly twice the
+number of bits in the original numbers.</p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

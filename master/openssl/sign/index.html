@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/openssl/sign.rs.html#1-584' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../src/openssl/sign.rs.html#1-562' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Message signatures.</p>
 
 <p>The <code>Signer</code> allows for the computation of cryptographic signatures of
@@ -76,7 +76,7 @@ data given the signature.</p>
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">signer</span> <span class="op">=</span> <span class="ident">Signer</span>::<span class="ident">new</span>(<span class="ident">MessageDigest</span>::<span class="ident">sha256</span>(), <span class="kw-2">&amp;</span><span class="ident">keypair</span>).<span class="ident">unwrap</span>();
 <span class="ident">signer</span>.<span class="ident">update</span>(<span class="ident">data</span>).<span class="ident">unwrap</span>();
 <span class="ident">signer</span>.<span class="ident">update</span>(<span class="ident">data2</span>).<span class="ident">unwrap</span>();
-<span class="kw">let</span> <span class="ident">signature</span> <span class="op">=</span> <span class="ident">signer</span>.<span class="ident">finish</span>().<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">signature</span> <span class="op">=</span> <span class="ident">signer</span>.<span class="ident">sign_to_vec</span>().<span class="ident">unwrap</span>();
 
 <span class="comment">// Verify the data</span>
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">verifier</span> <span class="op">=</span> <span class="ident">Verifier</span>::<span class="ident">new</span>(<span class="ident">MessageDigest</span>::<span class="ident">sha256</span>(), <span class="kw-2">&amp;</span><span class="ident">keypair</span>).<span class="ident">unwrap</span>();

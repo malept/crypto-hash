@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.9.24/src/dh.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/dh.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>dh.rs.html -- source</title>
@@ -203,34 +203,94 @@
 <span id="158">158</span>
 <span id="159">159</span>
 <span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">ErrorStack</span>;
 <span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">foreign_types</span>::<span class="ident">ForeignTypeRef</span>;
+<span class="kw">use</span> <span class="ident">foreign_types</span>::{<span class="ident">ForeignType</span>, <span class="ident">ForeignTypeRef</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
 <span class="kw">use</span> {<span class="ident">cvt</span>, <span class="ident">cvt_p</span>};
 <span class="kw">use</span> <span class="ident">bn</span>::<span class="ident">BigNum</span>;
+<span class="kw">use</span> <span class="ident">pkey</span>::{<span class="ident">HasParams</span>, <span class="ident">Params</span>};
 
-<span class="macro">foreign_type_and_impl_send_sync</span><span class="macro">!</span> {
+<span class="macro">generic_foreign_type_and_impl_send_sync</span><span class="macro">!</span> {
     <span class="kw">type</span> <span class="ident">CType</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">DH</span>;
     <span class="kw">fn</span> <span class="ident">drop</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">DH_free</span>;
 
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dh</span>;
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DhRef</span>;
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DhRef</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">DhRef</span> {
-    <span class="macro">to_pem</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">PEM_write_bio_DHparams</span>);
-    <span class="macro">to_der</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">i2d_DHparams</span>);
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">DhRef</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">T</span>: <span class="ident">HasParams</span>,
+{
+    <span class="macro">to_pem</span><span class="macro">!</span> {
+        <span class="doccomment">/// Serializes the parameters into a PEM-encoded PKCS#3 DHparameter structure.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// The output will have a header of `-----BEGIN DH PARAMETERS-----`.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`PEM_write_bio_DHparams`].</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`PEM_write_bio_DHparams`]: https://www.openssl.org/docs/manmaster/man3/PEM_write_bio_DHparams.html</span>
+        <span class="ident">params_to_pem</span>,
+        <span class="ident">ffi</span>::<span class="ident">PEM_write_bio_DHparams</span>
+    }
+
+    <span class="macro">to_der</span><span class="macro">!</span> {
+        <span class="doccomment">/// Serializes the parameters into a DER-encoded PKCS#3 DHparameter structure.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`i2d_DHparams`].</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`i2d_DHparams`]: https://www.openssl.org/docs/man1.1.0/crypto/i2d_DHparams.html</span>
+        <span class="ident">params_to_der</span>,
+        <span class="ident">ffi</span>::<span class="ident">i2d_DHparams</span>
+    }
 }
 
-<span class="kw">impl</span> <span class="ident">Dh</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_params</span>(<span class="ident">p</span>: <span class="ident">BigNum</span>, <span class="ident">g</span>: <span class="ident">BigNum</span>, <span class="ident">q</span>: <span class="ident">BigNum</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_params</span>(<span class="ident">p</span>: <span class="ident">BigNum</span>, <span class="ident">g</span>: <span class="ident">BigNum</span>, <span class="ident">q</span>: <span class="ident">BigNum</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>(<span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_new</span>())<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">from_ptr</span>(<span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_new</span>())<span class="question-mark">?</span>);
             <span class="ident">cvt</span>(<span class="ident">compat</span>::<span class="ident">DH_set0_pqg</span>(
                 <span class="ident">dh</span>.<span class="number">0</span>,
                 <span class="ident">p</span>.<span class="ident">as_ptr</span>(),
@@ -242,33 +302,54 @@
         }
     }
 
-    <span class="macro">from_pem</span><span class="macro">!</span>(<span class="ident">Dh</span>, <span class="ident">ffi</span>::<span class="ident">PEM_read_bio_DHparams</span>);
-    <span class="macro">from_der</span><span class="macro">!</span>(<span class="ident">Dh</span>, <span class="ident">ffi</span>::<span class="ident">d2i_DHparams</span>);
+    <span class="macro">from_pem</span><span class="macro">!</span> {
+        <span class="doccomment">/// Deserializes a PEM-encoded PKCS#3 DHpararameters structure.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// The input should have a header of `-----BEGIN DH PARAMETERS-----`.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`PEM_read_bio_DHparams`].</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`PEM_read_bio_DHparams`]: https://www.openssl.org/docs/man1.0.2/crypto/PEM_read_bio_DHparams.html</span>
+        <span class="ident">params_from_pem</span>,
+        <span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>,
+        <span class="ident">ffi</span>::<span class="ident">PEM_read_bio_DHparams</span>
+    }
+
+    <span class="macro">from_der</span><span class="macro">!</span> {
+        <span class="doccomment">/// Deserializes a DER-encoded PKCS#3 DHparameters structure.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`d2i_DHparams`].</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// [`d2i_DHparams`]: https://www.openssl.org/docs/man1.1.0/crypto/d2i_DHparams.html</span>
+        <span class="ident">params_from_der</span>,
+        <span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>,
+        <span class="ident">ffi</span>::<span class="ident">d2i_DHparams</span>
+    }
 
     <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_1024_160</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_1024_160</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
-            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_1024_160</span>()).<span class="ident">map</span>(<span class="ident">Dh</span>)
+            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_1024_160</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">Dh</span>::<span class="ident">from_ptr</span>(<span class="ident">p</span>))
         }
     }
 
     <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_224</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_224</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
-            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_2048_224</span>()).<span class="ident">map</span>(<span class="ident">Dh</span>)
+            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_2048_224</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">Dh</span>::<span class="ident">from_ptr</span>(<span class="ident">p</span>))
         }
     }
 
     <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_256</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_256</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
-            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_2048_256</span>()).<span class="ident">map</span>(<span class="ident">Dh</span>)
+            <span class="ident">cvt_p</span>(<span class="ident">ffi</span>::<span class="ident">DH_get_2048_256</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">Dh</span>::<span class="ident">from_ptr</span>(<span class="ident">p</span>))
         }
     }
 }
@@ -301,7 +382,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">dh</span>::<span class="ident">Dh</span>;
     <span class="kw">use</span> <span class="ident">bn</span>::<span class="ident">BigNum</span>;
-    <span class="kw">use</span> <span class="ident">ssl</span>::{<span class="ident">SslMethod</span>, <span class="ident">SslContext</span>};
+    <span class="kw">use</span> <span class="ident">ssl</span>::{<span class="ident">SslContext</span>, <span class="ident">SslMethod</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
@@ -319,30 +400,23 @@
     <span class="kw">fn</span> <span class="ident">test_dh</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">SslContext</span>::<span class="ident">builder</span>(<span class="ident">SslMethod</span>::<span class="ident">tls</span>()).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_hex_str</span>(
-            <span class="string">&quot;87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435\
-                                      E3B00E00DF8F1D61957D4FAF7DF4561B2AA3016C3D91134096FAA3BF429\
-                                      6D830E9A7C209E0C6497517ABD5A8A9D306BCF67ED91F9E6725B4758C02\
-                                      2E0B1EF4275BF7B6C5BFC11D45F9088B941F54EB1E59BB8BC39A0BF1230\
-                                      7F5C4FDB70C581B23F76B63ACAE1CAA6B7902D52526735488A0EF13C6D9\
-                                      A51BFA4AB3AD8347796524D8EF6A167B5A41825D967E144E5140564251C\
-                                      CACB83E6B486F6B3CA3F7971506026C0B857F689962856DED4010ABD0BE\
-                                      621C3A3960A54E710C375F26375D7014103A4B54330C198AF126116D227\
-                                      6E11715F693877FAD7EF09CADB094AE91E1A1597&quot;</span>,
+            <span class="string">&quot;87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435E3B00E00DF8F1D61957D4FAF7DF\
+             4561B2AA3016C3D91134096FAA3BF4296D830E9A7C209E0C6497517ABD5A8A9D306BCF67ED91F9E6725B47\
+             58C022E0B1EF4275BF7B6C5BFC11D45F9088B941F54EB1E59BB8BC39A0BF12307F5C4FDB70C581B23F76B6\
+             3ACAE1CAA6B7902D52526735488A0EF13C6D9A51BFA4AB3AD8347796524D8EF6A167B5A41825D967E144E5\
+             140564251CCACB83E6B486F6B3CA3F7971506026C0B857F689962856DED4010ABD0BE621C3A3960A54E710\
+             C375F26375D7014103A4B54330C198AF126116D2276E11715F693877FAD7EF09CADB094AE91E1A1597&quot;</span>,
         ).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_hex_str</span>(
-            <span class="string">&quot;3FB32C9B73134D0B2E77506660EDBD484CA7B18F21EF205407F4793A1A0\
-                                      BA12510DBC15077BE463FFF4FED4AAC0BB555BE3A6C1B0C6B47B1BC3773\
-                                      BF7E8C6F62901228F8C28CBB18A55AE31341000A650196F931C77A57F2D\
-                                      DF463E5E9EC144B777DE62AAAB8A8628AC376D282D6ED3864E67982428E\
-                                      BC831D14348F6F2F9193B5045AF2767164E1DFC967C1FB3F2E55A4BD1BF\
-                                      FE83B9C80D052B985D182EA0ADB2A3B7313D3FE14C8484B1E052588B9B7\
-                                      D2BBD2DF016199ECD06E1557CD0915B3353BBB64E0EC377FD028370DF92\
-                                      B52C7891428CDC67EB6184B523D1DB246C32F63078490F00EF8D647D148\
-                                      D47954515E2327CFEF98C582664B4C0F6CC41659&quot;</span>,
+            <span class="string">&quot;3FB32C9B73134D0B2E77506660EDBD484CA7B18F21EF205407F4793A1A0BA12510DBC15077BE463FFF4FED\
+             4AAC0BB555BE3A6C1B0C6B47B1BC3773BF7E8C6F62901228F8C28CBB18A55AE31341000A650196F931C77A\
+             57F2DDF463E5E9EC144B777DE62AAAB8A8628AC376D282D6ED3864E67982428EBC831D14348F6F2F9193B5\
+             045AF2767164E1DFC967C1FB3F2E55A4BD1BFFE83B9C80D052B985D182EA0ADB2A3B7313D3FE14C8484B1E\
+             052588B9B7D2BBD2DF016199ECD06E1557CD0915B3353BBB64E0EC377FD028370DF92B52C7891428CDC67E\
+             B6184B523D1DB246C32F63078490F00EF8D647D148D47954515E2327CFEF98C582664B4C0F6CC41659&quot;</span>,
         ).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">q</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_hex_str</span>(
-            <span class="string">&quot;8CF83642A709A097B447997640129DA299B1A47D1EB3750BA308B0FE64F\
-                                      5FBD3&quot;</span>,
+            <span class="string">&quot;8CF83642A709A097B447997640129DA299B1A47D1EB3750BA308B0FE64F5FBD3&quot;</span>,
         ).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">from_params</span>(<span class="ident">p</span>, <span class="ident">g</span>, <span class="ident">q</span>).<span class="ident">unwrap</span>();
         <span class="ident">ctx</span>.<span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="ident">dh</span>).<span class="ident">unwrap</span>();
@@ -352,16 +426,16 @@
     <span class="kw">fn</span> <span class="ident">test_dh_from_pem</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">SslContext</span>::<span class="ident">builder</span>(<span class="ident">SslMethod</span>::<span class="ident">tls</span>()).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">params</span> <span class="op">=</span> <span class="macro">include_bytes</span><span class="macro">!</span>(<span class="string">&quot;../test/dhparams.pem&quot;</span>);
-        <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">from_pem</span>(<span class="ident">params</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">params_from_pem</span>(<span class="ident">params</span>).<span class="ident">unwrap</span>();
         <span class="ident">ctx</span>.<span class="ident">set_tmp_dh</span>(<span class="kw-2">&amp;</span><span class="ident">dh</span>).<span class="ident">unwrap</span>();
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_dh_from_der</span>() {
         <span class="kw">let</span> <span class="ident">params</span> <span class="op">=</span> <span class="macro">include_bytes</span><span class="macro">!</span>(<span class="string">&quot;../test/dhparams.pem&quot;</span>);
-        <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">from_pem</span>(<span class="ident">params</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">der</span> <span class="op">=</span> <span class="ident">dh</span>.<span class="ident">to_der</span>().<span class="ident">unwrap</span>();
-        <span class="ident">Dh</span>::<span class="ident">from_der</span>(<span class="kw-2">&amp;</span><span class="ident">der</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">dh</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">params_from_pem</span>(<span class="ident">params</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">der</span> <span class="op">=</span> <span class="ident">dh</span>.<span class="ident">params_to_der</span>().<span class="ident">unwrap</span>();
+        <span class="ident">Dh</span>::<span class="ident">params_from_der</span>(<span class="kw-2">&amp;</span><span class="ident">der</span>).<span class="ident">unwrap</span>();
     }
 }
 </pre>
