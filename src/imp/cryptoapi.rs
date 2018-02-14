@@ -110,9 +110,7 @@ impl Hasher {
             hcrypthash: 0,
         };
 
-        call!(unsafe {
-            CryptCreateHash(ret.hcryptprov, hash_type, 0, 0, &mut ret.hcrypthash)
-        });
+        call!(unsafe { CryptCreateHash(ret.hcryptprov, hash_type, 0, 0, &mut ret.hcrypthash) });
         ret
     }
 
