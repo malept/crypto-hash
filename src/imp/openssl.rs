@@ -65,7 +65,7 @@ impl Hasher {
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
         let Hasher(ref mut hasher) = *self;
-        match hasher.finish2() {
+        match hasher.finish() {
             Ok(digest) => digest.to_vec(),
             Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack),
         }
