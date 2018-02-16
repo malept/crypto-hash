@@ -28,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Struct PointConversionForm</p><div class="block items"><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ec</a></p><script>window.sidebarCurrent = {name: 'PointConversionForm', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct PointConversionForm</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ec</a></p><script>window.sidebarCurrent = {name: 'PointConversionForm', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -61,15 +62,15 @@ for binary curves.</p>
                       Methods<a href='#methods' class='anchor'></a>
                     </h2>
                 <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ec.rs.html#57-69' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='associatedconstant.COMPRESSED' class="associatedconstant"><span id='COMPRESSED.v' class='invisible'><code>const <a href='#associatedconstant.COMPRESSED' class="constant"><b>COMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+<div class='impl-items'><h4 id='associatedconstant.COMPRESSED' class="associatedconstant"><span id='COMPRESSED.v' class='invisible'><code>pub const <a href='#associatedconstant.COMPRESSED' class="constant"><b>COMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">COMPRESSED</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_COMPRESSED</span>)</pre>
 <p>Compressed conversion from point value.</p>
-</div><h4 id='associatedconstant.UNCOMPRESSED' class="associatedconstant"><span id='UNCOMPRESSED.v' class='invisible'><code>const <a href='#associatedconstant.UNCOMPRESSED' class="constant"><b>UNCOMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+</div><h4 id='associatedconstant.UNCOMPRESSED' class="associatedconstant"><span id='UNCOMPRESSED.v' class='invisible'><code>pub const <a href='#associatedconstant.UNCOMPRESSED' class="constant"><b>UNCOMPRESSED</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">UNCOMPRESSED</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_UNCOMPRESSED</span>)</pre>
 <p>Uncompressed conversion from point value.</p>
-</div><h4 id='associatedconstant.HYBRID' class="associatedconstant"><span id='HYBRID.v' class='invisible'><code>const <a href='#associatedconstant.HYBRID' class="constant"><b>HYBRID</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
+</div><h4 id='associatedconstant.HYBRID' class="associatedconstant"><span id='HYBRID.v' class='invisible'><code>pub const <a href='#associatedconstant.HYBRID' class="constant"><b>HYBRID</b></a>: <a class="struct" href="../../openssl/ec/struct.PointConversionForm.html" title="struct openssl::ec::PointConversionForm">PointConversionForm</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">HYBRID</span>: <span class="ident">PointConversionForm</span> <span class="op">=</span> <span class="ident">PointConversionForm</span>(<span class="ident">ffi</span>::<span class="ident">point_conversion_form_t</span>::<span class="ident">POINT_CONVERSION_HYBRID</span>)</pre>
 <p>Performs both compressed and uncompressed conversions.</p>

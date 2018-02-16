@@ -28,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Struct X509VerifyResult</p><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a><a href="#method.error_string">error_string</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a><a href="#impl-PartialEq">PartialEq</a><a href="#impl-Eq">Eq</a><a href="#impl-Debug">Debug</a><a href="#impl-Display">Display</a><a href="#impl-Error">Error</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>x509</a></p><script>window.sidebarCurrent = {name: 'X509VerifyResult', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct X509VerifyResult</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a><a href="#method.error_string">error_string</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a><a href="#impl-PartialEq">PartialEq</a><a href="#impl-Eq">Eq</a><a href="#impl-Debug">Debug</a><a href="#impl-Display">Display</a><a href="#impl-Error">Error</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>x509</a></p><script>window.sidebarCurrent = {name: 'X509VerifyResult', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -67,11 +68,11 @@ number is invalid.</p>
 <div class='docblock'><p>Return a human readable error string from the verification error.</p>
 
 <p>This corresponds to <a href="https://www.openssl.org/docs/man1.1.0/crypto/X509_verify_cert_error_string.html"><code>X509_verify_cert_error_string</code></a>.</p>
-</div><h4 id='associatedconstant.OK' class="associatedconstant"><span id='OK.v' class='invisible'><code>const <a href='#associatedconstant.OK' class="constant"><b>OK</b></a>: <a class="struct" href="../../openssl/x509/struct.X509VerifyResult.html" title="struct openssl::x509::X509VerifyResult">X509VerifyResult</a></code></span></h4>
+</div><h4 id='associatedconstant.OK' class="associatedconstant"><span id='OK.v' class='invisible'><code>pub const <a href='#associatedconstant.OK' class="constant"><b>OK</b></a>: <a class="struct" href="../../openssl/x509/struct.X509VerifyResult.html" title="struct openssl::x509::X509VerifyResult">X509VerifyResult</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">OK</span>: <span class="ident">X509VerifyResult</span> <span class="op">=</span> <span class="ident">X509VerifyResult</span>(<span class="ident">ffi</span>::<span class="ident">X509_V_OK</span>)</pre>
 <p>Successful peer certifiate verification.</p>
-</div><h4 id='associatedconstant.APPLICATION_VERIFICATION' class="associatedconstant"><span id='APPLICATION_VERIFICATION.v' class='invisible'><code>const <a href='#associatedconstant.APPLICATION_VERIFICATION' class="constant"><b>APPLICATION_VERIFICATION</b></a>: <a class="struct" href="../../openssl/x509/struct.X509VerifyResult.html" title="struct openssl::x509::X509VerifyResult">X509VerifyResult</a></code></span></h4>
+</div><h4 id='associatedconstant.APPLICATION_VERIFICATION' class="associatedconstant"><span id='APPLICATION_VERIFICATION.v' class='invisible'><code>pub const <a href='#associatedconstant.APPLICATION_VERIFICATION' class="constant"><b>APPLICATION_VERIFICATION</b></a>: <a class="struct" href="../../openssl/x509/struct.X509VerifyResult.html" title="struct openssl::x509::X509VerifyResult">X509VerifyResult</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">APPLICATION_VERIFICATION</span>: <span class="ident">X509VerifyResult</span> <span class="op">=</span> <span class="ident">X509VerifyResult</span>(<span class="ident">ffi</span>::<span class="ident">X509_V_ERR_APPLICATION_VERIFICATION</span>)</pre>
 <p>Application verification failure.</p>

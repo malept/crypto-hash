@@ -28,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Struct SslFiletype</p><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a></p><script>window.sidebarCurrent = {name: 'SslFiletype', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct SslFiletype</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a></p><script>window.sidebarCurrent = {name: 'SslFiletype', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -59,13 +60,13 @@
 <div class='docblock'><p>Constructs an <code>SslFiletype</code> from a raw OpenSSL value.</p>
 </div><h4 id='method.as_raw' class="method"><span id='as_raw.v' class='invisible'><code>pub fn <a href='#method.as_raw' class='fnname'>as_raw</a>(&amp;self) -&gt; <a class="type" href="../../libc/type.c_int.html" title="type libc::c_int">c_int</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ssl/mod.rs.html#325-327' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns the raw OpenSSL value represented by this type.</p>
-</div><h4 id='associatedconstant.PEM' class="associatedconstant"><span id='PEM.v' class='invisible'><code>const <a href='#associatedconstant.PEM' class="constant"><b>PEM</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslFiletype.html" title="struct openssl::ssl::SslFiletype">SslFiletype</a></code></span></h4>
+</div><h4 id='associatedconstant.PEM' class="associatedconstant"><span id='PEM.v' class='invisible'><code>pub const <a href='#associatedconstant.PEM' class="constant"><b>PEM</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslFiletype.html" title="struct openssl::ssl::SslFiletype">SslFiletype</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">PEM</span>: <span class="ident">SslFiletype</span> <span class="op">=</span> <span class="ident">SslFiletype</span>(<span class="ident">ffi</span>::<span class="ident">SSL_FILETYPE_PEM</span>)</pre>
 <p>The PEM format.</p>
 
 <p>This corresponds to <code>SSL_FILETYPE_PEM</code>.</p>
-</div><h4 id='associatedconstant.ASN1' class="associatedconstant"><span id='ASN1.v' class='invisible'><code>const <a href='#associatedconstant.ASN1' class="constant"><b>ASN1</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslFiletype.html" title="struct openssl::ssl::SslFiletype">SslFiletype</a></code></span></h4>
+</div><h4 id='associatedconstant.ASN1' class="associatedconstant"><span id='ASN1.v' class='invisible'><code>pub const <a href='#associatedconstant.ASN1' class="constant"><b>ASN1</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslFiletype.html" title="struct openssl::ssl::SslFiletype">SslFiletype</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">ASN1</span>: <span class="ident">SslFiletype</span> <span class="op">=</span> <span class="ident">SslFiletype</span>(<span class="ident">ffi</span>::<span class="ident">SSL_FILETYPE_ASN1</span>)</pre>
 <p>The ASN1 format.</p>

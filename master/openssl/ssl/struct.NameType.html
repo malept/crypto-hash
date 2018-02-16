@@ -28,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Struct NameType</p><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a></p><script>window.sidebarCurrent = {name: 'NameType', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct NameType</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_raw">from_raw</a><a href="#method.as_raw">as_raw</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a></div></div><p class='location'><a href='../index.html'>openssl</a>::<wbr><a href='index.html'>ssl</a></p><script>window.sidebarCurrent = {name: 'NameType', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -59,7 +60,7 @@
 <div class='docblock'><p>Constructs a <code>StatusType</code> from a raw OpenSSL value.</p>
 </div><h4 id='method.as_raw' class="method"><span id='as_raw.v' class='invisible'><code>pub fn <a href='#method.as_raw' class='fnname'>as_raw</a>(&amp;self) -&gt; <a class="type" href="../../libc/type.c_int.html" title="type libc::c_int">c_int</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/openssl/ssl/mod.rs.html#370-372' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns the raw OpenSSL value represented by this type.</p>
-</div><h4 id='associatedconstant.HOST_NAME' class="associatedconstant"><span id='HOST_NAME.v' class='invisible'><code>const <a href='#associatedconstant.HOST_NAME' class="constant"><b>HOST_NAME</b></a>: <a class="struct" href="../../openssl/ssl/struct.NameType.html" title="struct openssl::ssl::NameType">NameType</a></code></span></h4>
+</div><h4 id='associatedconstant.HOST_NAME' class="associatedconstant"><span id='HOST_NAME.v' class='invisible'><code>pub const <a href='#associatedconstant.HOST_NAME' class="constant"><b>HOST_NAME</b></a>: <a class="struct" href="../../openssl/ssl/struct.NameType.html" title="struct openssl::ssl::NameType">NameType</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
 <span class="ident">HOST_NAME</span>: <span class="ident">NameType</span> <span class="op">=</span> <span class="ident">NameType</span>(<span class="ident">ffi</span>::<span class="ident">TLSEXT_NAMETYPE_host_name</span>)</pre>
 <p>A host name.</p>
