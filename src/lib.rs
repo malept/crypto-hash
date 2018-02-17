@@ -43,8 +43,6 @@
 
 #![warn(missing_docs)]
 
-#[cfg(target_os = "windows")]
-extern crate advapi32;
 #[cfg(target_os = "macos")]
 extern crate commoncrypto;
 extern crate hex;

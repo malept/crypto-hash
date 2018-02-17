@@ -24,13 +24,14 @@
 //! https://github.com/rust-lang/cargo/blob/0.10.0/src/cargo/util/sha256.rs
 //! which is copyright (c) 2014 The Rust Project Developers under the MIT license.
 
-use advapi32::{CryptAcquireContextW, CryptCreateHash, CryptDestroyHash, CryptGetHashParam,
-               CryptHashData, CryptReleaseContext};
 use std::io;
 use std::ptr;
 use super::Algorithm;
-use winapi::{CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT, CRYPT_VERIFYCONTEXT,
-             DWORD, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES};
+use winapi::shared::minwindef::DWORD;
+use winapi::um::wincrypt::{CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CryptAcquireContextW,
+                           CryptCreateHash, CryptDestroyHash, CryptGetHashParam, CryptHashData,
+                           CryptReleaseContext, CRYPT_SILENT, CRYPT_VERIFYCONTEXT, HCRYPTHASH,
+                           HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES};
 
 macro_rules! call {
     ($e: expr) => ({
