@@ -2,7 +2,18 @@
 
 ## Unreleased
 
+## [0.3.1] - 2018-02-14
+
+[0.3.1]: https://github.com/malept/crypto-hash/compare/v0.3.0...v0.3.1
+
+### Changed
+
+* Upgrade to `openssl` 0.10.x (#1)
+* Upgrade to `winapi` 0.3.x
+
 ## [0.3.0] - 2017-06-18
+
+[0.3.0]: https://github.com/malept/crypto-hash/compare/v0.2.1...v0.3.0
 
 ### Changed
 
@@ -11,11 +22,15 @@
 
 ## [0.2.1] - 2016-12-12
 
+[0.2.1]: https://github.com/malept/crypto-hash/compare/v0.2.0...v0.2.1
+
 ### Changed
 
 * Move CommonCrypto implementation to its own crate
 
 ## [0.2.0] - 2016-11-06
+
+[0.2.0]: https://github.com/malept/crypto-hash/compare/v0.1.0...v0.2.0
 
 ### Added
 
@@ -26,6 +41,8 @@
 * Upgrade rust-openssl to 0.9
 
 ## [0.1.0] - 2016-06-26
+
+[0.1.0]: https://github.com/malept/crypto-hash/releases/tag/v0.1.0
 
 This release signifies the minimum amount of algorithms and implementations necessary for
 [HTTP digest authentication](https://tools.ietf.org/html/rfc7616).
@@ -43,8 +60,3 @@ Implementations:
 * CommonCrypto (OS X)
 * CryptoAPI (Windows)
 * OpenSSL (Linux/BSD/etc.)
-
-[0.3.0]: https://github.com/malept/crypto-hash/compare/v0.2.1...v0.3.0
-[0.2.1]: https://github.com/malept/crypto-hash/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/malept/crypto-hash/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/malept/crypto-hash/releases/tag/v0.1.0
