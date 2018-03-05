@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/dh.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.5/src/dh.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>dh.rs.html -- source</title>
@@ -241,6 +241,10 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">ErrorStack</span>;
 <span class="kw">use</span> <span class="ident">ffi</span>;
@@ -327,8 +331,9 @@
         <span class="ident">ffi</span>::<span class="ident">d2i_DHparams</span>
     }
 
-    <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+    <span class="doccomment">/// Requires OpenSSL 1.0.2, 1.1.0, or 1.1.1 and the corresponding Cargo feature.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>),
+              <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>, <span class="ident">ossl111</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_1024_160</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
@@ -336,8 +341,9 @@
         }
     }
 
-    <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+    <span class="doccomment">/// Requires OpenSSL 1.0.2, 1.1.0, or 1.1.1 and the corresponding Cargo feature.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>),
+              <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>, <span class="ident">ossl111</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_224</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
@@ -345,8 +351,9 @@
         }
     }
 
-    <span class="doccomment">/// Requires the `v102` or `v110` features and OpenSSL 1.0.2 or OpenSSL 1.1.0.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+    <span class="doccomment">/// Requires OpenSSL 1.0.2, 1.1.0, or 1.1.1 and the corresponding Cargo feature.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>),
+              <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>, <span class="ident">ossl111</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_2048_256</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Dh</span><span class="op">&lt;</span><span class="ident">Params</span><span class="op">&gt;</span>, <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">ffi</span>::<span class="ident">init</span>();
@@ -386,7 +393,8 @@
     <span class="kw">use</span> <span class="ident">ssl</span>::{<span class="ident">SslContext</span>, <span class="ident">SslMethod</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>),
+              <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>, <span class="ident">ossl111</span>)))]</span>
     <span class="kw">fn</span> <span class="ident">test_dh_rfc5114</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">SslContext</span>::<span class="ident">builder</span>(<span class="ident">SslMethod</span>::<span class="ident">tls</span>()).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">dh1</span> <span class="op">=</span> <span class="ident">Dh</span>::<span class="ident">get_1024_160</span>().<span class="ident">unwrap</span>();

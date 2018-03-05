@@ -58,13 +58,13 @@
                 <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../openssl/ssl/struct.SslVerifyMode.html" title="struct openssl::ssl::SslVerifyMode">SslVerifyMode</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'></span></h3>
 <div class='impl-items'><h4 id='associatedconstant.PEER' class="associatedconstant"><span id='PEER.v' class='invisible'><code>pub const <a href='#associatedconstant.PEER' class="constant"><b>PEER</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslVerifyMode.html" title="struct openssl::ssl::SslVerifyMode">SslVerifyMode</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
-<span class="ident">PEER</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_PEER</span>,}</pre>
+<span class="ident">PEER</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_PEER</span>,}</pre>
 <p>Verifies that the peer&#39;s certificate is trusted.</p>
 
 <p>On the server side, this will cause OpenSSL to request a certificate from the client.</p>
 </div><h4 id='associatedconstant.NONE' class="associatedconstant"><span id='NONE.v' class='invisible'><code>pub const <a href='#associatedconstant.NONE' class="constant"><b>NONE</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslVerifyMode.html" title="struct openssl::ssl::SslVerifyMode">SslVerifyMode</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
-<span class="ident">NONE</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_NONE</span>,}</pre>
+<span class="ident">NONE</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_NONE</span>,}</pre>
 <p>Disables verification of the peer&#39;s certificate.</p>
 
 <p>On the server side, this will cause OpenSSL to not request a certificate from the
@@ -72,7 +72,7 @@ client. On the client side, the certificate will be checked for validity, but th
 negotiation will continue regardless of the result of that check.</p>
 </div><h4 id='associatedconstant.FAIL_IF_NO_PEER_CERT' class="associatedconstant"><span id='FAIL_IF_NO_PEER_CERT.v' class='invisible'><code>pub const <a href='#associatedconstant.FAIL_IF_NO_PEER_CERT' class="constant"><b>FAIL_IF_NO_PEER_CERT</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslVerifyMode.html" title="struct openssl::ssl::SslVerifyMode">SslVerifyMode</a></code></span></h4>
 <div class='docblock'><pre class="rust ">
-<span class="ident">FAIL_IF_NO_PEER_CERT</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: ::<span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span>,}</pre>
+<span class="ident">FAIL_IF_NO_PEER_CERT</span>: <span class="ident">SslVerifyMode</span> <span class="op">=</span> <span class="ident">SslVerifyMode</span>{<span class="ident">bits</span>: <span class="ident">ffi</span>::<span class="ident">SSL_VERIFY_FAIL_IF_NO_PEER_CERT</span>,}</pre>
 <p>On the server side, abort the handshake if the client did not send a certificate.</p>
 
 <p>This should be paired with <code>SSL_VERIFY_PEER</code>. It has no effect on the client side.</p>

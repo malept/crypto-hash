@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/symm.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.5/src/symm.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>symm.rs.html -- source</title>
@@ -1112,80 +1112,6 @@
 <span id="1066">1066</span>
 <span id="1067">1067</span>
 <span id="1068">1068</span>
-<span id="1069">1069</span>
-<span id="1070">1070</span>
-<span id="1071">1071</span>
-<span id="1072">1072</span>
-<span id="1073">1073</span>
-<span id="1074">1074</span>
-<span id="1075">1075</span>
-<span id="1076">1076</span>
-<span id="1077">1077</span>
-<span id="1078">1078</span>
-<span id="1079">1079</span>
-<span id="1080">1080</span>
-<span id="1081">1081</span>
-<span id="1082">1082</span>
-<span id="1083">1083</span>
-<span id="1084">1084</span>
-<span id="1085">1085</span>
-<span id="1086">1086</span>
-<span id="1087">1087</span>
-<span id="1088">1088</span>
-<span id="1089">1089</span>
-<span id="1090">1090</span>
-<span id="1091">1091</span>
-<span id="1092">1092</span>
-<span id="1093">1093</span>
-<span id="1094">1094</span>
-<span id="1095">1095</span>
-<span id="1096">1096</span>
-<span id="1097">1097</span>
-<span id="1098">1098</span>
-<span id="1099">1099</span>
-<span id="1100">1100</span>
-<span id="1101">1101</span>
-<span id="1102">1102</span>
-<span id="1103">1103</span>
-<span id="1104">1104</span>
-<span id="1105">1105</span>
-<span id="1106">1106</span>
-<span id="1107">1107</span>
-<span id="1108">1108</span>
-<span id="1109">1109</span>
-<span id="1110">1110</span>
-<span id="1111">1111</span>
-<span id="1112">1112</span>
-<span id="1113">1113</span>
-<span id="1114">1114</span>
-<span id="1115">1115</span>
-<span id="1116">1116</span>
-<span id="1117">1117</span>
-<span id="1118">1118</span>
-<span id="1119">1119</span>
-<span id="1120">1120</span>
-<span id="1121">1121</span>
-<span id="1122">1122</span>
-<span id="1123">1123</span>
-<span id="1124">1124</span>
-<span id="1125">1125</span>
-<span id="1126">1126</span>
-<span id="1127">1127</span>
-<span id="1128">1128</span>
-<span id="1129">1129</span>
-<span id="1130">1130</span>
-<span id="1131">1131</span>
-<span id="1132">1132</span>
-<span id="1133">1133</span>
-<span id="1134">1134</span>
-<span id="1135">1135</span>
-<span id="1136">1136</span>
-<span id="1137">1137</span>
-<span id="1138">1138</span>
-<span id="1139">1139</span>
-<span id="1140">1140</span>
-<span id="1141">1141</span>
-<span id="1142">1142</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! High level interface to certain symmetric ciphers.</span>
 <span class="doccomment">//!</span>
@@ -1211,6 +1137,36 @@
 <span class="doccomment">//!       \xFB\x3C\x5E\xC4\x59\x72\x4A\xF4\x7C\xA1&quot;,</span>
 <span class="doccomment">//!     &amp;ciphertext[..]);</span>
 <span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Encrypting an assymetric key with a symmetric cipher</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! use openssl::rsa::{Padding, Rsa};</span>
+<span class="doccomment">//! use openssl::symm::Cipher;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // Generate keypair and encrypt private key:</span>
+<span class="doccomment">//! let keypair = Rsa::generate(2048).unwrap();</span>
+<span class="doccomment">//! let cipher = Cipher::aes_256_cbc();</span>
+<span class="doccomment">//! let pubkey_pem = keypair.public_key_to_pem_pkcs1().unwrap();</span>
+<span class="doccomment">//! let privkey_pem = keypair.private_key_to_pem_passphrase(cipher, b&quot;Rust&quot;).unwrap();</span>
+<span class="doccomment">//! // pubkey_pem and privkey_pem could be written to file here.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // Load private and public key from string:</span>
+<span class="doccomment">//! let pubkey = Rsa::public_key_from_pem_pkcs1(&amp;pubkey_pem).unwrap();</span>
+<span class="doccomment">//! let privkey = Rsa::private_key_from_pem_passphrase(&amp;privkey_pem, b&quot;Rust&quot;).unwrap();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // Use the asymmetric keys to encrypt and decrypt a short message:</span>
+<span class="doccomment">//! let msg = b&quot;Foo bar&quot;;</span>
+<span class="doccomment">//! let mut encrypted = vec![0; pubkey.size() as usize];</span>
+<span class="doccomment">//! let mut decrypted = vec![0; privkey.size() as usize];</span>
+<span class="doccomment">//! let len = pubkey.public_encrypt(msg, &amp;mut encrypted, Padding::PKCS1).unwrap();</span>
+<span class="doccomment">//! assert!(len &gt; msg.len());</span>
+<span class="doccomment">//! let len = privkey.private_decrypt(&amp;encrypted, &amp;mut decrypted, Padding::PKCS1).unwrap();</span>
+<span class="doccomment">//! let output_string = String::from_utf8(decrypted[..len].to_vec()).unwrap();</span>
+<span class="doccomment">//! assert_eq!(&quot;Foo bar&quot;, output_string);</span>
+<span class="doccomment">//! println!(&quot;Decrypted: &#39;{}&#39;&quot;, output_string);</span>
+<span class="doccomment">//! ```</span>
+
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
@@ -1326,18 +1282,22 @@
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ede3</span>()) }
     }
 
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">des_ede3_cbc</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
+        <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ede3_cbc</span>()) }
+    }
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rc4</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_rc4</span>()) }
     }
 
-    <span class="doccomment">/// Requires the `v110` feature and OpenSSL 1.1.0.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>))]</span>
+    <span class="doccomment">/// Requires OpenSSL 1.1.0 or 1.1.1 and the corresponding Cargo feature.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>), <span class="ident">all</span>(<span class="ident">ossl111</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chacha20</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_chacha20</span>()) }
     }
 
-    <span class="doccomment">/// Requires the `v110` feature and OpenSSL 1.1.0.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>))]</span>
+    <span class="doccomment">/// Requires OpenSSL 1.1.0 or 1.1.1 and the corresponding Cargo feature.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>), <span class="ident">all</span>(<span class="ident">ossl111</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chacha20_poly1305</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_chacha20_poly1305</span>()) }
     }
@@ -1360,7 +1320,11 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iv_len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">EVP_CIPHER_iv_length</span>(<span class="self">self</span>.<span class="number">0</span>) <span class="kw">as</span> <span class="ident">usize</span>;
-            <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="ident">len</span>) }
+            <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="prelude-val">None</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">len</span>)
+            }
         }
     }
 
@@ -1690,7 +1654,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Decrypt data in AES256 ECB mode</span>
+<span class="doccomment">/// Decrypt data in AES128 CBC mode</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use openssl::symm::{decrypt, Cipher};</span>
@@ -1783,7 +1747,7 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl110</span>)]</span>
-<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">EVP_CIPHER_iv_length</span>, <span class="ident">EVP_CIPHER_block_size</span>, <span class="ident">EVP_CIPHER_key_length</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">EVP_CIPHER_block_size</span>, <span class="ident">EVP_CIPHER_iv_length</span>, <span class="ident">EVP_CIPHER_key_length</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl10x</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">bad_style</span>)]</span>
@@ -1816,74 +1780,17 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes_256_ecb</span>() {
         <span class="kw">let</span> <span class="ident">k0</span> <span class="op">=</span> [
-            <span class="number">0x00u8</span>,
-            <span class="number">0x01u8</span>,
-            <span class="number">0x02u8</span>,
-            <span class="number">0x03u8</span>,
-            <span class="number">0x04u8</span>,
-            <span class="number">0x05u8</span>,
-            <span class="number">0x06u8</span>,
-            <span class="number">0x07u8</span>,
-            <span class="number">0x08u8</span>,
-            <span class="number">0x09u8</span>,
-            <span class="number">0x0au8</span>,
-            <span class="number">0x0bu8</span>,
-            <span class="number">0x0cu8</span>,
-            <span class="number">0x0du8</span>,
-            <span class="number">0x0eu8</span>,
-            <span class="number">0x0fu8</span>,
-            <span class="number">0x10u8</span>,
-            <span class="number">0x11u8</span>,
-            <span class="number">0x12u8</span>,
-            <span class="number">0x13u8</span>,
-            <span class="number">0x14u8</span>,
-            <span class="number">0x15u8</span>,
-            <span class="number">0x16u8</span>,
-            <span class="number">0x17u8</span>,
-            <span class="number">0x18u8</span>,
-            <span class="number">0x19u8</span>,
-            <span class="number">0x1au8</span>,
-            <span class="number">0x1bu8</span>,
-            <span class="number">0x1cu8</span>,
-            <span class="number">0x1du8</span>,
-            <span class="number">0x1eu8</span>,
-            <span class="number">0x1fu8</span>,
+            <span class="number">0x00u8</span>, <span class="number">0x01u8</span>, <span class="number">0x02u8</span>, <span class="number">0x03u8</span>, <span class="number">0x04u8</span>, <span class="number">0x05u8</span>, <span class="number">0x06u8</span>, <span class="number">0x07u8</span>, <span class="number">0x08u8</span>, <span class="number">0x09u8</span>, <span class="number">0x0au8</span>,
+            <span class="number">0x0bu8</span>, <span class="number">0x0cu8</span>, <span class="number">0x0du8</span>, <span class="number">0x0eu8</span>, <span class="number">0x0fu8</span>, <span class="number">0x10u8</span>, <span class="number">0x11u8</span>, <span class="number">0x12u8</span>, <span class="number">0x13u8</span>, <span class="number">0x14u8</span>, <span class="number">0x15u8</span>,
+            <span class="number">0x16u8</span>, <span class="number">0x17u8</span>, <span class="number">0x18u8</span>, <span class="number">0x19u8</span>, <span class="number">0x1au8</span>, <span class="number">0x1bu8</span>, <span class="number">0x1cu8</span>, <span class="number">0x1du8</span>, <span class="number">0x1eu8</span>, <span class="number">0x1fu8</span>,
         ];
         <span class="kw">let</span> <span class="ident">p0</span> <span class="op">=</span> [
-            <span class="number">0x00u8</span>,
-            <span class="number">0x11u8</span>,
-            <span class="number">0x22u8</span>,
-            <span class="number">0x33u8</span>,
-            <span class="number">0x44u8</span>,
-            <span class="number">0x55u8</span>,
-            <span class="number">0x66u8</span>,
-            <span class="number">0x77u8</span>,
-            <span class="number">0x88u8</span>,
-            <span class="number">0x99u8</span>,
-            <span class="number">0xaau8</span>,
-            <span class="number">0xbbu8</span>,
-            <span class="number">0xccu8</span>,
-            <span class="number">0xddu8</span>,
-            <span class="number">0xeeu8</span>,
-            <span class="number">0xffu8</span>,
+            <span class="number">0x00u8</span>, <span class="number">0x11u8</span>, <span class="number">0x22u8</span>, <span class="number">0x33u8</span>, <span class="number">0x44u8</span>, <span class="number">0x55u8</span>, <span class="number">0x66u8</span>, <span class="number">0x77u8</span>, <span class="number">0x88u8</span>, <span class="number">0x99u8</span>, <span class="number">0xaau8</span>,
+            <span class="number">0xbbu8</span>, <span class="number">0xccu8</span>, <span class="number">0xddu8</span>, <span class="number">0xeeu8</span>, <span class="number">0xffu8</span>,
         ];
         <span class="kw">let</span> <span class="ident">c0</span> <span class="op">=</span> [
-            <span class="number">0x8eu8</span>,
-            <span class="number">0xa2u8</span>,
-            <span class="number">0xb7u8</span>,
-            <span class="number">0xcau8</span>,
-            <span class="number">0x51u8</span>,
-            <span class="number">0x67u8</span>,
-            <span class="number">0x45u8</span>,
-            <span class="number">0xbfu8</span>,
-            <span class="number">0xeau8</span>,
-            <span class="number">0xfcu8</span>,
-            <span class="number">0x49u8</span>,
-            <span class="number">0x90u8</span>,
-            <span class="number">0x4bu8</span>,
-            <span class="number">0x49u8</span>,
-            <span class="number">0x60u8</span>,
-            <span class="number">0x89u8</span>,
+            <span class="number">0x8eu8</span>, <span class="number">0xa2u8</span>, <span class="number">0xb7u8</span>, <span class="number">0xcau8</span>, <span class="number">0x51u8</span>, <span class="number">0x67u8</span>, <span class="number">0x45u8</span>, <span class="number">0xbfu8</span>, <span class="number">0xeau8</span>, <span class="number">0xfcu8</span>, <span class="number">0x49u8</span>,
+            <span class="number">0x90u8</span>, <span class="number">0x4bu8</span>, <span class="number">0x49u8</span>, <span class="number">0x60u8</span>, <span class="number">0x89u8</span>,
         ];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">c</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">Crypter</span>::<span class="ident">new</span>(
             <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_ecb</span>(),
@@ -1915,74 +1822,17 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes_256_cbc_decrypt</span>() {
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> [
-            <span class="number">4_u8</span>,
-            <span class="number">223_u8</span>,
-            <span class="number">153_u8</span>,
-            <span class="number">219_u8</span>,
-            <span class="number">28_u8</span>,
-            <span class="number">142_u8</span>,
-            <span class="number">234_u8</span>,
-            <span class="number">68_u8</span>,
-            <span class="number">227_u8</span>,
-            <span class="number">69_u8</span>,
-            <span class="number">98_u8</span>,
-            <span class="number">107_u8</span>,
-            <span class="number">208_u8</span>,
-            <span class="number">14_u8</span>,
-            <span class="number">236_u8</span>,
-            <span class="number">60_u8</span>,
+            <span class="number">4_u8</span>, <span class="number">223_u8</span>, <span class="number">153_u8</span>, <span class="number">219_u8</span>, <span class="number">28_u8</span>, <span class="number">142_u8</span>, <span class="number">234_u8</span>, <span class="number">68_u8</span>, <span class="number">227_u8</span>, <span class="number">69_u8</span>, <span class="number">98_u8</span>,
+            <span class="number">107_u8</span>, <span class="number">208_u8</span>, <span class="number">14_u8</span>, <span class="number">236_u8</span>, <span class="number">60_u8</span>,
         ];
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> [
-            <span class="number">143_u8</span>,
-            <span class="number">210_u8</span>,
-            <span class="number">75_u8</span>,
-            <span class="number">63_u8</span>,
-            <span class="number">214_u8</span>,
-            <span class="number">179_u8</span>,
-            <span class="number">155_u8</span>,
-            <span class="number">241_u8</span>,
-            <span class="number">242_u8</span>,
-            <span class="number">31_u8</span>,
-            <span class="number">154_u8</span>,
-            <span class="number">56_u8</span>,
-            <span class="number">198_u8</span>,
-            <span class="number">145_u8</span>,
-            <span class="number">192_u8</span>,
-            <span class="number">64_u8</span>,
-            <span class="number">2_u8</span>,
-            <span class="number">245_u8</span>,
-            <span class="number">167_u8</span>,
-            <span class="number">220_u8</span>,
-            <span class="number">55_u8</span>,
-            <span class="number">119_u8</span>,
-            <span class="number">233_u8</span>,
-            <span class="number">136_u8</span>,
-            <span class="number">139_u8</span>,
-            <span class="number">27_u8</span>,
-            <span class="number">71_u8</span>,
-            <span class="number">242_u8</span>,
-            <span class="number">119_u8</span>,
-            <span class="number">175_u8</span>,
-            <span class="number">65_u8</span>,
-            <span class="number">207_u8</span>,
+            <span class="number">143_u8</span>, <span class="number">210_u8</span>, <span class="number">75_u8</span>, <span class="number">63_u8</span>, <span class="number">214_u8</span>, <span class="number">179_u8</span>, <span class="number">155_u8</span>, <span class="number">241_u8</span>, <span class="number">242_u8</span>, <span class="number">31_u8</span>, <span class="number">154_u8</span>,
+            <span class="number">56_u8</span>, <span class="number">198_u8</span>, <span class="number">145_u8</span>, <span class="number">192_u8</span>, <span class="number">64_u8</span>, <span class="number">2_u8</span>, <span class="number">245_u8</span>, <span class="number">167_u8</span>, <span class="number">220_u8</span>, <span class="number">55_u8</span>, <span class="number">119_u8</span>,
+            <span class="number">233_u8</span>, <span class="number">136_u8</span>, <span class="number">139_u8</span>, <span class="number">27_u8</span>, <span class="number">71_u8</span>, <span class="number">242_u8</span>, <span class="number">119_u8</span>, <span class="number">175_u8</span>, <span class="number">65_u8</span>, <span class="number">207_u8</span>,
         ];
         <span class="kw">let</span> <span class="ident">ciphered_data</span> <span class="op">=</span> [
-            <span class="number">0x4a_u8</span>,
-            <span class="number">0x2e_u8</span>,
-            <span class="number">0xe5_u8</span>,
-            <span class="number">0x6_u8</span>,
-            <span class="number">0xbf_u8</span>,
-            <span class="number">0xcf_u8</span>,
-            <span class="number">0xf2_u8</span>,
-            <span class="number">0xd7_u8</span>,
-            <span class="number">0xea_u8</span>,
-            <span class="number">0x2d_u8</span>,
-            <span class="number">0xb1_u8</span>,
-            <span class="number">0x85_u8</span>,
-            <span class="number">0x6c_u8</span>,
-            <span class="number">0x93_u8</span>,
-            <span class="number">0x65_u8</span>,
-            <span class="number">0x6f_u8</span>,
+            <span class="number">0x4a_u8</span>, <span class="number">0x2e_u8</span>, <span class="number">0xe5_u8</span>, <span class="number">0x6_u8</span>, <span class="number">0xbf_u8</span>, <span class="number">0xcf_u8</span>, <span class="number">0xf2_u8</span>, <span class="number">0xd7_u8</span>, <span class="number">0xea_u8</span>,
+            <span class="number">0x2d_u8</span>, <span class="number">0xb1_u8</span>, <span class="number">0x85_u8</span>, <span class="number">0x6c_u8</span>, <span class="number">0x93_u8</span>, <span class="number">0x65_u8</span>, <span class="number">0x6f_u8</span>,
         ];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cr</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">Crypter</span>::<span class="ident">new</span>(
             <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_cbc</span>(),
@@ -2057,7 +1907,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_rc4</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;0000000000000000000000000000000000000000000000000000000000000000000000000000&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;A68686B04D686AA107BD8D4CAB191A3EEC0A6294BC78B60F65C25CB47BD7BB3A48EFC4D26BE4&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;97CD440324DA5FD1F7955C1C13B6B466&quot;</span>;
@@ -2083,7 +1932,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes128_ctr</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411\
                   E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;874D6191B620E3261BEF6864990DB6CE9806F66B7970FDFF8617187BB9FFFDFF5AE4DF3EDBD5D35E\
@@ -2108,7 +1956,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes128_cfb128</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6bc1bee22e409f96e93d7e117393172a&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;3b3fd92eb72dad20333449f8e83cfb4a&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;2b7e151628aed2a6abf7158809cf4f3c&quot;</span>;
@@ -2119,7 +1966,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes128_cfb8</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6bc1bee22e409f96e93d7e117393172aae2d&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;3b79424c9c0dd436bace9e0ed4586a4f32b9&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;2b7e151628aed2a6abf7158809cf4f3c&quot;</span>;
@@ -2130,7 +1976,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes256_cfb1</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6bc1&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;9029&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4&quot;</span>;
@@ -2141,7 +1986,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes256_cfb128</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6bc1bee22e409f96e93d7e117393172a&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;dc7e84bfda79164b7ecd8486985d3860&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4&quot;</span>;
@@ -2152,7 +1996,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes256_cfb8</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;6bc1bee22e409f96e93d7e117393172aae2d&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;dc1f1a8520a64db55fcc8ac554844e889700&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4&quot;</span>;
@@ -2175,7 +2018,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_bf_ecb</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;5CD54CA83DEF57DA&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;B1B8CC0B250F09A0&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0131D9619DC1376E&quot;</span>;
@@ -2186,7 +2028,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_bf_cfb64</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;37363534333231204E6F77206973207468652074696D6520666F722000&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0123456789ABCDEFF0E1D2C3B4A59687&quot;</span>;
@@ -2197,7 +2038,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_bf_ofb</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;37363534333231204E6F77206973207468652074696D6520666F722000&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0123456789ABCDEFF0E1D2C3B4A59687&quot;</span>;
@@ -2208,7 +2048,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_des_cbc</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;54686973206973206120746573742e&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;6f2867cfefda048a4046ef7e556c7132&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;7cb66337f3d3c0fe&quot;</span>;
@@ -2219,7 +2058,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_des_ecb</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;54686973206973206120746573742e&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;0050ab8aecec758843fe157b4dde938c&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;7cb66337f3d3c0fe&quot;</span>;
@@ -2230,13 +2068,23 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_des_ede3</span>() {
-
         <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;9994f4c69d40ae4f34ff403b5cf39d4c8207ea5d3e19a5fd&quot;</span>;
         <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;9e5c4297d60582f81071ac8ab7d0698d4c79de8b94c519858207ea5d3e19a5fd&quot;</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;010203040506070801020304050607080102030405060708&quot;</span>;
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;5cc118306dc702e4&quot;</span>;
 
         <span class="ident">cipher_test</span>(<span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">des_ede3</span>(), <span class="ident">pt</span>, <span class="ident">ct</span>, <span class="ident">key</span>, <span class="ident">iv</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_des_ede3_cbc</span>() {
+
+        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;54686973206973206120746573742e&quot;</span>;
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;6f2867cfefda048a4046ef7e556c7132&quot;</span>;
+        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;7cb66337f3d3c0fe7cb66337f3d3c0fe7cb66337f3d3c0fe&quot;</span>;
+        <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;0001020304050607&quot;</span>;
+
+        <span class="ident">cipher_test</span>(<span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">des_ede3_cbc</span>(), <span class="ident">pt</span>, <span class="ident">ct</span>, <span class="ident">key</span>, <span class="ident">iv</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2280,30 +2128,34 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>), <span class="ident">all</span>(<span class="ident">ossl111</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>)))]</span>
     <span class="kw">fn</span> <span class="ident">test_chacha20</span>() {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0000000000000000000000000000000000000000000000000000000000000000&quot;</span>;
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;00000000000000000000000000000000&quot;</span>;
-        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-                  00000000000000000000000000000000000000000000000&quot;</span>;
-        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;76b8e0ada0f13d90405d6ae55386bd28bdd219b8a08ded1aa836efcc8b770dc7da41597c5157488d7\
-                  724e03fb8d84a376a43b8f41518a11cc387b669b2ee6586&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span>
+            <span class="string">&quot;000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+             00000000000000000000000000000000000000000000000&quot;</span>;
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span>
+            <span class="string">&quot;76b8e0ada0f13d90405d6ae55386bd28bdd219b8a08ded1aa836efcc8b770dc7da41597c5157488d7\
+             724e03fb8d84a376a43b8f41518a11cc387b669b2ee6586&quot;</span>;
 
         <span class="ident">cipher_test</span>(<span class="ident">Cipher</span>::<span class="ident">chacha20</span>(), <span class="ident">pt</span>, <span class="ident">ct</span>, <span class="ident">key</span>, <span class="ident">iv</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">ossl110</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>), <span class="ident">all</span>(<span class="ident">ossl111</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>)))]</span>
     <span class="kw">fn</span> <span class="ident">test_chacha20_poly1305</span>() {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f&quot;</span>;
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;070000004041424344454647&quot;</span>;
         <span class="kw">let</span> <span class="ident">aad</span> <span class="op">=</span> <span class="string">&quot;50515253c0c1c2c3c4c5c6c7&quot;</span>;
-        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;4c616469657320616e642047656e746c656d656e206f662074686520636c617373206f66202739393\
-                  a204966204920636f756c64206f6666657220796f75206f6e6c79206f6e652074697020666f722074\
-                  6865206675747572652c2073756e73637265656e20776f756c642062652069742e&quot;</span>;
-        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;d31a8d34648e60db7b86afbc53ef7ec2a4aded51296e08fea9e2b5a736ee62d63dbea45e8ca967128\
-                  2fafb69da92728b1a71de0a9e060b2905d6a5b67ecd3b3692ddbd7f2d778b8c9803aee328091b58fa\
-                  b324e4fad675945585808b4831d7bc3ff4def08e4b7a9de576d26586cec64b6116&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span>
+            <span class="string">&quot;4c616469657320616e642047656e746c656d656e206f662074686520636c617373206f66202739393\
+             a204966204920636f756c64206f6666657220796f75206f6e6c79206f6e652074697020666f722074\
+             6865206675747572652c2073756e73637265656e20776f756c642062652069742e&quot;</span>;
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span>
+            <span class="string">&quot;d31a8d34648e60db7b86afbc53ef7ec2a4aded51296e08fea9e2b5a736ee62d63dbea45e8ca967128\
+             2fafb69da92728b1a71de0a9e060b2905d6a5b67ecd3b3692ddbd7f2d778b8c9803aee328091b58fa\
+             b324e4fad675945585808b4831d7bc3ff4def08e4b7a9de576d26586cec64b6116&quot;</span>;
         <span class="kw">let</span> <span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;1ae10b594f09e26a7e902ecbd0600691&quot;</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">actual_tag</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">16</span>];

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.3/src/x509/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.5/src/x509/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -1355,7 +1355,8 @@
           <span class="ident">X509_STORE_CTX_get0_chain</span> <span class="kw">as</span> <span class="ident">X509_STORE_CTX_get_chain</span>,
           <span class="ident">X509_set1_notAfter</span> <span class="kw">as</span> <span class="ident">X509_set_notAfter</span>, <span class="ident">X509_set1_notBefore</span> <span class="kw">as</span> <span class="ident">X509_set_notBefore</span>};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v102&quot;</span>, <span class="ident">ossl102</span>), <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v110&quot;</span>, <span class="ident">ossl110</span>),
+          <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;v111&quot;</span>, <span class="ident">ossl111</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">verify</span>;
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">extension</span>;
@@ -2372,7 +2373,6 @@
 }
 
 <span class="kw">impl</span> <span class="ident">GeneralNameRef</span> {
-
     <span class="kw">fn</span> <span class="ident">ia5_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ffi_type</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">as_ptr</span>()).<span class="ident">type_</span> <span class="op">!=</span> <span class="ident">ffi_type</span> {
