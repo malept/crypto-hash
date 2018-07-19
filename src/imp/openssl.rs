@@ -22,9 +22,9 @@
 
 #![warn(missing_docs)]
 
+use super::Algorithm;
 use openssl::hash;
 use std::io;
-use super::Algorithm;
 
 /// Generator of digests using a cryptographic hash function.
 ///

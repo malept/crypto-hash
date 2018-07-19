@@ -20,9 +20,9 @@
 
 #![cfg(test)]
 
+use super::{hex_digest, Algorithm, Hasher};
 use hex;
 use std::io::Write;
-use super::{hex_digest, Algorithm, Hasher};
 
 // From Wikipedia
 const MD5_EMPTY_STRING: &'static str = "d41d8cd98f00b204e9800998ecf8427e";

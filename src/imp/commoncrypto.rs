@@ -20,9 +20,9 @@
 
 //! A cryptographic hash generator dependent upon OSX's `CommonCrypto`.
 
+use super::Algorithm;
 use commoncrypto::hash;
 use std::io;
-use super::Algorithm;
 
 /// Generator of digests using a cryptographic hash function.
 ///

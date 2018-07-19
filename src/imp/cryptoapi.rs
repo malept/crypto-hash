@@ -24,21 +24,22 @@
 //! https://github.com/rust-lang/cargo/blob/0.10.0/src/cargo/util/sha256.rs
 //! which is copyright (c) 2014 The Rust Project Developers under the MIT license.
 
+use super::Algorithm;
 use std::io;
 use std::ptr;
-use super::Algorithm;
 use winapi::shared::minwindef::DWORD;
-use winapi::um::wincrypt::{CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CryptAcquireContextW,
-                           CryptCreateHash, CryptDestroyHash, CryptGetHashParam, CryptHashData,
-                           CryptReleaseContext, CRYPT_SILENT, CRYPT_VERIFYCONTEXT, HCRYPTHASH,
-                           HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES};
+use winapi::um::wincrypt::{
+    CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CryptAcquireContextW, CryptCreateHash,
+    CryptDestroyHash, CryptGetHashParam, CryptHashData, CryptReleaseContext, CRYPT_SILENT,
+    CRYPT_VERIFYCONTEXT, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES,
+};
 
 macro_rules! call {
-    ($e: expr) => ({
+    ($e:expr) => {{
         if $e == 0 {
             panic!("failed {}: {}", stringify!($e), io::Error::last_os_error())
         }
-    })
+    }};
 }
 
 macro_rules! finish_algorithm {
