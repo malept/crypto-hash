@@ -87,7 +87,7 @@ pub struct Hasher {
 
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
-    pub fn new(algorithm: Algorithm) -> Hasher {
+    pub fn new(algorithm: &Algorithm) -> Hasher {
         let mut hcp = 0;
         call!(unsafe {
             CryptAcquireContextW(
