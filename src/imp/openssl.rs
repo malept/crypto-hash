@@ -34,7 +34,7 @@ use std::io;
 /// use crypto_hash::{Algorithm, Hasher};
 /// use std::io::Write;
 ///
-/// let mut hasher = Hasher::new(Algorithm::SHA256);
+/// let mut hasher = Hasher::new(&Algorithm::SHA256);
 /// hasher.write_all(b"crypto");
 /// hasher.write_all(b"-");
 /// hasher.write_all(b"hash");

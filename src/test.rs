@@ -62,14 +62,14 @@ fn sha512_empty_string() {
 
 #[test]
 fn hasher_sans_write() {
-    let mut hasher = Hasher::new(Algorithm::MD5);
+    let mut hasher = Hasher::new(&Algorithm::MD5);
     let actual = hex::encode(hasher.finish());
     assert_eq!(MD5_EMPTY_STRING, actual)
 }
 
 #[test]
 fn hasher_with_write() {
-    let mut hasher = Hasher::new(Algorithm::MD5);
+    let mut hasher = Hasher::new(&Algorithm::MD5);
     hasher
         .write_all(TO_HASH.as_bytes())
         .expect("Could not write to hasher");
