@@ -1,6 +1,6 @@
 # Changes by Version
 
-## Unreleased
+## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.1...master)
 
 ## [0.3.1] - 2018-02-14
 
