@@ -29,8 +29,8 @@ use std::io;
 use std::ptr;
 use winapi::shared::minwindef::DWORD;
 use winapi::um::wincrypt::{
-    CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CryptAcquireContextW, CryptCreateHash,
-    CryptDestroyHash, CryptGetHashParam, CryptHashData, CryptReleaseContext, CRYPT_SILENT,
+    CryptAcquireContextW, CryptCreateHash, CryptDestroyHash, CryptGetHashParam, CryptHashData,
+    CryptReleaseContext, CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT,
     CRYPT_VERIFYCONTEXT, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES,
 };
 
