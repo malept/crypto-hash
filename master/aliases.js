@@ -20,6 +20,7 @@ ALIASES['crypto_hash'] = {};
 ALIASES['crypto_hash'] = {};
 ALIASES['crypto_hash'] = {};
 ALIASES['crypto_hash'] = {};
+ALIASES['crypto_hash'] = {};
 ALIASES['foreign_types'] = {};
 ALIASES['foreign_types'] = {};
 ALIASES['foreign_types'] = {};
