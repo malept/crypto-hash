@@ -107,7 +107,7 @@ impl Hasher {
         };
 
         let mut ret = Hasher {
-            algorithm: algorithm,
+            algorithm: *algorithm,
             hcryptprov: hcp,
             hcrypthash: 0,
         };
