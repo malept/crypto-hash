@@ -30,7 +30,7 @@ use std::ptr;
 use winapi::shared::minwindef::DWORD;
 use winapi::um::wincrypt::{
     CryptAcquireContextW, CryptCreateHash, CryptDestroyHash, CryptGetHashParam, CryptHashData,
-    CryptReleaseContext, CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT,
+    CryptReleaseContext, ALG_ID, CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT,
     CRYPT_VERIFYCONTEXT, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES,
 };
 
@@ -80,7 +80,7 @@ const SHA512_LENGTH: usize = 64;
 /// assert_eq!(expected, result)
 /// ```
 pub struct Hasher {
-    algorithm: Algorithm,
+    alg_id: ALG_ID,
     hcryptprov: HCRYPTPROV,
     hcrypthash: HCRYPTHASH,
 }
@@ -99,30 +99,39 @@ impl Hasher {
             )
         });
 
-        let hash_type = match algorithm {
+        let alg_id = match algorithm {
             Algorithm::MD5 => CALG_MD5,
             Algorithm::SHA1 => CALG_SHA1,
             Algorithm::SHA256 => CALG_SHA_256,
             Algorithm::SHA512 => CALG_SHA_512,
         };
 
-        let mut ret = Hasher {
-            algorithm: *algorithm,
+        let mut hasher = Hasher {
+            alg_id,
             hcryptprov: hcp,
             hcrypthash: 0,
         };
 
-        call!(unsafe { CryptCreateHash(ret.hcryptprov, hash_type, 0, 0, &mut ret.hcrypthash) });
-        ret
+        call!(unsafe {
+            CryptCreateHash(
+                hasher.hcryptprov,
+                hasher.alg_id,
+                0,
+                0,
+                &mut hasher.hcrypthash,
+            )
+        });
+        hasher
     }
 
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
-        match self.algorithm {
-            Algorithm::MD5 => self.finish_md5(),
-            Algorithm::SHA1 => self.finish_sha1(),
-            Algorithm::SHA256 => self.finish_sha256(),
-            Algorithm::SHA512 => self.finish_sha512(),
+        match self.alg_id {
+            CALG_MD5 => self.finish_md5(),
+            CALG_SHA1 => self.finish_sha1(),
+            CALG_SHA_256 => self.finish_sha256(),
+            CALG_SHA_512 => self.finish_sha512(),
+            _ => panic!("Unknown algorithm {}", self.alg_id),
         }
     }
 
