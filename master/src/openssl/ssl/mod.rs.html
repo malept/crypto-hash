@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.11/src/ssl/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.12/src/ssl/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -3432,6 +3432,134 @@
 <span id="3432">3432</span>
 <span id="3433">3433</span>
 <span id="3434">3434</span>
+<span id="3435">3435</span>
+<span id="3436">3436</span>
+<span id="3437">3437</span>
+<span id="3438">3438</span>
+<span id="3439">3439</span>
+<span id="3440">3440</span>
+<span id="3441">3441</span>
+<span id="3442">3442</span>
+<span id="3443">3443</span>
+<span id="3444">3444</span>
+<span id="3445">3445</span>
+<span id="3446">3446</span>
+<span id="3447">3447</span>
+<span id="3448">3448</span>
+<span id="3449">3449</span>
+<span id="3450">3450</span>
+<span id="3451">3451</span>
+<span id="3452">3452</span>
+<span id="3453">3453</span>
+<span id="3454">3454</span>
+<span id="3455">3455</span>
+<span id="3456">3456</span>
+<span id="3457">3457</span>
+<span id="3458">3458</span>
+<span id="3459">3459</span>
+<span id="3460">3460</span>
+<span id="3461">3461</span>
+<span id="3462">3462</span>
+<span id="3463">3463</span>
+<span id="3464">3464</span>
+<span id="3465">3465</span>
+<span id="3466">3466</span>
+<span id="3467">3467</span>
+<span id="3468">3468</span>
+<span id="3469">3469</span>
+<span id="3470">3470</span>
+<span id="3471">3471</span>
+<span id="3472">3472</span>
+<span id="3473">3473</span>
+<span id="3474">3474</span>
+<span id="3475">3475</span>
+<span id="3476">3476</span>
+<span id="3477">3477</span>
+<span id="3478">3478</span>
+<span id="3479">3479</span>
+<span id="3480">3480</span>
+<span id="3481">3481</span>
+<span id="3482">3482</span>
+<span id="3483">3483</span>
+<span id="3484">3484</span>
+<span id="3485">3485</span>
+<span id="3486">3486</span>
+<span id="3487">3487</span>
+<span id="3488">3488</span>
+<span id="3489">3489</span>
+<span id="3490">3490</span>
+<span id="3491">3491</span>
+<span id="3492">3492</span>
+<span id="3493">3493</span>
+<span id="3494">3494</span>
+<span id="3495">3495</span>
+<span id="3496">3496</span>
+<span id="3497">3497</span>
+<span id="3498">3498</span>
+<span id="3499">3499</span>
+<span id="3500">3500</span>
+<span id="3501">3501</span>
+<span id="3502">3502</span>
+<span id="3503">3503</span>
+<span id="3504">3504</span>
+<span id="3505">3505</span>
+<span id="3506">3506</span>
+<span id="3507">3507</span>
+<span id="3508">3508</span>
+<span id="3509">3509</span>
+<span id="3510">3510</span>
+<span id="3511">3511</span>
+<span id="3512">3512</span>
+<span id="3513">3513</span>
+<span id="3514">3514</span>
+<span id="3515">3515</span>
+<span id="3516">3516</span>
+<span id="3517">3517</span>
+<span id="3518">3518</span>
+<span id="3519">3519</span>
+<span id="3520">3520</span>
+<span id="3521">3521</span>
+<span id="3522">3522</span>
+<span id="3523">3523</span>
+<span id="3524">3524</span>
+<span id="3525">3525</span>
+<span id="3526">3526</span>
+<span id="3527">3527</span>
+<span id="3528">3528</span>
+<span id="3529">3529</span>
+<span id="3530">3530</span>
+<span id="3531">3531</span>
+<span id="3532">3532</span>
+<span id="3533">3533</span>
+<span id="3534">3534</span>
+<span id="3535">3535</span>
+<span id="3536">3536</span>
+<span id="3537">3537</span>
+<span id="3538">3538</span>
+<span id="3539">3539</span>
+<span id="3540">3540</span>
+<span id="3541">3541</span>
+<span id="3542">3542</span>
+<span id="3543">3543</span>
+<span id="3544">3544</span>
+<span id="3545">3545</span>
+<span id="3546">3546</span>
+<span id="3547">3547</span>
+<span id="3548">3548</span>
+<span id="3549">3549</span>
+<span id="3550">3550</span>
+<span id="3551">3551</span>
+<span id="3552">3552</span>
+<span id="3553">3553</span>
+<span id="3554">3554</span>
+<span id="3555">3555</span>
+<span id="3556">3556</span>
+<span id="3557">3557</span>
+<span id="3558">3558</span>
+<span id="3559">3559</span>
+<span id="3560">3560</span>
+<span id="3561">3561</span>
+<span id="3562">3562</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! SSL/TLS support.</span>
 <span class="doccomment">//!</span>
@@ -3523,6 +3651,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl110</span>)]</span>
 <span class="kw">use</span> <span class="ident">nid</span>::<span class="ident">Nid</span>;
 <span class="kw">use</span> <span class="ident">pkey</span>::{<span class="ident">HasPrivate</span>, <span class="ident">PKeyRef</span>, <span class="ident">Params</span>, <span class="ident">Private</span>};
+<span class="kw">use</span> <span class="ident">srtp</span>::{<span class="ident">SrtpProtectionProfile</span>, <span class="ident">SrtpProtectionProfileRef</span>};
 <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">bio</span>::<span class="ident">BioMethod</span>;
 <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">callbacks</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">error</span>::<span class="ident">InnerError</span>;
@@ -3532,7 +3661,7 @@
 <span class="kw">use</span> <span class="ident">x509</span>::<span class="ident">store</span>::{<span class="ident">X509StoreBuilderRef</span>, <span class="ident">X509StoreRef</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">ossl102</span>, <span class="ident">libressl261</span>))]</span>
 <span class="kw">use</span> <span class="ident">x509</span>::<span class="ident">verify</span>::<span class="ident">X509VerifyParamRef</span>;
-<span class="kw">use</span> <span class="ident">x509</span>::{<span class="ident">X509</span>, <span class="ident">X509Name</span>, <span class="ident">X509Ref</span>, <span class="ident">X509StoreContextRef</span>, <span class="ident">X509VerifyResult</span>};
+<span class="kw">use</span> <span class="ident">x509</span>::{<span class="ident">X509Name</span>, <span class="ident">X509Ref</span>, <span class="ident">X509StoreContextRef</span>, <span class="ident">X509VerifyResult</span>, <span class="ident">X509</span>};
 <span class="kw">use</span> {<span class="ident">cvt</span>, <span class="ident">cvt_n</span>, <span class="ident">cvt_p</span>, <span class="ident">init</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ssl</span>::<span class="ident">connector</span>::{
@@ -4086,12 +4215,20 @@
     <span class="doccomment">/// This corresponds to [`SSL_CTX_set_tlsext_servername_callback`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_set_tlsext_servername_callback`]: https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_tlsext_servername_callback.html</span>
+    <span class="comment">// FIXME tlsext prefix?</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_servername_callback</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslRef</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SslAlert</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SniError</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="kw">unsafe</span> {
-            <span class="self">self</span>.<span class="ident">set_ex_data</span>(<span class="ident">SslContext</span>::<span class="ident">cached_ex_index</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(), <span class="ident">callback</span>);
+            <span class="comment">// The SNI callback is somewhat unique in that the callback associated with the original</span>
+            <span class="comment">// context associated with an SSL can be used even if the SSL&#39;s context has been swapped</span>
+            <span class="comment">// out. When that happens, we wouldn&#39;t be able to look up the callback&#39;s state in the</span>
+            <span class="comment">// context&#39;s ex data. Instead, pass the pointer directly as the servername arg. It&#39;s</span>
+            <span class="comment">// still stored in ex data to manage the lifetime.</span>
+            <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_ex_data_inner</span>(<span class="ident">SslContext</span>::<span class="ident">cached_ex_index</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(), <span class="ident">callback</span>);
+            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_tlsext_servername_arg</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">arg</span>);
+
             <span class="kw">let</span> <span class="ident">f</span>: <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">-&gt;</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">raw_sni</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>;
             <span class="kw">let</span> <span class="ident">f</span>: <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>() <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">f</span>);
             <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_tlsext_servername_callback</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="prelude-val">Some</span>(<span class="ident">f</span>));
@@ -4230,9 +4367,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The file should contain a sequence of PEM-formatted CA certificates.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This corresponds to [`SSL_CTX_set_default_verify_file`].</span>
+    <span class="doccomment">/// This corresponds to [`SSL_CTX_load_verify_locations`].</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [`SSL_CTX_set_default_verify_file`]: https://www.openssl.org/docs/man1.1.0/ssl/SSL_CTX_set_default_verify_paths.html</span>
+    <span class="doccomment">/// [`SSL_CTX_load_verify_locations`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_load_verify_locations.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_ca_file</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">file</span>: <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">file</span>.<span class="ident">as_ref</span>().<span class="ident">as_os_str</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
         <span class="kw">unsafe</span> {
@@ -4591,6 +4728,25 @@
         }
     }
 
+    <span class="doccomment">/// Enables the DTLS extension &quot;use_srtp&quot; as defined in RFC5764.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_CTX_set_tlsext_use_srtp`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_CTX_set_tlsext_use_srtp`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_CTX_set_tlsext_use_srtp.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tlsext_use_srtp</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">protocols</span>).<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_tlsext_use_srtp</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">cstr</span>.<span class="ident">as_ptr</span>());
+            <span class="comment">// fun fact, set_tlsext_use_srtp has a reversed return code D:</span>
+            <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="prelude-val">Ok</span>(())
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>())
+            }
+        }
+    }
+
     <span class="doccomment">/// Sets the callback used by a server to select a protocol for Application Layer Protocol</span>
     <span class="doccomment">/// Negotiation (ALPN).</span>
     <span class="doccomment">///</span>
@@ -4928,13 +5084,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`SSL_CTX_set_ex_data`]: https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_ex_data.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_ex_data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">Index</span><span class="op">&lt;</span><span class="ident">SslContext</span>, <span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">data</span>: <span class="ident">T</span>) {
+        <span class="self">self</span>.<span class="ident">set_ex_data_inner</span>(<span class="ident">index</span>, <span class="ident">data</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">set_ex_data_inner</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">Index</span><span class="op">&lt;</span><span class="ident">SslContext</span>, <span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">data</span>);
-            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_ex_data</span>(
-                <span class="self">self</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">index</span>.<span class="ident">as_raw</span>(),
-                <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">data</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-            );
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">data</span>)) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>;
+            <span class="ident">ffi</span>::<span class="ident">SSL_CTX_set_ex_data</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">index</span>.<span class="ident">as_raw</span>(), <span class="ident">data</span>);
+            <span class="ident">data</span>
         }
     }
 
@@ -5890,6 +6047,63 @@
         }
     }
 
+    <span class="doccomment">/// Enables the DTLS extension &quot;use_srtp&quot; as defined in RFC5764.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_set_tlsext_use_srtp`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_set_tlsext_use_srtp`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_CTX_set_tlsext_use_srtp.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tlsext_use_srtp</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ErrorStack</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">protocols</span>).<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_set_tlsext_use_srtp</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">cstr</span>.<span class="ident">as_ptr</span>());
+            <span class="comment">// fun fact, set_tlsext_use_srtp has a reversed return code D:</span>
+            <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="prelude-val">Ok</span>(())
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">ErrorStack</span>::<span class="ident">get</span>())
+            }
+        }
+    }
+
+    <span class="doccomment">/// Gets all SRTP profiles that are enabled for handshake via set_tlsext_use_srtp</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// DTLS extension &quot;use_srtp&quot; as defined in RFC5764 has to be enabled.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_get_srtp_profiles`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_get_srtp_profiles`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_CTX_set_tlsext_use_srtp.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">srtp_profiles</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">StackRef</span><span class="op">&lt;</span><span class="ident">SrtpProtectionProfile</span><span class="op">&gt;&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">chain</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_srtp_profiles</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>());
+
+            <span class="kw">if</span> <span class="ident">chain</span>.<span class="ident">is_null</span>() {
+                <span class="prelude-val">None</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">StackRef</span>::<span class="ident">from_ptr</span>(<span class="ident">chain</span>))
+            }
+        }
+    }
+
+    <span class="doccomment">/// Gets the SRTP profile selected by handshake.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// DTLS extension &quot;use_srtp&quot; as defined in RFC5764 has to be enabled.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_get_selected_srtp_profile`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_get_selected_srtp_profile`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_CTX_set_tlsext_use_srtp.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">selected_srtp_profile</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">SrtpProtectionProfileRef</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">profile</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_selected_srtp_profile</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>());
+
+            <span class="kw">if</span> <span class="ident">profile</span>.<span class="ident">is_null</span>() {
+                <span class="prelude-val">None</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">SrtpProtectionProfileRef</span>::<span class="ident">from_ptr</span>(<span class="ident">profile</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>))
+            }
+        }
+    }
+
     <span class="doccomment">/// Returns the number of bytes remaining in the currently processed TLS record.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If this is greater than 0, the next call to `read` will not call down to the underlying</span>
@@ -6169,8 +6383,7 @@
                 <span class="self">self</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">p</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
                 <span class="ident">response</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_long</span>,
-            ) <span class="kw">as</span> <span class="ident">c_int</span>)
-                .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ) <span class="kw">as</span> <span class="ident">c_int</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -6451,6 +6664,30 @@
             <span class="ident">n</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="self">self</span>.<span class="ident">make_error</span>(<span class="ident">n</span>)),
         }
     }
+
+    <span class="doccomment">/// Returns the session&#39;s shutdown state.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_get_shutdown`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_get_shutdown`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_set_shutdown.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_shutdown</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ShutdownState</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">bits</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_get_shutdown</span>(<span class="self">self</span>.<span class="ident">ssl</span>.<span class="ident">as_ptr</span>());
+            <span class="ident">ShutdownState</span> { <span class="ident">bits</span> }
+        }
+    }
+
+    <span class="doccomment">/// Sets the session&#39;s shutdown state.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This can be used to tell OpenSSL that the session should be cached even if a full two-way</span>
+    <span class="doccomment">/// shutdown was not completed.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This corresponds to [`SSL_set_shutdown`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`SSL_set_shutdown`]: https://www.openssl.org/docs/man1.1.1/man3/SSL_set_shutdown.html</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_shutdown</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">state</span>: <span class="ident">ShutdownState</span>) {
+        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">SSL_set_shutdown</span>(<span class="self">self</span>.<span class="ident">ssl</span>.<span class="ident">as_ptr</span>(), <span class="ident">state</span>.<span class="ident">bits</span>()) }
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
@@ -6623,9 +6860,12 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
             <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">code</span>() {
-                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(
-                    <span class="ident">MidHandshakeSslStream</span> { <span class="ident">stream</span>, <span class="ident">error</span> },
-                )),
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(<span class="ident">MidHandshakeSslStream</span> {
+                        <span class="ident">stream</span>,
+                        <span class="ident">error</span>,
+                    }))
+                }
                 <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
                     <span class="ident">stream</span>,
                     <span class="ident">error</span>,
@@ -6643,9 +6883,12 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
             <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">code</span>() {
-                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(
-                    <span class="ident">MidHandshakeSslStream</span> { <span class="ident">stream</span>, <span class="ident">error</span> },
-                )),
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(<span class="ident">MidHandshakeSslStream</span> {
+                        <span class="ident">stream</span>,
+                        <span class="ident">error</span>,
+                    }))
+                }
                 <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
                     <span class="ident">stream</span>,
                     <span class="ident">error</span>,
@@ -6669,9 +6912,12 @@
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">make_error</span>(<span class="ident">ret</span>);
             <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">code</span>() {
-                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(
-                    <span class="ident">MidHandshakeSslStream</span> { <span class="ident">stream</span>, <span class="ident">error</span> },
-                )),
+                <span class="ident">ErrorCode</span>::<span class="ident">WANT_READ</span> <span class="op">|</span> <span class="ident">ErrorCode</span>::<span class="ident">WANT_WRITE</span> <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">WouldBlock</span>(<span class="ident">MidHandshakeSslStream</span> {
+                        <span class="ident">stream</span>,
+                        <span class="ident">error</span>,
+                    }))
+                }
                 <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">Failure</span>(<span class="ident">MidHandshakeSslStream</span> {
                     <span class="ident">stream</span>,
                     <span class="ident">error</span>,
@@ -6777,6 +7023,16 @@
 
     <span class="doccomment">/// A close notify response message has been received from the peer.</span>
     <span class="ident">Received</span>,
+}
+
+<span class="macro">bitflags</span><span class="macro">!</span> {
+    <span class="doccomment">/// The shutdown state of a session.</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ShutdownState</span>: <span class="ident">c_int</span> {
+        <span class="doccomment">/// A close notify message has been sent to the peer.</span>
+        <span class="kw">const</span> <span class="ident">SENT</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_SENT_SHUTDOWN</span>;
+        <span class="doccomment">/// A close notify message has been received from the peer.</span>
+        <span class="kw">const</span> <span class="ident">RECEIVED</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">SSL_RECEIVED_SHUTDOWN</span>;
+    }
 }
 
 <span class="macro">cfg_if</span><span class="macro">!</span> {
