@@ -1,3 +1,6 @@
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
 platform:
   - x86
   - x64
@@ -6,10 +9,6 @@ environment:
     - RUST_VERSION: stable
       BUILD_TARGET: msvc
     - RUST_VERSION: stable
-      BUILD_TARGET: gnu
-    - RUST_VERSION: beta
-      BUILD_TARGET: msvc
-    - RUST_VERSION: beta
       BUILD_TARGET: gnu
     - RUST_VERSION: nightly
       BUILD_TARGET: msvc
@@ -21,9 +20,8 @@ matrix:
       platform: x86
     - RUST_VERSION: nightly
 cache:
-  - target\debug\build
-  - target\debug\deps
-  - '%USERPROFILE%\.cargo'
+  - target
+  - '%USERPROFILE%\.cargo\registry'
 install:
   - ps: |
         $env:PATH += ";${env:USERPROFILE}\.cargo\bin";
@@ -47,4 +45,10 @@ install:
   - cargo -vV
 build: false
 test_script:
-  - cargo test --no-default-features
+  # we don't run the "test phase" when doing deploys
+  - if [%APPVEYOR_REPO_TAG%]==[false] (
+      cargo build --target %RUST_ARCH% &&
+      cargo build --target %RUST_ARCH% --release &&
+      cargo test --target %RUST_ARCH% &&
+      cargo test --target %RUST_ARCH% --release
+    )
