@@ -1,107 +1,97 @@
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
 sudo: required
 language: rust
-
-# necessary for `cargo coveralls`
-addons:
-  apt:
-    packages:
-    - libcurl4-openssl-dev
-    - libelf-dev
-    - libdw-dev
-    - binutils-dev
-
-os:
-- linux
-- osx
+os: linux
 dist: trusty
+rust: stable
 
-cache:
-  cargo: true
+cache: cargo
 
-rust:
-- nightly
-- beta
-- stable
-
-# From https://github.com/japaric/rust-everywhere
-matrix:
-  # Clear the whole matrix
-  exclude:
-  - os: linux
-  - os: osx
-  - rust: nightly
-  - rust: beta
-  - rust: stable
+jobs:
   include:
-  - os: linux # 32-bit Linux (glibc)
-    rust: stable
-    env:
-    - PKG_CONFIG_ALLOW_CROSS=1
-    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
-    - TARGET=i686-unknown-linux-gnu
-    addons:
-      apt:
-        packages:
-          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
-          - libelf-dev
-          - libdw-dev
+    # rustdoc/rustfmt/clippy
+    - stage: style-docs
+      name: "Docs/Formatting/Lints"
+      env: TARGET=all-style-docs
+
+    # Android
+    - stage: compile-only
+      env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
+    - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
+    - env: TARGET=i686-linux-android DISABLE_TESTS=1
+    - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
+
+    # *BSD
+    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+
+    # iOS
+    - env: TARGET=aarch64-apple-ios DISABLE_TESTS=1
+      os: osx
+    - env: TARGET=armv7-apple-ios DISABLE_TESTS=1
+      os: osx
+    - env: TARGET=armv7s-apple-ios DISABLE_TESTS=1
+      os: osx
+    - env: TARGET=i386-apple-ios DISABLE_TESTS=1
+      os: osx
+    - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
+      os: osx
+
+    # Linux
+    - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
+
+    - stage: compile-test
+      env: TARGET=aarch64-unknown-linux-gnu
+    - env: TARGET=arm-unknown-linux-gnueabi
+    - env: TARGET=armv7-unknown-linux-gnueabihf
+    - env: TARGET=i686-unknown-linux-gnu
+    - env: TARGET=i686-unknown-linux-musl
+    - env: TARGET=mips-unknown-linux-gnu
+    - env: TARGET=mips64-unknown-linux-gnuabi64
+    - env: TARGET=mips64el-unknown-linux-gnuabi64
+    - env: TARGET=mipsel-unknown-linux-gnu
+    - env: TARGET=powerpc-unknown-linux-gnu
+    - env: TARGET=powerpc64-unknown-linux-gnu
+    - env: TARGET=powerpc64le-unknown-linux-gnu
+    - env: TARGET=x86_64-unknown-linux-gnu
+      # necessary for `cargo coveralls`
+      addons:
+        apt:
+          packages:
           - binutils-dev
-          - gcc-multilib # Cross compiler and cross compiled C libraries
-          - libssl-dev:i386
-  - os: linux # 32-bit Linux (glibc)
-    env:
-    - PKG_CONFIG_ALLOW_CROSS=1
-    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
-    - TARGET=i686-unknown-linux-gnu
-    rust: beta
-    addons:
-      apt:
-        packages:
-          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
-          - libelf-dev
+          - libcurl4-openssl-dev
           - libdw-dev
-          - binutils-dev
-          - gcc-multilib # Cross compiler and cross compiled C libraries
-          - libssl-dev:i386
-  - os: linux # 32-bit Linux (glibc)
-    rust: nightly
-    env:
-    - PKG_CONFIG_ALLOW_CROSS=1
-    - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
-    - TARGET=i686-unknown-linux-gnu
-    addons:
-      apt:
-        packages:
-          - libcurl4-gnutls-dev # different curl to not conflict with i386 openssl
           - libelf-dev
-          - libdw-dev
-          - binutils-dev
-          - gcc-multilib # Cross compiler and cross compiled C libraries
-          - libssl-dev:i386
-  - os: linux # 64-bit Linux (glibc)
-    rust: stable
-    env: TARGET=x86_64-unknown-linux-gnu
-  - os: linux # 64-bit Linux (glibc)
-    rust: beta
-    env: TARGET=x86_64-unknown-linux-gnu
-  - os: linux # 64-bit Linux (glibc)
-    rust: nightly
-    env: TARGET=x86_64-unknown-linux-gnu
-  # 64-bit Linux (musl) doesn't work with openssl
-  - os: osx # 64-bit OSX
-    rust: stable
-    env: TARGET=x86_64-apple-darwin
-  - os: osx # 64-bit OSX
-    rust: beta
-    env: TARGET=x86_64-apple-darwin
-  - os: osx # 64-bit OSX
-    rust: nightly
-    env: TARGET=x86_64-apple-darwin
+          - libiberty-dev
+    - env: TARGET=x86_64-unknown-linux-musl
+
+    # OSX
+    - env: TARGET=i686-apple-darwin
+      os: osx
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+
+    # Testing other channels
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: nightly
+
+matrix:
   allow_failures:
   - rust: nightly
 
-before_install: ci/before_install.sh
-before_script: ci/before_script.sh
+stages:
+- style-docs
+- compile-test
+- compile-only
+
+install: ci/install.sh
 script: ci/script.sh
 after_success: ci/after_success.sh
 
