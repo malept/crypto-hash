@@ -62,10 +62,11 @@ jobs:
       addons:
         apt:
           packages:
-          - libcurl4-openssl-dev
-          - libelf-dev
-          - libdw-dev
           - binutils-dev
+          - libcurl4-openssl-dev
+          - libdw-dev
+          - libelf-dev
+          - libiberty-dev
     - env: TARGET=x86_64-unknown-linux-musl
 
     # OSX
