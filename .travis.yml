@@ -9,16 +9,25 @@ rust: stable
 
 cache: cargo
 
-matrix:
+jobs:
   include:
     # rustdoc/rustfmt/clippy
-    - env: TARGET=all-style-docs
+    - stage: style-docs
+      name: "Docs/Formatting/Lints"
+      env: TARGET=all-style-docs
+
     # Android
-    - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    - stage: compile-only
+      env: TARGET=aarch64-linux-android DISABLE_TESTS=1
     - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
     - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
     - env: TARGET=i686-linux-android DISABLE_TESTS=1
     - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
+
+    # *BSD
+    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
 
     # iOS
     - env: TARGET=aarch64-apple-ios DISABLE_TESTS=1
@@ -33,13 +42,13 @@ matrix:
       os: osx
 
     # Linux
-    - env: TARGET=aarch64-unknown-linux-gnu
+    - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
+
+    - stage: compile-test
+      env: TARGET=aarch64-unknown-linux-gnu
     - env: TARGET=arm-unknown-linux-gnueabi
     - env: TARGET=armv7-unknown-linux-gnueabihf
-    - env:
-      - TARGET=i686-unknown-linux-gnu
-      - PKG_CONFIG_ALLOW_CROSS=1
-      - PKG_CONFIG_LIBDIR=/usr/lib/i386-linux-gnu/pkgconfig
+    - env: TARGET=i686-unknown-linux-gnu
     - env: TARGET=i686-unknown-linux-musl
     - env: TARGET=mips-unknown-linux-gnu
     - env: TARGET=mips64-unknown-linux-gnuabi64
@@ -48,7 +57,6 @@ matrix:
     - env: TARGET=powerpc-unknown-linux-gnu
     - env: TARGET=powerpc64-unknown-linux-gnu
     - env: TARGET=powerpc64le-unknown-linux-gnu
-    - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
     - env: TARGET=x86_64-unknown-linux-gnu
       # necessary for `cargo coveralls`
       addons:
@@ -66,19 +74,21 @@ matrix:
     - env: TARGET=x86_64-apple-darwin
       os: osx
 
-    # *BSD
-    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
-    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
-    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
-
     # Testing other channels
     - env: TARGET=x86_64-unknown-linux-gnu
       rust: nightly
     - env: TARGET=x86_64-apple-darwin
       os: osx
       rust: nightly
+
+matrix:
   allow_failures:
   - rust: nightly
+
+stages:
+- style-docs
+- compile-test
+- compile-only
 
 install: ci/install.sh
 script: ci/script.sh
