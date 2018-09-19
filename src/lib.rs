@@ -46,7 +46,15 @@
 #[cfg(any(target_os = "macos", target_os = "ios"))]
 extern crate commoncrypto;
 extern crate hex;
-#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "windows")))]
+#[cfg(
+    not(
+        any(
+            target_os = "macos",
+            target_os = "ios",
+            target_os = "windows"
+        )
+    )
+)]
 extern crate openssl;
 #[cfg(target_os = "windows")]
 extern crate winapi;
@@ -59,7 +67,15 @@ mod imp;
 #[cfg(target_os = "windows")]
 #[path = "imp/cryptoapi.rs"]
 mod imp;
-#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "windows")))]
+#[cfg(
+    not(
+        any(
+            target_os = "macos",
+            target_os = "ios",
+            target_os = "windows"
+        )
+    )
+)]
 #[path = "imp/openssl.rs"]
 mod imp;
 
