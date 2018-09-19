@@ -1,26 +1,34 @@
 #!/bin/bash -xe
 
-main() {
+build_and_test() {
     cross build --target $TARGET
     cross build --target $TARGET --release
 
-    if [ ! -z $DISABLE_TESTS ]; then
+    if [ -n $DISABLE_TESTS ]; then
         return
     fi
 
     cross test --target $TARGET
     cross test --target $TARGET --release
+}
 
-    if test "$TARGET" = "x86_64-unknown-linux-gnu" -a "$TRAVIS_RUST_VERSION" = "stable"; then
-        cargo doc
+style_and_docs() {
+    cargo doc
 
-        if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-            cargo fmt -- --check $(git diff --name-only "$TRAVIS_COMMIT" "$TRAVIS_BRANCH" | grep \.rs$)
-        else
-            cargo fmt -- --check $(git show --format= --name-only "$TRAVIS_COMMIT_RANGE" | sort -u | grep \.rs$)
-        fi
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        cargo fmt -- --check $(git diff --name-only "$TRAVIS_COMMIT" "$TRAVIS_BRANCH" | grep \.rs$)
+    else
+        cargo fmt -- --check $(git show --format= --name-only "$TRAVIS_COMMIT_RANGE" | sort -u | grep \.rs$)
+    fi
 
-        cargo clippy --target $TARGET -- --allow clippy_pedantic
+    cargo clippy -- --allow clippy_pedantic
+}
+
+main() {
+    if test "$TARGET" = "all-style-docs"; then
+        style_and_docs
+    else
+        build_and_test
     fi
 }
 

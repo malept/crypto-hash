@@ -9,9 +9,10 @@ rust: stable
 
 cache: cargo
 
-
 matrix:
   include:
+    # rustdoc/rustfmt/clippy
+    - env: TARGET=all-style-docs
     # Android
     - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
     - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
@@ -57,7 +58,6 @@ matrix:
           - libelf-dev
           - libdw-dev
           - binutils-dev
-    # 64-bit Linux (musl) doesn't work with openssl
     - env: TARGET=x86_64-unknown-linux-musl
 
     # OSX

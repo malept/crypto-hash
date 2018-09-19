@@ -1,34 +1,32 @@
 #!/bin/bash -xe
 
-main() {
+install_cargo_travis() {
+    cargo install cargo-update || echo "cargo-update already installed"
+    cargo install cargo-travis || echo "cargo-travis already installed"
+    cargo install-update -a
+}
+
+install_style_docs_dependencies() {
+    rustup component add rustfmt-preview clippy-preview --toolchain=$TRAVIS_RUST_VERSION
+    install_cargo_travis
+}
+
+install_compile_dependencies() {
+    # Builds for iOS are done on OSX, but require the specific target to be installed.
+    case $TARGET in
+        *-apple-ios)
+            rustup target install $TARGET
+            ;;
+    esac
+
     local target=
     if [ $TRAVIS_OS_NAME = linux ]; then
         target=x86_64-unknown-linux-musl
         sort=sort
     else
         target=x86_64-apple-darwin
-        sort=gsort  # for `sort --sort-version`, from brew's coreutils.
+        sort=gsort  # for `sort --sort-version`, from homebrew's coreutils.
     fi
-
-    # Builds for iOS are done on OSX, but require the specific target to be
-    # installed.
-    case $TARGET in
-        aarch64-apple-ios)
-            rustup target install aarch64-apple-ios
-            ;;
-        armv7-apple-ios)
-            rustup target install armv7-apple-ios
-            ;;
-        armv7s-apple-ios)
-            rustup target install armv7s-apple-ios
-            ;;
-        i386-apple-ios)
-            rustup target install i386-apple-ios
-            ;;
-        x86_64-apple-ios)
-            rustup target install x86_64-apple-ios
-            ;;
-    esac
 
     # This fetches latest stable release
     local tag=$(git ls-remote --tags --refs --exit-code https://github.com/japaric/cross \
@@ -43,12 +41,16 @@ main() {
            --tag $tag \
            --target $target
 
-    if test "$TRAVIS_OS_NAME" = "linux" -a "$TARGET" = "x86_64-unknown-linux-gnu" -a "$TRAVIS_RUST_VERSION" = "stable"; then
-        rustup component add rustfmt-preview clippy-preview --toolchain=$TRAVIS_RUST_VERSION
+    if test "$TARGET" = "x86_64-unknown-linux-gnu" -a "$TRAVIS_RUST_VERSION" = "stable"; then
+        install_cargo_travis
+    fi
+}
 
-        cargo install cargo-update || echo "cargo-update already installed"
-        cargo install cargo-travis || echo "cargo-travis already installed"
-        cargo install-update -a
+main() {
+    if test "$TARGET" = "all-style-docs"; then
+        install_style_docs_dependencies
+    else
+        install_compile_dependencies
     fi
 }
 
