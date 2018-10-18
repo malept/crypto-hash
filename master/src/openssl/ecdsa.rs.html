@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.12/src/ecdsa.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ecdsa.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.13/src/ecdsa.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ecdsa.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -195,6 +195,42 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Low level Elliptic Curve Digital Signature Algorithm (ECDSA) functions.</span>
 <span class="kw">use</span> <span class="ident">ffi</span>;
@@ -300,6 +336,25 @@
             <span class="ident">BigNumRef</span>::<span class="ident">from_ptr</span>(<span class="ident">s</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>)
         }
     }
+
+    <span class="macro">from_der</span><span class="macro">!</span> {
+        <span class="doccomment">/// Decodes a DER-encoded ECDSA signature.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`d2i_ECDSA_SIG`]: https://www.openssl.org/docs/man1.1.0/crypto/d2i_ECDSA_SIG.html</span>
+        <span class="ident">from_der</span>,
+        <span class="ident">EcdsaSig</span>,
+        <span class="ident">ffi</span>::<span class="ident">d2i_ECDSA_SIG</span>
+	}
+}
+
+<span class="kw">impl</span> <span class="ident">EcdsaSigRef</span> {
+    <span class="macro">to_der</span><span class="macro">!</span> {
+        <span class="doccomment">/// Serializes the ECDSA signature into a DER-encoded ECDSASignature structure.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This corresponds to [`i2d_ECDSA_SIG`]: https://www.openssl.org/docs/man1.1.0/crypto/i2d_ECDSA_SIG.html</span>
+        <span class="ident">to_der</span>,
+        <span class="ident">ffi</span>::<span class="ident">i2d_ECDSA_SIG</span>
+	}
 }
 
 <span class="macro">cfg_if</span><span class="macro">!</span> {
@@ -391,6 +446,23 @@
         <span class="kw">let</span> <span class="ident">res2</span> <span class="op">=</span> <span class="ident">EcdsaSig</span>::<span class="ident">from_private_components</span>(<span class="ident">r</span>, <span class="ident">s</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">verification2</span> <span class="op">=</span> <span class="ident">res2</span>.<span class="ident">verify</span>(<span class="ident">data</span>.<span class="ident">as_bytes</span>(), <span class="kw-2">&amp;</span><span class="ident">public_key</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">verification2</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">osslconf</span> <span class="op">=</span> <span class="string">&quot;OPENSSL_NO_EC2M&quot;</span>, <span class="ident">ignore</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">serialize_deserialize</span>() {
+        <span class="kw">let</span> <span class="ident">group</span> <span class="op">=</span> <span class="ident">EcGroup</span>::<span class="ident">from_curve_name</span>(<span class="ident">Nid</span>::<span class="ident">SECP256K1</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">private_key</span> <span class="op">=</span> <span class="ident">EcKey</span>::<span class="ident">generate</span>(<span class="kw-2">&amp;</span><span class="ident">group</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="ident">get_public_key</span>(<span class="kw-2">&amp;</span><span class="ident">group</span>, <span class="kw-2">&amp;</span><span class="ident">private_key</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;hello&quot;</span>);
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">EcdsaSig</span>::<span class="ident">sign</span>(<span class="ident">data</span>.<span class="ident">as_bytes</span>(), <span class="kw-2">&amp;</span><span class="ident">private_key</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">der</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">to_der</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">sig</span> <span class="op">=</span> <span class="ident">EcdsaSig</span>::<span class="ident">from_der</span>(<span class="kw-2">&amp;</span><span class="ident">der</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">verification</span> <span class="op">=</span> <span class="ident">sig</span>.<span class="ident">verify</span>(<span class="ident">data</span>.<span class="ident">as_bytes</span>(), <span class="kw-2">&amp;</span><span class="ident">public_key</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">verification</span>);
     }
 }
 </pre>
