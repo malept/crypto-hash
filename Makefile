@@ -26,4 +26,4 @@ fmt:
 	$(CARGO) fmt
 
 lint:
-	$(CARGO) +nightly clippy -- --allow clippy-pedantic
+	$(CARGO) +nightly clippy -- --allow clippy::pedantic

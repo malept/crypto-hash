@@ -21,7 +21,7 @@ style_and_docs() {
         cargo fmt -- --check $(git show --format= --name-only "$TRAVIS_COMMIT_RANGE" | sort -u | grep \.rs$)
     fi
 
-    cargo clippy -- --allow clippy_pedantic
+    cargo clippy -- --allow clippy::pedantic
 }
 
 main() {
