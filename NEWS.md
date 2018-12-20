@@ -1,10 +1,20 @@
 # `crypto-hash`: Changes by Version
 
-## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.2...master)
+## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.3...master)
+
+## [0.3.3] - 2018-12-20
+
+[0.3.3]: https://github.com/malept/crypto-hash/compare/v0.3.2...v0.3.3
+
+### Changed
+
+* Revert API change (#6)
 
 ## [0.3.2] - 2018-12-20
 
 [0.3.2]: https://github.com/malept/crypto-hash/compare/v0.3.1...v0.3.2
+
+**Note: This release was yanked from Cargo due to #6.**
 
 ### Added
 

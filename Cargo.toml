@@ -1,6 +1,6 @@
 [package]
 name = "crypto-hash"
-version = "0.3.2"
+version = "0.3.3"
 authors = ["Mark Lee"]
 description = "A wrapper for OS-level cryptographic hash functions"
 documentation = "https://docs.rs/crypto-hash"
