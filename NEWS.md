@@ -1,6 +1,14 @@
-# Changes by Version
+# `crypto-hash`: Changes by Version
 
-## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.1...master)
+## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.2...master)
+
+## [0.3.2] - 2018-12-20
+
+[0.3.2]: https://github.com/malept/crypto-hash/compare/v0.3.1...v0.3.2
+
+### Added
+
+* iOS support
 
 ## [0.3.1] - 2018-02-14
 
