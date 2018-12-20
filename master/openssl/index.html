@@ -9,7 +9,7 @@ OpenSSL.</p>
 a copy of OpenSSL. The build process requires a C compiler, perl, and make. The OpenSSL version will generally track
 the newest OpenSSL release, and changes to the version are <em>not</em> considered breaking changes.</p>
 <pre><code class="language-toml">[dependencies]
-openssl = { version = &quot;0.10&quot;, feature = [&quot;vendored&quot;] }
+openssl = { version = &quot;0.10&quot;, features = [&quot;vendored&quot;] }
 </code></pre>
 <p>The vendored copy will not be configured to automatically find the system's root certificates, but the
 <code>openssl-probe</code> crate can be used to do that instead.</p>
