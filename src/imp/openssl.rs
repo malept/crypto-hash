@@ -48,7 +48,7 @@ pub struct Hasher(hash::Hasher);
 
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
-    pub fn new(algorithm: &Algorithm) -> Hasher {
+    pub fn new(algorithm: Algorithm) -> Hasher {
         let hash_type = match algorithm {
             Algorithm::MD5 => hash::MessageDigest::md5(),
             Algorithm::SHA1 => hash::MessageDigest::sha1(),

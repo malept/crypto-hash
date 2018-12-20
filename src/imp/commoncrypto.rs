@@ -47,7 +47,7 @@ pub struct Hasher(hash::Hasher);
 
 impl Hasher {
     /// Create a new `Hasher` for the given `Algorithm`.
-    pub fn new(algorithm: &Algorithm) -> Hasher {
+    pub fn new(algorithm: Algorithm) -> Hasher {
         let cc_algorithm = match algorithm {
             Algorithm::MD5 => hash::CCDigestAlgorithm::kCCDigestMD5,
             Algorithm::SHA1 => hash::CCDigestAlgorithm::kCCDigestSHA1,

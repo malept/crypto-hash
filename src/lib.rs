@@ -96,7 +96,7 @@ pub enum Algorithm {
 /// assert_eq!(expected, result)
 /// ```
 pub fn digest(algorithm: Algorithm, data: &[u8]) -> Vec<u8> {
-    let mut hasher = imp::Hasher::new(&algorithm);
+    let mut hasher = imp::Hasher::new(algorithm);
     hasher.write_all(data).expect("Could not write hash data");
     hasher.finish()
 }
