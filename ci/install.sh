@@ -7,7 +7,7 @@ install_cargo_travis() {
 }
 
 install_style_docs_dependencies() {
-    rustup component add rustfmt-preview clippy-preview --toolchain=$TRAVIS_RUST_VERSION
+    rustup component add rustfmt clippy --toolchain=$TRAVIS_RUST_VERSION
     install_cargo_travis
 }
 
