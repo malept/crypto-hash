@@ -39,6 +39,23 @@ renegotiation.</p>
 <div class='docblock'><p>Disables the use of TLSv1.1.</p>
 </div><h4 id='associatedconstant.NO_TLSV1_2' class="associatedconstant"><span id='NO_TLSV1_2.v' class='invisible'><code>pub const <a href='#associatedconstant.NO_TLSV1_2' class="constant"><b>NO_TLSV1_2</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></span></h4>
 <div class='docblock'><p>Disables the use of TLSv1.2.</p>
+</div><h4 id='associatedconstant.NO_DTLSV1' class="associatedconstant"><span id='NO_DTLSV1.v' class='invisible'><code>pub const <a href='#associatedconstant.NO_DTLSV1' class="constant"><b>NO_DTLSV1</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></span></h4>
+<div class='docblock'><p>Disables the use of DTLSv1.0</p>
+<p>Requires OpenSSL 1.0.2 or newer.</p>
+</div><h4 id='associatedconstant.NO_DTLSV1_2' class="associatedconstant"><span id='NO_DTLSV1_2.v' class='invisible'><code>pub const <a href='#associatedconstant.NO_DTLSV1_2' class="constant"><b>NO_DTLSV1_2</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></span></h4>
+<div class='docblock'><p>Disables the use of DTLSv1.2.</p>
+<p>Requires OpenSSL 1.0.2, or newer.</p>
+</div><h4 id='associatedconstant.NO_SSL_MASK' class="associatedconstant"><span id='NO_SSL_MASK.v' class='invisible'><code>pub const <a href='#associatedconstant.NO_SSL_MASK' class="constant"><b>NO_SSL_MASK</b></a>: <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></span></h4>
+<div class='docblock'><p>Disables the use of all (D)TLS protocol versions.</p>
+<p>This can be used as a mask when whitelisting protocol versions.</p>
+<p>Requires OpenSSL 1.0.2 or newer.</p>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Only support TLSv1.2:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">ssl</span>::<span class="ident">SslOptions</span>;
+
+<span class="kw">let</span> <span class="ident">options</span> <span class="op">=</span> <span class="ident">SslOptions</span>::<span class="ident">NO_SSL_MASK</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">SslOptions</span>::<span class="ident">NO_TLSV1_2</span>;</pre>
 </div><h4 id='method.empty' class="method"><span id='empty.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.empty' class='fnname'>empty</a>() -&gt; <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></td><td></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns an empty set of flags.</p>
 </div><h4 id='method.all' class="method"><span id='all.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.all' class='fnname'>all</a>() -&gt; <a class="struct" href="../../openssl/ssl/struct.SslOptions.html" title="struct openssl::ssl::SslOptions">SslOptions</a></code></td><td></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns the set containing all flags.</p>
 </div><h4 id='method.bits' class="method"><span id='bits.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.bits' class='fnname'>bits</a>(&amp;self) -&gt; <a class="type" href="../../libc/unix/notbsd/linux/other/b64/not_x32/type.c_ulong.html" title="type libc::unix::notbsd::linux::other::b64::not_x32::c_ulong">c_ulong</a></code></td><td></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns the raw value of the flags currently stored.</p>
