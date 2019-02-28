@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/ec.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ec.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/ec.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ec.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -929,6 +929,17 @@
 <span id="929">929</span>
 <span id="930">930</span>
 <span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Elliptic Curve</span>
 <span class="doccomment">//!</span>
@@ -1095,7 +1106,8 @@
                 <span class="ident">a</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">b</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1124,7 +1136,8 @@
                 <span class="ident">a</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">b</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1152,7 +1165,8 @@
                 <span class="self">self</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">order</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1204,7 +1218,8 @@
                 <span class="ident">a</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">b</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1228,7 +1243,8 @@
                 <span class="ident">q</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">m</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1247,7 +1263,8 @@
                 <span class="ident">ptr</span>::<span class="ident">null</span>(),
                 <span class="ident">ptr</span>::<span class="ident">null</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1268,7 +1285,8 @@
                 <span class="ident">q</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">m</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1283,7 +1301,8 @@
                 <span class="ident">group</span>.<span class="ident">as_ptr</span>(),
                 <span class="self">self</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1369,7 +1388,8 @@
                 <span class="ident">x</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">y</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1394,7 +1414,8 @@
                 <span class="ident">x</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">y</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">ctx</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 }
@@ -1620,7 +1641,8 @@
                     <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">EC_KEY_set_public_key</span>(
                         <span class="ident">key</span>.<span class="ident">as_ptr</span>(),
                         <span class="ident">public_key</span>.<span class="ident">as_ptr</span>(),
-                    )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
+                    ))
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
                 })
         }
     }
@@ -1642,7 +1664,8 @@
                         <span class="ident">key</span>.<span class="ident">as_ptr</span>(),
                         <span class="ident">x</span>.<span class="ident">as_ptr</span>(),
                         <span class="ident">y</span>.<span class="ident">as_ptr</span>(),
-                    )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
+                    ))
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
                 })
         }
     }
@@ -1677,13 +1700,15 @@
                     <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">EC_KEY_set_private_key</span>(
                         <span class="ident">key</span>.<span class="ident">as_ptr</span>(),
                         <span class="ident">private_number</span>.<span class="ident">as_ptr</span>(),
-                    )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
+                    ))
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
                 })
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> {
                     <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">EC_KEY_set_public_key</span>(
                         <span class="ident">key</span>.<span class="ident">as_ptr</span>(),
                         <span class="ident">public_key</span>.<span class="ident">as_ptr</span>(),
-                    )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
+                    ))
+                    .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">key</span>)
                 })
         }
     }
@@ -1735,9 +1760,10 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="kw">use</span> <span class="ident">hex</span>::<span class="ident">FromHex</span>;
+
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">bn</span>::{<span class="ident">BigNum</span>, <span class="ident">BigNumContext</span>};
-    <span class="kw">use</span> <span class="ident">data_encoding</span>::<span class="ident">BASE64URL_NOPAD</span>;
     <span class="kw">use</span> <span class="ident">nid</span>::<span class="ident">Nid</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1821,11 +1847,9 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">key_from_affine_coordinates</span>() {
         <span class="kw">let</span> <span class="ident">group</span> <span class="op">=</span> <span class="ident">EcGroup</span>::<span class="ident">from_curve_name</span>(<span class="ident">Nid</span>::<span class="ident">X9_62_PRIME256V1</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">BASE64URL_NOPAD</span>
-            .<span class="ident">decode</span>(<span class="string">&quot;MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4&quot;</span>.<span class="ident">as_bytes</span>())
+        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="string">&quot;30a0424cd21c2944838a2d75c92b37e76ea20d9f00893a3b4eee8a3c0aafec3e&quot;</span>)
             .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">BASE64URL_NOPAD</span>
-            .<span class="ident">decode</span>(<span class="string">&quot;4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM&quot;</span>.<span class="ident">as_bytes</span>())
+        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="string">&quot;e04b65e92456d9888b52b379bdfbd51ee869ef1f0fc65b6659695b6cce081723&quot;</span>)
             .<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">xbn</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>).<span class="ident">unwrap</span>();
@@ -1838,11 +1862,9 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">get_affine_coordinates</span>() {
         <span class="kw">let</span> <span class="ident">group</span> <span class="op">=</span> <span class="ident">EcGroup</span>::<span class="ident">from_curve_name</span>(<span class="ident">Nid</span>::<span class="ident">X9_62_PRIME256V1</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">BASE64URL_NOPAD</span>
-            .<span class="ident">decode</span>(<span class="string">&quot;MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4&quot;</span>.<span class="ident">as_bytes</span>())
+        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="string">&quot;30a0424cd21c2944838a2d75c92b37e76ea20d9f00893a3b4eee8a3c0aafec3e&quot;</span>)
             .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">BASE64URL_NOPAD</span>
-            .<span class="ident">decode</span>(<span class="string">&quot;4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM&quot;</span>.<span class="ident">as_bytes</span>())
+        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="string">&quot;e04b65e92456d9888b52b379bdfbd51ee869ef1f0fc65b6659695b6cce081723&quot;</span>)
             .<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">xbn</span> <span class="op">=</span> <span class="ident">BigNum</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>).<span class="ident">unwrap</span>();

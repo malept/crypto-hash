@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/x509/extension.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>extension.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/x509/extension.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>extension.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -519,7 +519,7 @@
 <span id="519">519</span>
 <span id="520">520</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Add extensions to an `X509` certificate or certificate request. </span>
+<span class="doccomment">//! Add extensions to an `X509` certificate or certificate request.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The extensions defined for X.509 v3 certificates provide methods for</span>
 <span class="doccomment">//! associating additional attributes with users or public keys and for</span>
@@ -532,11 +532,11 @@
 <span class="doccomment">//! extern crate openssl;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! use openssl::x509::extension::BasicConstraints;</span>
-<span class="doccomment">//! use openssl::x509::X509Extension; </span>
+<span class="doccomment">//! use openssl::x509::X509Extension;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! fn main() {</span>
 <span class="doccomment">//!     let mut bc = BasicConstraints::new();</span>
-<span class="doccomment">//!     let bc = bc.critical().ca().pathlen(1); </span>
+<span class="doccomment">//!     let bc = bc.critical().ca().pathlen(1);</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     let extension: X509Extension = bc.build().unwrap();</span>
 <span class="doccomment">//! }</span>

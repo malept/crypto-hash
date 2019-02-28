@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/dsa.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dsa.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/dsa.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dsa.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -409,6 +409,10 @@
 <span id="409">409</span>
 <span id="410">410</span>
 <span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Digital Signatures</span>
 <span class="doccomment">//!</span>
@@ -421,8 +425,8 @@
 <span class="kw">use</span> <span class="ident">foreign_types</span>::{<span class="ident">ForeignType</span>, <span class="ident">ForeignTypeRef</span>};
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
 <span class="kw">use</span> <span class="ident">bn</span>::{<span class="ident">BigNum</span>, <span class="ident">BigNumRef</span>};
 <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">ErrorStack</span>;
@@ -733,9 +737,9 @@
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">bn</span>::<span class="ident">BigNumContext</span>;
-    <span class="kw">use</span> <span class="ident">sign</span>::{<span class="ident">Signer</span>, <span class="ident">Verifier</span>};
     <span class="kw">use</span> <span class="ident">hash</span>::<span class="ident">MessageDigest</span>;
     <span class="kw">use</span> <span class="ident">pkey</span>::<span class="ident">PKey</span>;
+    <span class="kw">use</span> <span class="ident">sign</span>::{<span class="ident">Signer</span>, <span class="ident">Verifier</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_generate</span>() {
@@ -802,14 +806,18 @@
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">q</span>).<span class="ident">unwrap</span>(),
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">g</span>).<span class="ident">unwrap</span>(),
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">priv_key</span>).<span class="ident">unwrap</span>(),
-            <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">pub_key</span>).<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
+            <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">pub_key</span>).<span class="ident">unwrap</span>(),
+        )
+        .<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">priv_key</span> <span class="op">=</span> <span class="ident">PKey</span>::<span class="ident">from_dsa</span>(<span class="ident">priv_key</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">pub_key</span> <span class="op">=</span> <span class="ident">Dsa</span>::<span class="ident">from_public_components</span>(
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">p</span>).<span class="ident">unwrap</span>(),
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">q</span>).<span class="ident">unwrap</span>(),
             <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">g</span>).<span class="ident">unwrap</span>(),
-            <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">pub_key</span>).<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
+            <span class="ident">BigNumRef</span>::<span class="ident">to_owned</span>(<span class="ident">pub_key</span>).<span class="ident">unwrap</span>(),
+        )
+        .<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">pub_key</span> <span class="op">=</span> <span class="ident">PKey</span>::<span class="ident">from_dsa</span>(<span class="ident">pub_key</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">signer</span> <span class="op">=</span> <span class="ident">Signer</span>::<span class="ident">new</span>(<span class="ident">MessageDigest</span>::<span class="ident">sha256</span>(), <span class="kw-2">&amp;</span><span class="ident">priv_key</span>).<span class="ident">unwrap</span>();

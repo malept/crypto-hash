@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/x509/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/x509/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1357,6 +1357,14 @@
 <span id="1357">1357</span>
 <span id="1358">1358</span>
 <span id="1359">1359</span>
+<span id="1360">1360</span>
+<span id="1361">1361</span>
+<span id="1362">1362</span>
+<span id="1363">1363</span>
+<span id="1364">1364</span>
+<span id="1365">1365</span>
+<span id="1366">1366</span>
+<span id="1367">1367</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The standard defining the format of public key certificates.</span>
 <span class="doccomment">//!</span>
@@ -1615,7 +1623,8 @@
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">X509_set_serialNumber</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">serial_number</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1625,7 +1634,8 @@
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">X509_set_issuer_name</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">issuer_name</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1652,7 +1662,8 @@
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">X509_set_subject_name</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">subject_name</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -2116,7 +2127,8 @@
                 <span class="ident">value</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>,
                 <span class="op">-</span><span class="number">1</span>,
                 <span class="number">0</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -2136,7 +2148,8 @@
                 <span class="ident">value</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>,
                 <span class="op">-</span><span class="number">1</span>,
                 <span class="number">0</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -2190,7 +2203,7 @@
         <span class="ident">X509NameEntries</span> {
             <span class="ident">name</span>: <span class="self">self</span>,
             <span class="ident">nid</span>: <span class="prelude-val">None</span>,
-            <span class="ident">loc</span>: <span class="op">-</span><span class="number">1</span>
+            <span class="ident">loc</span>: <span class="op">-</span><span class="number">1</span>,
         }
     }
 }
@@ -2305,7 +2318,8 @@
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">X509_REQ_set_subject_name</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">subject_name</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -2354,7 +2368,8 @@
             <span class="ident">cvt</span>(<span class="ident">ffi</span>::<span class="ident">X509_REQ_add_extensions</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">extensions</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -2372,7 +2387,8 @@
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">key</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">hash</span>.<span class="ident">as_ptr</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 

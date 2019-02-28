@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/symm.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>symm.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/symm.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>symm.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1257,6 +1257,36 @@
 <span id="1257">1257</span>
 <span id="1258">1258</span>
 <span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+<span id="1271">1271</span>
+<span id="1272">1272</span>
+<span id="1273">1273</span>
+<span id="1274">1274</span>
+<span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! High level interface to certain symmetric ciphers.</span>
 <span class="doccomment">//!</span>
@@ -1452,6 +1482,10 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">des_ede3_cbc</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
         <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ede3_cbc</span>()) }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">des_ede3_cfb64</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
+        <span class="kw">unsafe</span> { <span class="ident">Cipher</span>(<span class="ident">ffi</span>::<span class="ident">EVP_des_ede3_cfb64</span>()) }
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rc4</span>() <span class="op">-&gt;</span> <span class="ident">Cipher</span> {
@@ -1678,7 +1712,8 @@
                 <span class="ident">ffi</span>::<span class="ident">EVP_CTRL_GCM_SET_TAG</span>,
                 <span class="ident">tag</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>,
                 <span class="ident">tag</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1695,7 +1730,8 @@
                 <span class="ident">ffi</span>::<span class="ident">EVP_CTRL_GCM_SET_TAG</span>,
                 <span class="ident">tag_len</span> <span class="kw">as</span> <span class="ident">c_int</span>,
                 <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1713,7 +1749,8 @@
                 <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">len</span>,
                 <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                 <span class="ident">data_len</span> <span class="kw">as</span> <span class="ident">c_int</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1732,7 +1769,8 @@
                 <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">len</span>,
                 <span class="ident">input</span>.<span class="ident">as_ptr</span>(),
                 <span class="ident">input</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 
@@ -1807,7 +1845,8 @@
                 <span class="ident">ffi</span>::<span class="ident">EVP_CTRL_GCM_GET_TAG</span>,
                 <span class="ident">tag</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>,
                 <span class="ident">tag</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            )).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+            ))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
         }
     }
 }
@@ -2026,7 +2065,8 @@
             <span class="kw">super</span>::<span class="ident">Mode</span>::<span class="ident">Encrypt</span>,
             <span class="kw-2">&amp;</span><span class="ident">k0</span>,
             <span class="prelude-val">None</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="ident">c</span>.<span class="ident">pad</span>(<span class="bool-val">false</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r0</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">c0</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_ecb</span>().<span class="ident">block_size</span>()];
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">r0</span>).<span class="ident">unwrap</span>();
@@ -2039,7 +2079,8 @@
             <span class="kw">super</span>::<span class="ident">Mode</span>::<span class="ident">Decrypt</span>,
             <span class="kw-2">&amp;</span><span class="ident">k0</span>,
             <span class="prelude-val">None</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="ident">c</span>.<span class="ident">pad</span>(<span class="bool-val">false</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">p1</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">r0</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_ecb</span>().<span class="ident">block_size</span>()];
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">r0</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">p1</span>).<span class="ident">unwrap</span>();
@@ -2068,7 +2109,8 @@
             <span class="kw">super</span>::<span class="ident">Mode</span>::<span class="ident">Decrypt</span>,
             <span class="kw-2">&amp;</span><span class="ident">data</span>,
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">iv</span>),
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="ident">cr</span>.<span class="ident">pad</span>(<span class="bool-val">false</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">unciphered_data</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">data</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">aes_256_cbc</span>().<span class="ident">block_size</span>()];
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">cr</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">ciphered_data</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">unciphered_data</span>).<span class="ident">unwrap</span>();
@@ -2316,6 +2358,16 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_des_ede3_cfb64</span>() {
+        <span class="kw">let</span> <span class="ident">pt</span> <span class="op">=</span> <span class="string">&quot;2b1773784b5889dc788477367daa98ad&quot;</span>;
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="string">&quot;6f2867cfefda048a4046ef7e556c7132&quot;</span>;
+        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;7cb66337f3d3c0fe7cb66337f3d3c0fe7cb66337f3d3c0fe&quot;</span>;
+        <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;0001020304050607&quot;</span>;
+
+        <span class="ident">cipher_test</span>(<span class="kw">super</span>::<span class="ident">Cipher</span>::<span class="ident">des_ede3_cfb64</span>(), <span class="ident">pt</span>, <span class="ident">ct</span>, <span class="ident">key</span>, <span class="ident">iv</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_aes128_gcm</span>() {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="string">&quot;0e00c76561d2bd9b40c3c15427e2b08f&quot;</span>;
         <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="string">&quot;492cadaccd3ca3fbc9cf9f06eb3325c4e159850b0dbe98199b89b7af528806610b6f63998e1eae80c348e7\
@@ -2340,7 +2392,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
 
@@ -2351,7 +2404,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 
@@ -2373,7 +2427,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
@@ -2385,7 +2440,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 
@@ -2427,7 +2483,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
@@ -2439,7 +2496,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 
@@ -2502,7 +2560,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">pt</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actual_tag</span>,
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ct</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tag</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">actual_tag</span>));
 
@@ -2513,7 +2572,8 @@
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">aad</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">ct</span>).<span class="ident">unwrap</span>(),
             <span class="kw-2">&amp;</span><span class="ident">Vec</span>::<span class="ident">from_hex</span>(<span class="ident">tag</span>).<span class="ident">unwrap</span>(),
-        ).<span class="ident">unwrap</span>();
+        )
+        .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pt</span>, <span class="ident">hex</span>::<span class="ident">encode</span>(<span class="ident">out</span>));
     }
 }

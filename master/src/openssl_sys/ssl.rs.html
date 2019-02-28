@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-sys-0.9.40/src/ssl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ssl.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-sys-0.9.41/src/ssl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ssl.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1275,6 +1275,28 @@
 <span id="1275">1275</span>
 <span id="1276">1276</span>
 <span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
+<span id="1290">1290</span>
+<span id="1291">1291</span>
+<span id="1292">1292</span>
+<span id="1293">1293</span>
+<span id="1294">1294</span>
+<span id="1295">1295</span>
+<span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
@@ -1804,16 +1826,22 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CTX_set_stateless_cookie_generate_cb</span>(
         <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL_CTX</span>,
         <span class="ident">cb</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>
-            <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>, <span class="ident">cookie</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>, <span class="ident">cookie_len</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>)
-                <span class="op">-&gt;</span> <span class="ident">c_int</span>,
+            <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+                <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>,
+                <span class="ident">cookie</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
+                <span class="ident">cookie_len</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>,
+            ) <span class="op">-&gt;</span> <span class="ident">c_int</span>,
         <span class="op">&gt;</span>,
     );
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl111</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CTX_set_stateless_cookie_verify_cb</span>(
         <span class="ident">s</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL_CTX</span>,
         <span class="ident">cb</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>
-            <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>, <span class="ident">cookie</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>, <span class="ident">cookie_len</span>: <span class="ident">size_t</span>)
-                <span class="op">-&gt;</span> <span class="ident">c_int</span>,
+            <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+                <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>,
+                <span class="ident">cookie</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,
+                <span class="ident">cookie_len</span>: <span class="ident">size_t</span>,
+            ) <span class="op">-&gt;</span> <span class="ident">c_int</span>,
         <span class="op">&gt;</span>,
     );
 
@@ -1887,8 +1915,14 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CTX_set_psk_client_callback</span>(
         <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL_CTX</span>,
         <span class="ident">psk_client_cb</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>
-            <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>, <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>, <span class="ident">c_uint</span>, <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>, <span class="ident">c_uint</span>)
-                <span class="op">-&gt;</span> <span class="ident">c_uint</span>,
+            <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+                <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>,
+                <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>,
+                <span class="ident">c_uint</span>,
+                <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
+                <span class="ident">c_uint</span>,
+            ) <span class="op">-&gt;</span> <span class="ident">c_uint</span>,
         <span class="op">&gt;</span>,
     );
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CTX_set_psk_server_callback</span>(
@@ -2142,6 +2176,10 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl111</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CIPHER_get_handshake_digest</span>(<span class="ident">cipher</span>: <span class="kw-2">*</span><span class="kw">const</span> ::<span class="ident">SSL_CIPHER</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> ::<span class="ident">EVP_MD</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CIPHER_get_name</span>(<span class="ident">cipher</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">SSL_CIPHER</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl111</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CIPHER_standard_name</span>(<span class="ident">cipher</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">SSL_CIPHER</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">ossl111</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">OPENSSL_cipher_name</span>(<span class="ident">rfc_name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_pending</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">SSL</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_set_bio</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>, <span class="ident">rbio</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">BIO</span>, <span class="ident">wbio</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">BIO</span>);
@@ -2490,15 +2528,21 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">ossl110</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_CTX_set_tmp_ecdh_callback</span>(
         <span class="ident">ctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">SSL_CTX</span>,
-        <span class="ident">ecdh</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">SSL</span>, <span class="ident">is_export</span>: <span class="ident">c_int</span>, <span class="ident">keylength</span>: <span class="ident">c_int</span>)
-            <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">EC_KEY</span>,
+        <span class="ident">ecdh</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+            <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">SSL</span>,
+            <span class="ident">is_export</span>: <span class="ident">c_int</span>,
+            <span class="ident">keylength</span>: <span class="ident">c_int</span>,
+        ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">EC_KEY</span>,
     );
     <span class="comment">// FIXME should take an option</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">ossl110</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SSL_set_tmp_ecdh_callback</span>(
         <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>,
-        <span class="ident">ecdh</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>, <span class="ident">is_export</span>: <span class="ident">c_int</span>, <span class="ident">keylength</span>: <span class="ident">c_int</span>)
-            <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">EC_KEY</span>,
+        <span class="ident">ecdh</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+            <span class="ident">ssl</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SSL</span>,
+            <span class="ident">is_export</span>: <span class="ident">c_int</span>,
+            <span class="ident">keylength</span>: <span class="ident">c_int</span>,
+        ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">EC_KEY</span>,
     );
 }
 

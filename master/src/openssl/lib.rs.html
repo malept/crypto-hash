@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.16/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.10.18/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -196,57 +196,55 @@
 <span id="196">196</span>
 <span id="197">197</span>
 <span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Bindings to OpenSSL</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! This crate provides a safe interface to the popular OpenSSL cryptography library. OpenSSL versions 1.0.1 through</span>
 <span class="doccomment">//! 1.1.1 and LibreSSL versions 2.5 through 2.8 are supported.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Building</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! Both OpenSSL libraries and headers are required to build this crate. There are multiple options available to locate</span>
 <span class="doccomment">//! OpenSSL.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ## Vendored</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! If the `vendored` Cargo feature is enabled, the `openssl-src` crate will be used to compile and statically link to</span>
 <span class="doccomment">//! a copy of OpenSSL. The build process requires a C compiler, perl, and make. The OpenSSL version will generally track</span>
 <span class="doccomment">//! the newest OpenSSL release, and changes to the version are *not* considered breaking changes.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```toml</span>
 <span class="doccomment">//! [dependencies]</span>
 <span class="doccomment">//! openssl = { version = &quot;0.10&quot;, features = [&quot;vendored&quot;] }</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! The vendored copy will not be configured to automatically find the system&#39;s root certificates, but the</span>
 <span class="doccomment">//! `openssl-probe` crate can be used to do that instead.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ## Automatic</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! The `openssl-sys` crate will automatically detect OpenSSL installations via Homebrew on macOS and vcpkg on Windows.</span>
 <span class="doccomment">//! Additionally, it will use `pkg-config` on Unix-like systems to find the system installation.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```not_rust</span>
 <span class="doccomment">//! # macOS</span>
 <span class="doccomment">//! $ brew install openssl@1.1</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Arch Linux</span>
 <span class="doccomment">//! $ sudo pacman -S pkg-config openssl</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Debian and Ubuntu</span>
 <span class="doccomment">//! $ sudo apt-get install pkg-config libssl-dev</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Fedora</span>
 <span class="doccomment">//! $ sudo dnf install pkg-config openssl-devel</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ## Manual</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! A set of environment variables can be used to point `openssl-sys` towards an OpenSSL installation. They will</span>
 <span class="doccomment">//! override the automatic detection logic.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! * `OPENSSL_DIR` - If specified, the directory of an OpenSSL installation. The directory should contain `lib` and</span>
 <span class="doccomment">//!     `include` subdirectories containing the libraries and headers respectively.</span>
 <span class="doccomment">//! * `OPENSSL_LIB_DIR` and `OPENSSL_INCLUDE_DIR` - If specified, the directories containing the OpenSSL libraries and</span>
@@ -257,53 +255,53 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Additionally, these variables can be prefixed with the upper-cased target architecture (e.g.</span>
 <span class="doccomment">//!     `X86_64_UNKNOWN_LINUX_GNU_OPENSSL_DIR`), which can be useful when cross compiling.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Feature Detection</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! APIs have been added to and removed from the various supported OpenSSL versions, and this library exposes the</span>
 <span class="doccomment">//! functionality available in the version being linked against. This means that methods, constants, and even modules</span>
 <span class="doccomment">//! will be present when building against one version of OpenSSL but not when building against another! APIs will</span>
 <span class="doccomment">//! document any version-specific availability restrictions.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! A build script can be used to detect the OpenSSL or LibreSSL version at compile time if needed. The `openssl-sys`</span>
 <span class="doccomment">//! crate propagates the version via the `DEP_OPENSSL_VERSION_NUMBER` and `DEP_OPENSSL_LIBRESSL_VERSION_NUMBER`</span>
 <span class="doccomment">//! environment variables to build scripts. The version format is a hex-encoding of the OpenSSL release version:</span>
 <span class="doccomment">//! `0xMNNFFPPS`. For example, version 1.0.2g&#39;s encoding is `0x1_00_02_07_0`.</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! For example, let&#39;s say we want to adjust the TLSv1.3 cipher suites used by a client, but also want to compile</span>
 <span class="doccomment">//! against OpenSSL versions that don&#39;t support TLSv1.3:</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! Cargo.toml:</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```toml</span>
 <span class="doccomment">//! [dependencies]</span>
 <span class="doccomment">//! openssl-sys = &quot;0.9&quot;</span>
 <span class="doccomment">//! openssl = &quot;0.10&quot;</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! build.rs:</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//! use std::env;</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! fn main() {</span>
 <span class="doccomment">//!     if let Ok(v) = env::var(&quot;DEP_OPENSSL_VERSION_NUMBER&quot;) {</span>
 <span class="doccomment">//!         let version = u64::from_str_radix(&amp;v, 16).unwrap();</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//!         if version &gt;= 0x1_01_01_00_0 {</span>
 <span class="doccomment">//!             println!(&quot;cargo:rustc-cfg=openssl111&quot;);</span>
 <span class="doccomment">//!         }</span>
 <span class="doccomment">//!     }</span>
 <span class="doccomment">//! }</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! lib.rs:</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//! use openssl::ssl::{SslConnector, SslMethod};</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! let mut ctx = SslConnector::builder(SslMethod::tls()).unwrap();</span>
-<span class="doccomment">//! </span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! // set_ciphersuites was added in OpenSSL 1.1.1, so we can only call it when linking against that version</span>
 <span class="doccomment">//! #[cfg(openssl111)]</span>
 <span class="doccomment">//! ctx.set_ciphersuites(&quot;TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256&quot;).unwrap();</span>
@@ -321,8 +319,6 @@
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">openssl_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">data_encoding</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">hex</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

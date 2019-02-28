@@ -8,11 +8,11 @@ module can be used with <code>X509v3Context</code> objects.</p>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">openssl</span>;
 
 <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">x509</span>::<span class="ident">extension</span>::<span class="ident">BasicConstraints</span>;
-<span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">x509</span>::<span class="ident">X509Extension</span>; 
+<span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">x509</span>::<span class="ident">X509Extension</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bc</span> <span class="op">=</span> <span class="ident">BasicConstraints</span>::<span class="ident">new</span>();
-    <span class="kw">let</span> <span class="ident">bc</span> <span class="op">=</span> <span class="ident">bc</span>.<span class="ident">critical</span>().<span class="ident">ca</span>().<span class="ident">pathlen</span>(<span class="number">1</span>); 
+    <span class="kw">let</span> <span class="ident">bc</span> <span class="op">=</span> <span class="ident">bc</span>.<span class="ident">critical</span>().<span class="ident">ca</span>().<span class="ident">pathlen</span>(<span class="number">1</span>);
 
     <span class="kw">let</span> <span class="ident">extension</span>: <span class="ident">X509Extension</span> <span class="op">=</span> <span class="ident">bc</span>.<span class="ident">build</span>().<span class="ident">unwrap</span>();
 }</pre></div>
