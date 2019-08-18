@@ -43,7 +43,7 @@ install_compile_dependencies() {
            --target $target
 
     if test "$TARGET" = "x86_64-unknown-linux-gnu" -a "$TRAVIS_RUST_VERSION" = "stable"; then
-        install_cargo_travis
+        install_cargo_plugins
     fi
 }
 
