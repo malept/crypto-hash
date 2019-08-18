@@ -1,14 +1,15 @@
 #!/bin/bash -xe
 
-install_cargo_travis() {
+install_cargo_plugins() {
     cargo install cargo-update || echo "cargo-update already installed"
     cargo install cargo-travis || echo "cargo-travis already installed"
+    cargo install cargo-tarpaulin || echo "cargo-tarpaulin already installed"
     cargo install-update -a
 }
 
 install_style_docs_dependencies() {
     rustup component add rustfmt clippy --toolchain=$TRAVIS_RUST_VERSION
-    install_cargo_travis
+    install_cargo_plugins
 }
 
 install_compile_dependencies() {
@@ -42,7 +43,7 @@ install_compile_dependencies() {
            --target $target
 
     if test "$TARGET" = "x86_64-unknown-linux-gnu" -a "$TRAVIS_RUST_VERSION" = "stable"; then
-        install_cargo_travis
+        install_cargo_plugins
     fi
 }
 
