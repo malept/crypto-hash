@@ -68,7 +68,7 @@ mod test;
 pub use imp::Hasher;
 
 /// Available cryptographic hash functions.
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Algorithm {
     /// Popular message digest algorithm, only available for backwards compatibility purposes.
     MD5,
