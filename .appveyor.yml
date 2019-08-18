@@ -19,6 +19,10 @@ matrix:
     - BUILD_TARGET: msvc
       platform: x86
     - RUST_VERSION: nightly
+branches:
+  only:
+    - master
+    - /v\d+\.\d+\.\d+/
 cache:
   - target
   - '%USERPROFILE%\.cargo\registry'

@@ -85,6 +85,11 @@ matrix:
   allow_failures:
   - rust: nightly
 
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+/
+
 stages:
 - style-docs
 - compile-test
