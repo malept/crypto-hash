@@ -1,6 +1,14 @@
 # `crypto-hash`: Changes by Version
 
-## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.3...master)
+## [Unreleased](https://github.com/malept/crypto-hash/compare/v0.3.4...master)
+
+## [0.3.4] - 2019-08-18
+
+[0.3.4]: https://github.com/malept/crypto-hash/compare/v0.3.3...v0.3.4
+
+### Added
+
+* `Copy`, `Eq`, `Hash`, & `PartialEq` derives on `Algorithm` (#11)
 
 ## [0.3.3] - 2018-12-20
 
