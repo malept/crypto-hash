@@ -18,7 +18,7 @@ travis-ci = { repository = "malept/crypto-hash" }
 appveyor = { repository = "malept/crypto-hash" }
 
 [dependencies]
-hex = "0.3"
+hex = "0.4"
 
 [target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies]
 commoncrypto = "0.2"
