@@ -3,7 +3,7 @@
 
 language: rust
 os: linux
-dist: xenial
+dist: bionic
 rust: stable
 
 cache: cargo
@@ -78,8 +78,6 @@ jobs:
     - env: TARGET=x86_64-apple-darwin
       os: osx
       rust: nightly
-
-matrix:
   allow_failures:
   - rust: nightly
 
