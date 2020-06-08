@@ -40,6 +40,15 @@ let digest = hex_digest(Algorithm::SHA256, b"crypto-hash");
 
 For more examples, consult the [documentation](https://malept.github.io/crypto-hash/).
 
+To help create portable executables, there is a feature to build a
+vendored openssl, named `vendored-openssl`:
+
+```toml
+[dependencies.crypto-hash]
+features = ["vendored-openssl"]
+...
+```
+
 ## [Release Notes](https://github.com/malept/crypto-hash/blob/master/NEWS.md)
 
 ## [Contributing](https://github.com/malept/crypto-hash/blob/master/CONTRIBUTING.md)
