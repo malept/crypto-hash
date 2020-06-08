@@ -53,6 +53,8 @@ test_script:
   - if [%APPVEYOR_REPO_TAG%]==[false] (
       cargo build --target %RUST_ARCH% &&
       cargo build --target %RUST_ARCH% --release &&
-      cargo test --target %RUST_ARCH% &&
-      cargo test --target %RUST_ARCH% --release
+      cargo build --target %RUST_ARCH% --all-features &&
+      cargo build --target %RUST_ARCH% --release --all-features &&
+      cargo test --target %RUST_ARCH% --all-features &&
+      cargo test --target %RUST_ARCH% --release --all-features
     )

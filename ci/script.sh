@@ -3,6 +3,8 @@
 build_and_test() {
     cross build --target $TARGET
     cross build --target $TARGET --release
+    cross build --target $TARGET --all-features
+    cross build --target $TARGET --release --all-features
 
     if [ -n $DISABLE_TESTS ]; then
         return
@@ -10,6 +12,8 @@ build_and_test() {
 
     cross test --target $TARGET
     cross test --target $TARGET --release
+    cross test --target $TARGET --all-features
+    cross test --target $TARGET --release --all-features
 }
 
 style_and_docs() {
