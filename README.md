@@ -1,7 +1,7 @@
 # `crypto-hash`
 
-[![Linux/OS X Status](https://travis-ci.org/malept/crypto-hash.svg?branch=master)](https://travis-ci.org/malept/crypto-hash)
-[![Windows status](https://ci.appveyor.com/api/projects/status/xwc9nb4633b5n67r/branch/master?svg=true)](https://ci.appveyor.com/project/malept/crypto-hash)
+[![Linux/OS X Status](https://travis-ci.org/malept/crypto-hash.svg?branch=main)](https://travis-ci.org/malept/crypto-hash)
+[![Windows status](https://ci.appveyor.com/api/projects/status/xwc9nb4633b5n67r/branch/main?svg=true)](https://ci.appveyor.com/project/malept/crypto-hash)
 [![Crates.io](https://img.shields.io/crates/v/crypto-hash.svg?maxAge=2592000)](https://crates.io/crates/crypto-hash)
 
 `crypto-hash` is a Rust wrapper around OS-level implementations of cryptographic hash functions.
@@ -40,9 +40,9 @@ let digest = hex_digest(Algorithm::SHA256, b"crypto-hash");
 
 For more examples, consult the [documentation](https://malept.github.io/crypto-hash/).
 
-## [Release Notes](https://github.com/malept/crypto-hash/blob/master/NEWS.md)
+## [Release Notes](https://github.com/malept/crypto-hash/blob/main/NEWS.md)
 
-## [Contributing](https://github.com/malept/crypto-hash/blob/master/CONTRIBUTING.md)
+## [Contributing](https://github.com/malept/crypto-hash/blob/main/CONTRIBUTING.md)
 
 ## Acknowledgements
 

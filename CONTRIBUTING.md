@@ -52,7 +52,7 @@ etc.:
   [clippy](https://github.com/Manishearth/rust-clippy) linter.
 * If you are contributing a nontrivial change, please add an entry to `NEWS.md`. The format is
   similar to the one described at [Keep a Changelog](http://keepachangelog.com/).
-* Please make sure your commits are rebased onto the latest commit in the master branch, and that
+* Please make sure your commits are rebased onto the latest commit in the main branch, and that
   you limit/squash the number of commits created to a "feature"-level. For instance:
 
 bad:
