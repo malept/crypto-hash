@@ -21,7 +21,7 @@ matrix:
     - RUST_VERSION: nightly
 branches:
   only:
-    - master
+    - main
     - /v\d+\.\d+\.\d+/
 cache:
   - target
