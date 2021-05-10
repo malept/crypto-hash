@@ -66,6 +66,19 @@ impl Hasher {
             Err(error) => panic!("CommonCrypto error: {}", error),
         }
     }
+
+    /// Generate a digest from the data written to the `Hasher`. `dest` must be
+    /// exactly the length of the digest.
+    pub fn finish_into(&mut self, dest: &mut [u8]) {
+        let Hasher(ref mut hasher) = *self;
+        match hasher.finish() {
+            Ok(digest) => {
+                assert_eq!(dest.len(), digest.len());
+                dest.copy_from_slice(&digest);
+            }
+            Err(error) => panic!("CommonCrypto error: {}", error),
+        }
+    }
 }
 
 impl io::Write for Hasher {

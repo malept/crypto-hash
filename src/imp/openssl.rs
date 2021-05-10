@@ -70,6 +70,19 @@ impl Hasher {
             Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack),
         }
     }
+
+    /// Generate a digest from the data written to the `Hasher`. `dest` must be
+    /// exactly the length of the digest.
+    pub fn finish_into(&mut self, dest: &mut [u8]) {
+        let Hasher(ref mut hasher) = *self;
+        match hasher.finish() {
+            Ok(digest) => {
+                assert_eq!(dest.len(), digest.len());
+                dest.copy_from_slice(&digest)
+            }
+            Err(error_stack) => panic!("OpenSSL error(s): {}", error_stack),
+        }
+    }
 }
 
 impl io::Write for Hasher {
