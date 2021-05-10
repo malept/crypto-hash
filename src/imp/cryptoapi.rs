@@ -56,6 +56,19 @@ macro_rules! finish_algorithm {
     }
 }
 
+macro_rules! finish_algorithm_into {
+    ($func_name: ident, $size: ident) => {
+        fn $func_name(&mut self, dest: &mut [u8]) {
+            assert_eq!(dest.len(), $size);
+            let mut len = $size as u32;
+            call!(unsafe {
+                CryptGetHashParam(self.hcrypthash, HP_HASHVAL, dest.as_mut_ptr(), &mut len, 0)
+            });
+            assert_eq!(len as usize, dest.len());
+        }
+    }
+}
+
 const MD5_LENGTH: usize = 16;
 const SHA1_LENGTH: usize = 20;
 const SHA256_LENGTH: usize = 32;
@@ -135,10 +148,27 @@ impl Hasher {
         }
     }
 
+    /// Generate a digest from the data written to the `Hasher`. `dest` must be
+    /// exactly the length of the digest.
+    pub fn finish_into(&mut self, dest: &mut [u8]) {
+        match self.alg_id {
+            CALG_MD5 => self.finish_md5_into(dest),
+            CALG_SHA1 => self.finish_sha1_into(dest),
+            CALG_SHA_256 => self.finish_sha256_into(dest),
+            CALG_SHA_512 => self.finish_sha512_into(dest),
+            _ => panic!("Unknown algorithm {}", self.alg_id),
+        }
+    }
+
     finish_algorithm!(finish_md5, MD5_LENGTH);
     finish_algorithm!(finish_sha1, SHA1_LENGTH);
     finish_algorithm!(finish_sha256, SHA256_LENGTH);
     finish_algorithm!(finish_sha512, SHA512_LENGTH);
+
+    finish_algorithm_into!(finish_md5, MD5_LENGTH);
+    finish_algorithm_into!(finish_sha1, SHA1_LENGTH);
+    finish_algorithm_into!(finish_sha256, SHA256_LENGTH);
+    finish_algorithm_into!(finish_sha512, SHA512_LENGTH);
 }
 
 impl io::Write for Hasher {

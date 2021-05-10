@@ -38,6 +38,7 @@ const SHA512_EMPTY_STRING: &'static str = concat!(
 );
 const TO_HASH: &'static str = "The quick brown fox jumps over the lazy dog";
 const TO_HASH_MD5: &'static str = "9e107d9d372bb6826bd81d3542a419d6";
+const TO_HASH_SHA1: &'static str = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
 
 #[test]
 fn md5_empty_string() {
@@ -72,9 +73,43 @@ fn hasher_with_write() {
     let mut hasher = Hasher::new(Algorithm::MD5);
     hasher
         .write_all(TO_HASH.as_bytes())
+        .and_then(|_| hasher.flush())
         .expect("Could not write to hasher");
     let actual = hex::encode(hasher.finish());
     assert_eq!(TO_HASH_MD5, actual)
+}
+
+#[test]
+fn hasher_finalize_into() {
+    let mut hasher = Hasher::new(Algorithm::SHA1);
+    hasher
+        .write_all(TO_HASH.as_bytes())
+        .and_then(|_| hasher.flush())
+        .expect("Could not write to hasher");
+    let mut actual = [0; 20];
+    hasher.finish_into(&mut actual);
+    assert_eq!(*TO_HASH_SHA1, hex::encode(actual));
+}
+
+// This test is important, especially on Windows, where we pass this buffer
+// directly into the unsafe C code to be written to, without an explicit length
+// (the CryptoAPI assumes the buffer is the correct length).
+//
+// We opt not to handle this logic error dynamically, and instead replicate the
+// same panic that safe code exhibits when indexing out of bounds.
+#[test]
+#[should_panic(expected = "assertion failed")]
+fn hasher_finalize_into_short_buffer_no_overrun() {
+    let mut hasher = Hasher::new(Algorithm::SHA1);
+    hasher
+        .write_all(TO_HASH.as_bytes())
+        .and_then(|_| hasher.flush())
+        .expect("Could not write to hasher");
+    // A SHA1 digest is 20 bytes.
+    let mut actual = [0; 19];
+
+    // Should panic rather than overwrite the buffer in the unsafe impl code.
+    hasher.finish_into(&mut actual);
 }
 
 fn assert_hex_hashed_empty_string(algorithm: Algorithm, expected: &str) {

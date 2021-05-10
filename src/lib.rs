@@ -97,8 +97,36 @@ pub enum Algorithm {
 /// ```
 pub fn digest(algorithm: Algorithm, data: &[u8]) -> Vec<u8> {
     let mut hasher = imp::Hasher::new(algorithm);
-    hasher.write_all(data).expect("Could not write hash data");
+    hasher
+        .write_all(data)
+        .and_then(|_| hasher.flush())
+        .expect("Could not write hash data");
     hasher.finish()
+}
+
+/// Helper function for `Hasher` which generates a cryptographic digest from the given
+/// data and algorithm and writes it to `dest`, which must be exactly the
+/// correct length for the digest.
+///
+/// # Examples
+///
+/// ```rust
+/// use crypto_hash::{Algorithm, digest_into};
+///
+/// let data = b"crypto-hash";
+/// let mut dest = [0; 20];
+/// digest_into(Algorithm::SHA1, data, &mut dest);
+/// let expected =
+///     b"\x57\xba\xb6\xe4\x94\x8e\x3a\x06\x09\x3b\x5e\x46\x69\x2b\xa4\x80\xa1\x31\x0c\xfb";
+/// assert_eq!(*expected, dest)
+/// ```
+pub fn digest_into(algorithm: Algorithm, data: &[u8], dest: &mut [u8]) {
+    let mut hasher = imp::Hasher::new(algorithm);
+    hasher
+        .write_all(data)
+        .and_then(|_| hasher.flush())
+        .expect("Could not write hash data");
+    hasher.finish_into(dest);
 }
 
 /// Helper function for `Hasher` which generates a cryptographic digest serialized in
