@@ -53,7 +53,7 @@ macro_rules! finish_algorithm {
             assert_eq!(len as usize, hash.len());
             hash.to_vec()
         }
-    }
+    };
 }
 
 const MD5_LENGTH: usize = 16;
