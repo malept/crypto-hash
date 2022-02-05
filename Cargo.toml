@@ -19,12 +19,6 @@ appveyor = { repository = "malept/crypto-hash" }
 
 [dependencies]
 hex = "0.4"
-
-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies]
 commoncrypto = "0.2"
-
-[target.'cfg(target_os = "windows")'.dependencies]
 winapi = { version = "0.3", features = ["minwindef", "wincrypt"] }
-
-[target.'cfg(not(any(target_os = "windows", target_os = "macos", target_os = "ios")))'.dependencies]
 openssl = "0.10"

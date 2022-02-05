@@ -43,23 +43,23 @@
 
 #![warn(missing_docs)]
 
-#[cfg(any(target_os = "macos", target_os = "ios"))]
+#[cfg(feature = "commoncrypto")]
 extern crate commoncrypto;
 extern crate hex;
-#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "windows")))]
+#[cfg(feature = "openssl")]
 extern crate openssl;
-#[cfg(target_os = "windows")]
+#[cfg(feature = "winapi")]
 extern crate winapi;
 
 use std::io::Write;
 
-#[cfg(any(target_os = "macos", target_os = "ios"))]
+#[cfg(feature = "commoncrypto")]
 #[path = "imp/commoncrypto.rs"]
 mod imp;
-#[cfg(target_os = "windows")]
+#[cfg(feature = "winapi")]
 #[path = "imp/cryptoapi.rs"]
 mod imp;
-#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "windows")))]
+#[cfg(feature = "openssl")]
 #[path = "imp/openssl.rs"]
 mod imp;
 
