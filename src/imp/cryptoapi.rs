@@ -51,6 +51,10 @@ macro_rules! finish_algorithm {
                 CryptGetHashParam(self.hcrypthash, HP_HASHVAL, hash.as_mut_ptr(), &mut len, 0)
             });
             assert_eq!(len as usize, hash.len());
+            call!(unsafe { CryptDestroyHash(self.hcrypthash) });
+            call!(unsafe {
+                CryptCreateHash(self.hcryptprov, self.alg_id, 0, 0, &mut self.hcrypthash)
+            });
             hash.to_vec()
         }
     }
