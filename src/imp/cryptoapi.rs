@@ -27,11 +27,10 @@
 use super::Algorithm;
 use std::io;
 use std::ptr;
-use winapi::shared::minwindef::DWORD;
-use winapi::um::wincrypt::{
+use windows_sys::Win32::Security::Cryptography::{
     CryptAcquireContextW, CryptCreateHash, CryptDestroyHash, CryptGetHashParam, CryptHashData,
-    CryptReleaseContext, ALG_ID, CALG_MD5, CALG_SHA1, CALG_SHA_256, CALG_SHA_512, CRYPT_SILENT,
-    CRYPT_VERIFYCONTEXT, HCRYPTHASH, HCRYPTPROV, HP_HASHVAL, PROV_RSA_AES,
+    CryptReleaseContext, ALG_CLASS_HASH, ALG_SID_MD5, ALG_SID_SHA1, ALG_SID_SHA_256,
+    ALG_SID_SHA_512, ALG_TYPE_ANY, CRYPT_SILENT, CRYPT_VERIFYCONTEXT, HP_HASHVAL, PROV_RSA_AES,
 };
 
 macro_rules! call {
@@ -53,7 +52,7 @@ macro_rules! finish_algorithm {
             assert_eq!(len as usize, hash.len());
             hash.to_vec()
         }
-    }
+    };
 }
 
 const MD5_LENGTH: usize = 16;
@@ -80,9 +79,9 @@ const SHA512_LENGTH: usize = 64;
 /// assert_eq!(expected, result)
 /// ```
 pub struct Hasher {
-    alg_id: ALG_ID,
-    hcryptprov: HCRYPTPROV,
-    hcrypthash: HCRYPTHASH,
+    alg_id: u32,
+    hcryptprov: usize,
+    hcrypthash: usize,
 }
 
 impl Hasher {
@@ -99,12 +98,14 @@ impl Hasher {
             )
         });
 
-        let alg_id = match algorithm {
-            Algorithm::MD5 => CALG_MD5,
-            Algorithm::SHA1 => CALG_SHA1,
-            Algorithm::SHA256 => CALG_SHA_256,
-            Algorithm::SHA512 => CALG_SHA_512,
-        };
+        let alg_id = ALG_CLASS_HASH
+            | ALG_TYPE_ANY
+            | match algorithm {
+                Algorithm::MD5 => ALG_SID_MD5,
+                Algorithm::SHA1 => ALG_SID_SHA1,
+                Algorithm::SHA256 => ALG_SID_SHA_256,
+                Algorithm::SHA512 => ALG_SID_SHA_512,
+            };
 
         let mut hasher = Hasher {
             alg_id,
@@ -126,11 +127,11 @@ impl Hasher {
 
     /// Generate a digest from the data written to the `Hasher`.
     pub fn finish(&mut self) -> Vec<u8> {
-        match self.alg_id {
-            CALG_MD5 => self.finish_md5(),
-            CALG_SHA1 => self.finish_sha1(),
-            CALG_SHA_256 => self.finish_sha256(),
-            CALG_SHA_512 => self.finish_sha512(),
+        match self.alg_id & !(ALG_CLASS_HASH | ALG_TYPE_ANY) {
+            ALG_SID_MD5 => self.finish_md5(),
+            ALG_SID_SHA1 => self.finish_sha1(),
+            ALG_SID_SHA_256 => self.finish_sha256(),
+            ALG_SID_SHA_512 => self.finish_sha512(),
             _ => panic!("Unknown algorithm {}", self.alg_id),
         }
     }
@@ -144,12 +145,7 @@ impl Hasher {
 impl io::Write for Hasher {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         call!(unsafe {
-            CryptHashData(
-                self.hcrypthash,
-                buf.as_ptr() as *mut _,
-                buf.len() as DWORD,
-                0,
-            )
+            CryptHashData(self.hcrypthash, buf.as_ptr() as *mut _, buf.len() as u32, 0)
         });
         Ok(buf.len())
     }
