@@ -43,14 +43,6 @@
 
 #![warn(missing_docs)]
 
-#[cfg(any(target_os = "macos", target_os = "ios"))]
-extern crate commoncrypto;
-extern crate hex;
-#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "windows")))]
-extern crate openssl;
-#[cfg(target_os = "windows")]
-extern crate winapi;
-
 use std::io::Write;
 
 #[cfg(any(target_os = "macos", target_os = "ios"))]
